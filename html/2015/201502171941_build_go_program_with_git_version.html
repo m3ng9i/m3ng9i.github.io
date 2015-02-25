@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html lang='zh-cn'>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,width=device-width">
+    <meta name="author" content="m3ng9i">
+    <meta name="title" content="编译时向 go 程序写入 git 版本信息">
+    <meta name="pubtime" content="2015-02-17T19:41:00+08:00">
+    <meta name="url" content="http://mengqi.info/html/2015/201502171941_build_go_program_with_git_version.html">
+    <script type="text/javascript" src="/static/libs/html5shiv.min.js"></script>
+    <script type="text/javascript" src="/static/libs/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/libs/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <link rel="alternate" type="application/atom+xml" title="My*Candy 最新文章" href="/feed.xml">
+    <title>编译时向 go 程序写入 git 版本信息 - My*Candy</title>
+</head>
+
+<body>
+    <div id="container">
+        <div id="container_inner">
+            <article>
+                <header>
+                    <h1 class="title"><a href="http://mengqi.info/html/2015/201502171941_build_go_program_with_git_version.html">编译时向 go 程序写入 git 版本信息</a></h1>
+                    <p class="pubtime">m3ng9i 发表于 <time datetime="2015-02-17T19:41:00+08:00" pubdate>2015-02-17 19:41</time></p>
+                </header>
+                <p>如何在 <a href="https://golang.org" title="点击前往 golang 官方网站" rel="nofollow">go</a> 程序中记录版本信息？最简单的办法就是手工输入。下面是一个例子。</p>
+
+<p>程序 <code>myproject.go</code> 代码：</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+import &quot;flag&quot;
+
+var _version_ = &quot;v0.1&quot;
+
+func main() {
+    var version bool
+    flag.BoolVar(&amp;version, &quot;v&quot;, false, &quot;-v&quot;)
+    flag.Parse()
+
+    if version {
+        fmt.Printf(&quot;Version: %s&quot;, _version_)
+    }
+}
+</code></pre>
+
+<p>版本信息被保存到变量 <code>_version_</code> 中，当程序编译后，生成可执行文件 myproject。在命令行运行 <code>./myproject -v</code> 后，显示：</p>
+
+<pre><code>Version: v0.1
+</code></pre>
+
+<p>这么做并没有什么不妥，但如果你的程序经常进行更新，那么频繁的修改 _version_ 变量的值会显得非常繁琐。</p>
+
+<h1>go build</h1>
+
+<p>go 程序的编译命令 <code>go build</code> 包含一个 <code>-ldflags</code> 选项，可以向链接器传递指令。向链接器传一个 <code>-X</code> 指令可以设置程序中字符串变量的值。利用这个方法能够实现在编译时设置程序的版本信息。对于上面的那个 go 程序，使用下面的编译命令可以将 main 包中的 _version_ 变量的值设置为 v0.2：</p>
+
+<pre><code>go build -ldflags &quot;-X main._version_ 'v0.2'&quot;
+</code></pre>
+
+<p>编译后，运行 <code>./myproject -v</code> 将显示：</p>
+
+<pre><code>Version: v0.2
+</code></pre>
+
+<p>如果要同时设置多个变量，可以参照以下格式：</p>
+
+<pre><code>go build -ldflags &quot;-X importpath.name value -X importpath_2.name_2 value_2 ...&quot;
+</code></pre>
+
+<p>现在我们从 go 程序中离开一下，看一下 git。</p>
+
+<h1>git</h1>
+
+<p>在使用 <a href="http://git-scm.com" title="点击前往 git 官方网站" rel="nofollow">git</a> 作为程序开发的版本控制软件时，每向 git 做一次提交，都会生成一个 sha1 格式的 commit id。由于每一个 commit id 都不相同，这样我们就可以把 commit id 作为程序的特征值，在编译程序时，将其写入到程序中。</p>
+
+<p>下图是在 <a href="http://sourcetreeapp.com" rel="nofollow">SourceTree</a> 中查看 git log 的截图。可以看到，除了 commit id，git 日志还可以包含分支名称、标签等信息：</p>
+
+<p><img src="/static/2015/build_go_program_with_git_version_1.png" alt="git 日志">
+</p>
+
+<p>以上信息可以通过 git 命令提取出来。</p>
+
+<p>下面的命令可以提取出最近一条 git 日志的 commit id：</p>
+
+<pre><code>git log --pretty=format:&quot;%h&quot; -1
+</code></pre>
+
+<p>下面的命令可以提取出当前的 git 分支名称：</p>
+
+<pre><code>git rev-parse --abbrev-ref HEAD
+</code></pre>
+
+<p>下面的命令可以提取出最近一个标签的名称，如果当前分支没有创建过标签则会报错：</p>
+
+<pre><code>git describe --abbrev=0 --tags
+</code></pre>
+
+<h1>构造 go 编译程序</h1>
+
+<p>为了进行演示，我修改了上面的 go 程序，加入了分支名称、commit id、编译时间 3 个变量。修改后的 <code>myproject.go</code> 代码如下：</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+import &quot;flag&quot;
+
+var _version_   = &quot;&quot;
+var _branch_    = &quot;&quot;
+var _commitId_  = &quot;&quot;
+var _buildTime_ = &quot;&quot;
+
+func main() {
+    var version bool
+    flag.BoolVar(&amp;version, &quot;v&quot;, false, &quot;-v&quot;)
+    flag.Parse()
+
+    if version {
+        fmt.Printf(&quot;Version: %s, Branch: %s, Build: %s, Build time: %s\n&quot;,
+            _version_, _branch_, _commitId_, _buildTime_)
+    }
+}
+</code></pre>
+
+<p>为了实现自动化的提取 git 日志信息并将其编译进 go 程序，我用 <a href="http://python.org" rel="nofollow">python</a> 写了一个脚本程序 <code>build.py</code> 来完成这个任务。这个程序会调用上述的若干 git 命令，将提取到的信息拼装为一个 go build 命令，然后运行此命令完成编译。</p>
+
+<p>完整的 <code>build.py</code> 代码如下：</p>
+
+<pre><code class="language-python">#!/usr/bin/env python3
+
+import os, time, subprocess
+
+def runCmd(cmd):
+    p = subprocess.Popen(cmd, shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    stdout = p.communicate()[0].decode('utf-8').strip()
+    return stdout
+
+# Get last tag.
+def lastTag():
+    return runCmd('git describe --abbrev=0 --tags')
+
+# Get current branch name.
+def branch():
+    return runCmd('git rev-parse --abbrev-ref HEAD')
+
+# Get last git commit id.
+def lastCommitId():
+    return runCmd('git log --pretty=format:&quot;%h&quot; -1')
+
+# Assemble build command.
+def buildCmd():
+    buildFlag = []
+
+    version = lastTag()
+    if version != &quot;&quot;:
+        buildFlag.append(&quot;-X main._version_ '{}'&quot;.format(version))
+
+    branchName = branch()        
+    if branchName != &quot;&quot;:
+        buildFlag.append(&quot;-X main._branch_ '{}'&quot;.format(branchName))
+
+    commitId = lastCommitId()
+    if commitId != &quot;&quot;:
+        buildFlag.append(&quot;-X main._commitId_ '{}'&quot;.format(commitId))
+
+    # current time
+    buildFlag.append(&quot;-X main._buildTime_ '{}'&quot;.format(time.strftime(&quot;%Y-%m-%d %H:%M %z&quot;)))
+
+    return 'go build -ldflags &quot;{}&quot;'.format(&quot; &quot;.join(buildFlag))
+
+if subprocess.call(buildCmd(), shell = True) == 0:
+    print(&quot;build finished.&quot;)
+</code></pre>
+
+<p>然后运行 <code>./build.py</code> 对 go 程序进行编译。编译完成后，再运行编译好的程序：<code>./myproject -v</code>。可以看到，标签：<code>v1.0</code>、分支名称：<code>master</code>、commit id：<code>e5b593c</code> 以及编译时间都被写入到了 go 程序中：</p>
+
+<pre><code>Version: v1.0, Branch: master, Build: e5b593c, Build time: 2015-02-17 15:46 +0800
+</code></pre>
+
+<p>是不是很方便？</p>
+
+<h1>参考资料</h1>
+
+<ul>
+<li><a href="https://github.com/hyper-carrot/go_command_tutorial" rel="nofollow">go command tutorial</a><br></li>
+<li><a href="http://golang.org/cmd/go/" rel="nofollow">Command go</a><br></li>
+<li><a href="http://golang.org/cmd/ld/" rel="nofollow">Command ld</a><br></li>
+<li><a href="http://git-scm.com/doc" rel="nofollow">Git Documentation</a><br></li>
+</ul>
+
+            </article>
+
+            <nav>
+                <p><a href="/">首页</a> <a href="/html/about.html">关于</a> <a href="/feed.xml" title="atom 1.0 feed">订阅</a></p>
+            </nav>
+        </div>
+    </div>
+
+</body>
+
+</html>
