@@ -7,7 +7,7 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-02-25T16:55:21+08:00</updated>
+    <updated>2015-02-28T11:53:05+08:00</updated>
 
     <entry><title>编译时向 go 程序写入 git 版本信息</title>
 <author><name>m3ng9i</name></author>
