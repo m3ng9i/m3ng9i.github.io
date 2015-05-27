@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html lang='zh-cn'>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,width=device-width">
+    <meta name="author" content="m3ng9i">
+    <meta name="title" content="RSS 阅读器 QReader 发布">
+    <meta name="pubtime" content="2015-05-27T13:35:00+08:00">
+    <meta name="url" content="http://mengqi.info/html/2015/201505271335_qreader.html">
+    <script type="text/javascript" src="/static/libs/html5shiv.min.js"></script>
+    <script type="text/javascript" src="/static/libs/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=42968888" charset="UTF-8"></script>
+    <link rel="stylesheet" type="text/css" href="/static/libs/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <link rel="alternate" type="application/atom+xml" title="My*Candy 最新文章" href="/feed.xml">
+    <title>RSS 阅读器 QReader 发布 - My*Candy</title>
+</head>
+
+<body>
+    <div id="container">
+        <div id="container_inner">
+            <article>
+                <header>
+                    <h1 class="title"><a href="http://mengqi.info/html/2015/201505271335_qreader.html">RSS 阅读器 QReader 发布</a></h1>
+                    <p class="pubtime">m3ng9i 发表于 <time datetime="2015-05-27T13:35:00+08:00" pubdate>2015-05-27 13:35</time></p>
+                </header>
+                <p><img src="/static/2015/qreader_on_phone.jpg" alt="QReader">
+</p>
+
+<p>最近用 Go 语言和 JavaScript 写了一个 RSS 阅读器 <a href="https://github.com/m3ng9i/qreader" rel="nofollow">QReader</a>。</p>
+
+<p>主要功能：</p>
+
+<ul>
+<li>按照标签分类 feed<br></li>
+<li>为每个 feed 单独设置更新周期<br></li>
+<li>设置最大已读保留数，当某个 feed 的未读文章数量超过设定的值后，较早的未读文章会被自动标记为已读<br></li>
+<li>设置最大文章保留数，当某个 feed 的已读文章数量超过设定的值后，较早的已读文章会被自动删除<br></li>
+<li>可以按随机顺序显示抓取的文章条目<br></li>
+<li>设置每页显示的条目数量<br></li>
+<li>文章加星<br></li>
+<li>设置登录密码<br></li>
+<li>与 QReader 服务器通讯的数据可以开启 TLS 加密<br></li>
+<li>支持使用 Socks5 代理服务器抓取 feed<br></li>
+</ul>
+
+<p>运行 QReader 需要你用一台 PC 做 server，程序运行后，使用电脑或手机上的浏览器访问。</p>
+
+<p>这个项目我学到的一些东西：</p>
+
+<ul>
+<li><a href="https://git-scm.com" rel="nofollow">Git</a>：优秀的版本管理软件<br></li>
+<li><a href="https://github.com/go-xorm/xorm" rel="nofollow">Xorm</a>：强大的 ORM 库<br></li>
+<li><a href="https://angularjs.org" rel="nofollow">AngularJS</a>：路由和模板很好用<br></li>
+<li><a href="http://www.rssboard.org/rss-specification" rel="nofollow">RSS</a> 和 <a href="http://tools.ietf.org/html/rfc4287" rel="nofollow">Atom</a> 规范：根据规范我写了 <a href="https://github.com/m3ng9i/feedreader" rel="nofollow">feedreader</a> 包来做 feed 解析<br></li>
+</ul>
+
+<p>查看 <a href="https://github.com/m3ng9i/qreader" rel="nofollow">QReader 截图与更多说明</a>，<a href="https://github.com/m3ng9i/qreader/releases" rel="nofollow">下载 QReader</a>。欢迎使用，如果你喜欢，请给我一个 star。</p>
+
+            </article>
+
+            <nav>
+                <p><a href="/">首页</a> <a href="/html/about.html">关于</a> <a href="/feed.xml" title="atom 1.0 feed">订阅</a></p>
+            </nav>
+        </div>
+    </div>
+
+</body>
+
+</html>

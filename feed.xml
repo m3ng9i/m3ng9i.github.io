@@ -7,9 +7,51 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-02-28T11:53:05+08:00</updated>
+    <updated>2015-05-27T14:54:06+08:00</updated>
 
-    <entry><title>编译时向 go 程序写入 git 版本信息</title>
+    <entry><title>RSS 阅读器 QReader 发布</title>
+<author><name>m3ng9i</name></author>
+<id>http://mengqi.info/html/2015/201505271335_qreader.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2015/201505271335_qreader.html"/>
+<published>2015-05-27T13:35:00+08:00</published>
+<updated>2015-05-27T13:35:00+08:00</updated>
+<content type="html">
+    &lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/qreader_on_phone.jpg&quot; alt=&quot;QReader&quot;/&gt;
+&lt;/p&gt;
+
+&lt;p&gt;最近用 Go 语言和 JavaScript 写了一个 RSS 阅读器 &lt;a href=&quot;https://github.com/m3ng9i/qreader&quot; rel=&quot;nofollow&quot;&gt;QReader&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;主要功能：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;按照标签分类 feed&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;为每个 feed 单独设置更新周期&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;设置最大已读保留数，当某个 feed 的未读文章数量超过设定的值后，较早的未读文章会被自动标记为已读&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;设置最大文章保留数，当某个 feed 的已读文章数量超过设定的值后，较早的已读文章会被自动删除&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;可以按随机顺序显示抓取的文章条目&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;设置每页显示的条目数量&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;文章加星&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;设置登录密码&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;与 QReader 服务器通讯的数据可以开启 TLS 加密&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;支持使用 Socks5 代理服务器抓取 feed&lt;br/&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;运行 QReader 需要你用一台 PC 做 server，程序运行后，使用电脑或手机上的浏览器访问。&lt;/p&gt;
+
+&lt;p&gt;这个项目我学到的一些东西：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://git-scm.com&quot; rel=&quot;nofollow&quot;&gt;Git&lt;/a&gt;：优秀的版本管理软件&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/go-xorm/xorm&quot; rel=&quot;nofollow&quot;&gt;Xorm&lt;/a&gt;：强大的 ORM 库&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://angularjs.org&quot; rel=&quot;nofollow&quot;&gt;AngularJS&lt;/a&gt;：路由和模板很好用&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.rssboard.org/rss-specification&quot; rel=&quot;nofollow&quot;&gt;RSS&lt;/a&gt; 和 &lt;a href=&quot;http://tools.ietf.org/html/rfc4287&quot; rel=&quot;nofollow&quot;&gt;Atom&lt;/a&gt; 规范：根据规范我写了 &lt;a href=&quot;https://github.com/m3ng9i/feedreader&quot; rel=&quot;nofollow&quot;&gt;feedreader&lt;/a&gt; 包来做 feed 解析&lt;br/&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;查看 &lt;a href=&quot;https://github.com/m3ng9i/qreader&quot; rel=&quot;nofollow&quot;&gt;QReader 截图与更多说明&lt;/a&gt;，&lt;a href=&quot;https://github.com/m3ng9i/qreader/releases&quot; rel=&quot;nofollow&quot;&gt;下载 QReader&lt;/a&gt;。欢迎使用，如果你喜欢，请给我一个 star。&lt;/p&gt;
+
+            
+</content>
+</entry><entry><title>编译时向 go 程序写入 git 版本信息</title>
 <author><name>m3ng9i</name></author>
 <id>http://mengqi.info/html/2015/201502171941_build_go_program_with_git_version.html</id>
 <link rel="alternate" href="http://mengqi.info/html/2015/201502171941_build_go_program_with_git_version.html"/>
