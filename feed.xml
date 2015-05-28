@@ -2,12 +2,12 @@
  
 <feed xmlns="http://www.w3.org/2005/Atom">
  
-    <title>My*Candy</title>
+    <title>My Candy</title>
     <author><name>m3ng9i</name></author>
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-05-27T14:54:06+08:00</updated>
+    <updated>2015-05-28T12:12:17+08:00</updated>
 
     <entry><title>RSS 阅读器 QReader 发布</title>
 <author><name>m3ng9i</name></author>

@@ -313,3 +313,9 @@ section#index li {
     line-height:200%;
 }
 
+.hidden {
+    display:none;
+    font-size:0px;
+    width:0px;
+    height:0px;
+}
