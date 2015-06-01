@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html lang='zh-cn'>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,width=device-width">
+    <meta name="author" content="m3ng9i">
+    <meta name="title" content="在 Go 语言中获取字符串中的字符个数">
+    <meta name="pubtime" content="2015-06-01T23:00:00+08:00">
+    <meta name="url" content="http://mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html">
+    <script type="text/javascript" src="/static/libs/html5shiv.min.js"></script>
+    <script type="text/javascript" src="/static/libs/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/libs/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/static/include/style.css">
+    <link rel="alternate" type="application/atom+xml" title="My Candy 最新文章" href="/feed.xml">
+    <title>在 Go 语言中获取字符串中的字符个数 - My Candy</title>
+</head>
+
+<body>
+    <div id="container">
+        <div id="container_inner">
+            <article>
+                <header>
+                    <h1 class="title"><a href="http://mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html">在 Go 语言中获取字符串中的字符个数</a></h1>
+                    <p class="pubtime">m3ng9i 发表于 <time datetime="2015-06-01T23:00:00+08:00" pubdate>2015-06-01 23:00</time></p>
+                </header>
+                <p>在 Go 语言中，是不能用 <code>len</code> 函数来统计字符串中的字符个数的，这是因为在 Go 中，字符串是以 UTF-8 为格式进行存储的，在字符串上调用 len 函数，取得的是字符串包含的 byte 的个数。</p>
+
+<p>例如字符串：<code>Hello, 世界</code> 包含 9 个字符。使用 <code>len(&quot;Hello, 世界&quot;)</code> 得到的结果为 <code>13</code>，因为这个字符串占用 13 个字节：</p>
+
+<pre><code>s := &quot;Hello, 世界&quot;
+fmt.Println(len(s)) // 13
+fmt.Println([]byte(s)) // [72 101 108 108 111 44 32 228 184 150 231 149 140]
+</code></pre>
+
+<p>那么如何统计 Golang 字符串中的字符个数呢？有下面几种方法：</p>
+
+<ul>
+<li>使用 <code>bytes.Count()</code> 统计<br></li>
+<li>使用 <code>strings.Count()</code> 统计<br></li>
+<li>将字符串转换为 <code>[]rune</code> 后调用 len 函数进行统计<br></li>
+<li>使用 <code>utf8.RuneCountInString()</code> 统计<br></li>
+</ul>
+
+<p>具体代码：</p>
+
+<pre><code class="language-go">    package count
+
+    import &quot;bytes&quot;
+    import &quot;strings&quot;
+    import &quot;unicode/utf8&quot;
+
+    func f1(s string) int {
+        return bytes.Count([]byte(s), nil) - 1
+    }
+
+    func f2(s string) int {
+        return strings.Count(s, &quot;&quot;) - 1
+    }
+
+    func f3(s string) int {
+        return len([]rune(s))
+    }
+
+    func f4(s string) int {
+        return utf8.RuneCountInString(s)
+    }
+</code></pre>
+
+<p>用上面 4 个函数计算字符串 <code>Hello, 世界</code> 都会得到正确的字符个数：9。那究竟哪个方法更好一些呢？做一下测试看看：</p>
+
+<p>创建文件：<code>count_test.go</code>，内容如下：</p>
+
+<pre><code class="language-go">    package count
+
+    import &quot;bytes&quot;
+    import &quot;strings&quot;
+    import &quot;unicode/utf8&quot;
+    import &quot;testing&quot;
+
+    func f1(s string) int {
+        return bytes.Count([]byte(s), nil) - 1
+    }
+
+    func f2(s string) int {
+        return strings.Count(s, &quot;&quot;) - 1
+    }
+
+    func f3(s string) int {
+        return len([]rune(s))
+    }
+
+    func f4(s string) int {
+        return utf8.RuneCountInString(s)
+    }
+
+    var s = &quot;Hello, 世界&quot;
+
+    func Benchmark1(b *testing.B) {
+        for i := 0; i &lt; b.N; i++ {
+            f1(s)
+        }
+    }
+
+    func Benchmark2(b *testing.B) {
+        for i := 0; i &lt; b.N; i++ {
+            f2(s)
+        }
+    }
+
+    func Benchmark3(b *testing.B) {
+        for i := 0; i &lt; b.N; i++ {
+            f3(s)
+        }
+    }
+
+    func Benchmark4(b *testing.B) {
+        for i := 0; i &lt; b.N; i++ {
+            f4(s)
+        }
+    }
+</code></pre>
+
+<p>在命令行中运行命令：<code>go test count_test.go -bench &quot;.*&quot;</code>，输出如下内容：</p>
+
+<pre><code>testing: warning: no tests to run
+PASS
+Benchmark1  20000000           109 ns/op
+Benchmark2  20000000            61.6 ns/op
+Benchmark3  10000000           220 ns/op
+Benchmark4  30000000            58.1 ns/op
+ok      command-line-arguments  7.843s
+</code></pre>
+
+<p>看来，速度最快的是 <code>utf8.RuneCountInString()</code>。</p>
+
+            </article>
+
+            <nav>
+                <p><a href="/">首页</a> <a href="/html/about.html">关于</a> <a href="/feed.xml" title="atom 1.0 feed">订阅</a></p>
+            </nav>
+        </div>
+    </div>
+
+    <div class="hidden">
+        <script async type="text/javascript" src="http://tajs.qq.com/stats?sId=42968888" charset="UTF-8"></script>
+        <script async type="text/javascript" src="http://s95.cnzz.com/z_stat.php?id=1255242145&web_id=1255242145"></script>
+        <script type="text/javascript">
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-63483419-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </div>
+</body>
+
+</html>

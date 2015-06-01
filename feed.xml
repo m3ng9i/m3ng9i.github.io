@@ -7,12 +7,131 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-05-28T12:12:17+08:00</updated>
+    <updated>2015-06-01T23:02:46+08:00</updated>
 
-    <entry><title>RSS 阅读器 QReader 发布</title>
+    <entry><title>在 Go 语言中获取字符串中的字符个数</title>
 <author><name>m3ng9i</name></author>
-<id>http://mengqi.info/html/2015/201505271335_qreader.html</id>
-<link rel="alternate" href="http://mengqi.info/html/2015/201505271335_qreader.html"/>
+<id>http://mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html"/>
+<published>2015-06-01T23:00:00+08:00</published>
+<updated>2015-06-01T23:00:00+08:00</updated>
+<content type="html">
+    &lt;p&gt;在 Go 语言中，是不能用 &lt;code&gt;len&lt;/code&gt; 函数来统计字符串中的字符个数的，这是因为在 Go 中，字符串是以 UTF-8 为格式进行存储的，在字符串上调用 len 函数，取得的是字符串包含的 byte 的个数。&lt;/p&gt;
+
+&lt;p&gt;例如字符串：&lt;code&gt;Hello, 世界&lt;/code&gt; 包含 9 个字符。使用 &lt;code&gt;len(&amp;#34;Hello, 世界&amp;#34;)&lt;/code&gt; 得到的结果为 &lt;code&gt;13&lt;/code&gt;，因为这个字符串占用 13 个字节：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;s := &amp;#34;Hello, 世界&amp;#34;
+fmt.Println(len(s)) // 13
+fmt.Println([]byte(s)) // [72 101 108 108 111 44 32 228 184 150 231 149 140]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;那么如何统计 Golang 字符串中的字符个数呢？有下面几种方法：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;使用 &lt;code&gt;bytes.Count()&lt;/code&gt; 统计&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;使用 &lt;code&gt;strings.Count()&lt;/code&gt; 统计&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;将字符串转换为 &lt;code&gt;[]rune&lt;/code&gt; 后调用 len 函数进行统计&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;使用 &lt;code&gt;utf8.RuneCountInString()&lt;/code&gt; 统计&lt;br/&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;具体代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;    package count
+
+    import &amp;#34;bytes&amp;#34;
+    import &amp;#34;strings&amp;#34;
+    import &amp;#34;unicode/utf8&amp;#34;
+
+    func f1(s string) int {
+        return bytes.Count([]byte(s), nil) - 1
+    }
+
+    func f2(s string) int {
+        return strings.Count(s, &amp;#34;&amp;#34;) - 1
+    }
+
+    func f3(s string) int {
+        return len([]rune(s))
+    }
+
+    func f4(s string) int {
+        return utf8.RuneCountInString(s)
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用上面 4 个函数计算字符串 &lt;code&gt;Hello, 世界&lt;/code&gt; 都会得到正确的字符个数：9。那究竟哪个方法更好一些呢？做一下测试看看：&lt;/p&gt;
+
+&lt;p&gt;创建文件：&lt;code&gt;count_test.go&lt;/code&gt;，内容如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;    package count
+
+    import &amp;#34;bytes&amp;#34;
+    import &amp;#34;strings&amp;#34;
+    import &amp;#34;unicode/utf8&amp;#34;
+    import &amp;#34;testing&amp;#34;
+
+    func f1(s string) int {
+        return bytes.Count([]byte(s), nil) - 1
+    }
+
+    func f2(s string) int {
+        return strings.Count(s, &amp;#34;&amp;#34;) - 1
+    }
+
+    func f3(s string) int {
+        return len([]rune(s))
+    }
+
+    func f4(s string) int {
+        return utf8.RuneCountInString(s)
+    }
+
+    var s = &amp;#34;Hello, 世界&amp;#34;
+
+    func Benchmark1(b *testing.B) {
+        for i := 0; i &amp;lt; b.N; i++ {
+            f1(s)
+        }
+    }
+
+    func Benchmark2(b *testing.B) {
+        for i := 0; i &amp;lt; b.N; i++ {
+            f2(s)
+        }
+    }
+
+    func Benchmark3(b *testing.B) {
+        for i := 0; i &amp;lt; b.N; i++ {
+            f3(s)
+        }
+    }
+
+    func Benchmark4(b *testing.B) {
+        for i := 0; i &amp;lt; b.N; i++ {
+            f4(s)
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在命令行中运行命令：&lt;code&gt;go test count_test.go -bench &amp;#34;.*&amp;#34;&lt;/code&gt;，输出如下内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;testing: warning: no tests to run
+PASS
+Benchmark1  20000000           109 ns/op
+Benchmark2  20000000            61.6 ns/op
+Benchmark3  10000000           220 ns/op
+Benchmark4  30000000            58.1 ns/op
+ok      command-line-arguments  7.843s
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看来，速度最快的是 &lt;code&gt;utf8.RuneCountInString()&lt;/code&gt;。&lt;/p&gt;
+
+            
+</content>
+</entry><entry><title>RSS 阅读器 QReader 发布</title>
+<author><name>m3ng9i</name></author>
+<id>http://mengqi.info/html/2015/201505271335-qreader.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2015/201505271335-qreader.html"/>
 <published>2015-05-27T13:35:00+08:00</published>
 <updated>2015-05-27T13:35:00+08:00</updated>
 <content type="html">
@@ -53,8 +172,8 @@
 </content>
 </entry><entry><title>编译时向 go 程序写入 git 版本信息</title>
 <author><name>m3ng9i</name></author>
-<id>http://mengqi.info/html/2015/201502171941_build_go_program_with_git_version.html</id>
-<link rel="alternate" href="http://mengqi.info/html/2015/201502171941_build_go_program_with_git_version.html"/>
+<id>http://mengqi.info/html/2015/201502171941-build-go-program-with-git-version.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2015/201502171941-build-go-program-with-git-version.html"/>
 <published>2015-02-17T19:41:00+08:00</published>
 <updated>2015-02-17T19:41:00+08:00</updated>
 <content type="html">
@@ -228,8 +347,8 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 </content>
 </entry><entry><title>使用命令行分析日志文件</title>
 <author><name>m3ng9i</name></author>
-<id>http://mengqi.info/html/2015/201502142232_text_data_analysis.html</id>
-<link rel="alternate" href="http://mengqi.info/html/2015/201502142232_text_data_analysis.html"/>
+<id>http://mengqi.info/html/2015/201502142232-text-data-analysis.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2015/201502142232-text-data-analysis.html"/>
 <published>2015-02-14T22:32:00+08:00</published>
 <updated>2015-02-14T22:32:00+08:00</updated>
 <content type="html">

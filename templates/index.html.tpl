@@ -16,7 +16,7 @@
     <div id="container">
         <div id="container_inner">
             <section id="index">
-                <header><h1>My<span class="star">*</span>Candy</h1></header>
+                <header><h1><a href="http://{{domain}}">My<span class="star">*</span>Candy</a></h1></header>
                 <ul>
                     {% for i in index %}
                     <li><a href="{{i.Path}}">{{i.Title}}</a> <time datetime="{{i.PubTime|time:"2006-01-02T15:04Z07:00"}}" pubdate title="{{i.PubTime|time:"2006-01-02 15:04"}}">({{i.PubTime|time:"2006-01-02"}})</time></li>
