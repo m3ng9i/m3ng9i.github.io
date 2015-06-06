@@ -7,9 +7,155 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-06-01T23:02:46+08:00</updated>
+    <updated>2015-06-06T23:31:23+08:00</updated>
 
-    <entry><title>在 Go 语言中获取字符串中的字符个数</title>
+    <entry><title>使用 Golang 通过 Proxy 抓取网页</title>
+<author><name>m3ng9i</name></author>
+<id>http://mengqi.info/html/2015/201506062329-socks5-proxy-client-in-golang.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2015/201506062329-socks5-proxy-client-in-golang.html"/>
+<published>2015-06-06T23:29:00+08:00</published>
+<updated>2015-06-06T23:29:00+08:00</updated>
+<content type="html">
+    &lt;p&gt;使用 Go 自带的 &lt;code&gt;http&lt;/code&gt; 包可以很方便的抓取网页，例如下面这个例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;package main
+
+import &amp;#34;fmt&amp;#34;
+import &amp;#34;net/http&amp;#34;
+import &amp;#34;io/ioutil&amp;#34;
+
+func main() {
+    resp, err := http.Get(&amp;#34;http://mengqi.info&amp;#34;)
+    if err != nil {
+        fmt.Println(err)
+    } else {
+
+        b, err := ioutil.ReadAll(resp.Body)
+        resp.Body.Close()
+        if err != nil {
+            fmt.Println(err)
+        } else {
+            fmt.Println(string(b))
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是如果想要通过代理服务器抓取网页该怎么办呢？我们可以尝试下 &lt;a href=&quot;https://godoc.org/golang.org/x/net/proxy&quot; rel=&quot;nofollow&quot;&gt;golang.org/x/net/proxy&lt;/a&gt; 这个包。由于这个包并不在 Go 的标准库中，需要使用 &lt;code&gt;go get&lt;/code&gt; 命令进行安装。&lt;/p&gt;
+
+&lt;p&gt;下面是利用 proxy 包创建 socks5 proxy client 并抓取网页的例子。&lt;/p&gt;
+
+&lt;p&gt;首先需要创建一个 &lt;em&gt;dialer&lt;/em&gt;，它包含了 sock5 代理服务器的地址、用户名、密码。&lt;a href=&quot;http://golang.org/pkg/net/#Dialer&quot; rel=&quot;nofollow&quot;&gt;net 包文档&lt;/a&gt;提到：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;A Dialer contains options for connecting to an address.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;下面是创建 dialer 的代码，这里假设代理服务器的 IP 为 127.0.0.1，端口为 8080，用户名为 username, 密码为 password：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;dialer, err := proxy.SOCKS5(&amp;#34;tcp&amp;#34;, &amp;#34;127.0.0.1:8080&amp;#34;,
+    &amp;amp;proxy.Auth{User:&amp;#34;username&amp;#34;, Password:&amp;#34;password&amp;#34;},
+    &amp;amp;net.Dialer {
+        Timeout: 30 * time.Second,
+        KeepAlive: 30 * time.Second,
+    },
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果代理服务器并不需要用户名、密码，可以将 proxy.SOCKS5 函数的第三个参数设置为 &lt;code&gt;nil&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;接下来需要创建一个 &lt;em&gt;transport&lt;/em&gt;，它会利用刚才创建的 dialer 进行 TCP 连接。&lt;a href=&quot;http://golang.org/pkg/net/http/#pkg-overview&quot; rel=&quot;nofollow&quot;&gt;net/http 包文档&lt;/a&gt;提到：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;For control over proxies, TLS configuration, keep-alives, compression, and other settings, create a Transport.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;创建 transport 的代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;transport := &amp;amp;http.Transport{
+    Proxy: nil,
+    Dial: dialer.Dial,
+    TLSHandshakeTimeout: 10 * time.Second,
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在，创建一个 &lt;em&gt;http client&lt;/em&gt;，它会用到刚才创建的 transport：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;client := &amp;amp;http.Client { Transport: transport }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有了 http client，就可以通过代理服务器发起 http 请求了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;response, err := client.Get(&amp;#34;http://mengqi.info&amp;#34;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面是完整的例子代码，client 的创建过程被封装成了一个函数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;package main
+
+import &amp;#34;fmt&amp;#34;
+import &amp;#34;net&amp;#34;
+import &amp;#34;time&amp;#34;
+import &amp;#34;os&amp;#34;
+import &amp;#34;net/http&amp;#34;
+import &amp;#34;io/ioutil&amp;#34;
+import &amp;#34;golang.org/x/net/proxy&amp;#34;
+
+
+func Socks5Client(addr string, auth ...*proxy.Auth) (client *http.Client, err error) {
+
+    dialer, err := proxy.SOCKS5(&amp;#34;tcp&amp;#34;, addr,
+        nil,
+        &amp;amp;net.Dialer {
+            Timeout: 30 * time.Second,
+            KeepAlive: 30 * time.Second,
+        },
+    )
+    if err != nil {
+        return
+    }
+
+    transport := &amp;amp;http.Transport{
+        Proxy: nil,
+        Dial: dialer.Dial,
+        TLSHandshakeTimeout: 10 * time.Second,
+    }
+
+    client = &amp;amp;http.Client { Transport: transport }
+
+    return
+}
+
+
+func main() {
+
+    client, err := Socks5Client(&amp;#34;127.0.0.1:8080&amp;#34;)
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+
+    // ip138 可以显示请求客户端的 IP
+    resp, err := client.Get(&amp;#34;http://1111.ip138.com/ic.asp&amp;#34;)
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+
+    b, err := ioutil.ReadAll(resp.Body)
+    resp.Body.Close()
+    if err != nil {
+        fmt.Println(err)
+    } else {
+        fmt.Println(string(b))
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+            
+</content>
+</entry><entry><title>在 Go 语言中获取字符串中的字符个数</title>
 <author><name>m3ng9i</name></author>
 <id>http://mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html</id>
 <link rel="alternate" href="http://mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html"/>
