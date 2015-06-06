@@ -185,13 +185,29 @@ article pre code {
     font-size: 0.8em;
 }
 
-/* 用于引用、提示 markdown: >text */
+/* 用于引用 markdown: >text */
 article blockquote {
-    border-left:4px #cccccc solid;
-    padding:2px 10px;
-    margin:0.8em 0;
-    font-size:1.2em;
-    border-radius:10px;
+    font-size: 1.2em;
+    font-style: italic;
+    line-height: 1.45;
+    position: relative;
+    color: #555555;
+    text-indent:1em;
+    width: 90%;
+    padding: 1em 1.5em;
+    margin:0 auto;
+    display:table
+}
+
+article blockquote:before {
+    font-family: Georgia, serif;
+    display: block;
+    content: "\201C";
+    font-size: 4em;
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    color: #7a7a7a;
 }
 
 /* 一般用于文章开头的提示、强调 markdown: >*text* */
@@ -318,9 +334,14 @@ section#index li {
     line-height:200%;
 }
 
+/************************
+ * 其他
+ ***********************/
+
 .hidden {
     display:none;
     font-size:0px;
     width:0px;
     height:0px;
 }
+
