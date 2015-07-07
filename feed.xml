@@ -7,9 +7,77 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-06-06T23:31:23+08:00</updated>
+    <updated>2015-07-07T15:39:07+08:00</updated>
 
-    <entry><title>使用 Golang 通过 Proxy 抓取网页</title>
+    <entry><title>Golang 中的 UTF-8 与 GBK 编码转换</title>
+<author><name>m3ng9i</name></author>
+<id>http://mengqi.info/html/2015/201507071345-using-golang-to-convert-text-between-gbk-and-utf-8.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2015/201507071345-using-golang-to-convert-text-between-gbk-and-utf-8.html"/>
+<published>2015-07-07T13:45:00+08:00</published>
+<updated>2015-07-07T13:45:00+08:00</updated>
+<content type="html">
+    &lt;p&gt;在 Golang 中转换 UTF-8 与 GBK 编码的文本，可以使用 Go 官方的 &lt;a href=&quot;https://godoc.org/golang.org/x/text&quot; rel=&quot;nofollow&quot;&gt;golang.org/x/text&lt;/a&gt; 包实现，这个包可以通过下面的命令安装：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go get golang.org/x/text
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果访问 golang.org 站点存在困难，也可以使用下面的命令通过 github 下载 text 包的代码，下载完成后，再手工将其移动至 &lt;code&gt;$GOPATH/src/golang.org/x/text&lt;/code&gt; 目录中完成安装。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone --depth 1 https://github.com/golang/text.git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面就是 UTF-8 与 GBK 编码转换的例子代码。这里创建了两个函数：&lt;code&gt;GbkToUtf8()&lt;/code&gt; 和 &lt;code&gt;Utf8ToGbk()&lt;/code&gt;，分别进行 GBK 到 UTF-8 和 UTF-8 到 GBK 的转换。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;package main
+
+import (
+    &amp;#34;bytes&amp;#34;
+    &amp;#34;golang.org/x/text/encoding/simplifiedchinese&amp;#34;
+    &amp;#34;golang.org/x/text/transform&amp;#34;
+    &amp;#34;io/ioutil&amp;#34;
+    &amp;#34;fmt&amp;#34;
+)
+
+func GbkToUtf8(s []byte) ([]byte, error) {
+    reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewDecoder())
+    d, e := ioutil.ReadAll(reader)
+    if e != nil {
+        return nil, e
+    }
+    return d, nil
+}
+
+func Utf8ToGbk(s []byte) ([]byte, error) {
+    reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewEncoder())
+    d, e := ioutil.ReadAll(reader)
+    if e != nil {
+        return nil, e
+    }
+    return d, nil
+}
+
+func main() {
+
+    s := &amp;#34;GBK 与 UTF-8 编码转换测试&amp;#34;
+    gbk, err := Utf8ToGbk([]byte(s))
+    if err != nil {
+        fmt.Println(err)
+    } else {
+        fmt.Println(string(gbk))
+    }
+
+    utf8, err := GbkToUtf8(gbk)
+    if err != nil {
+        fmt.Println(err)
+    } else {
+        fmt.Println(string(utf8))
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+            
+</content>
+</entry><entry><title>使用 Golang 通过 Proxy 抓取网页</title>
 <author><name>m3ng9i</name></author>
 <id>http://mengqi.info/html/2015/201506062329-socks5-proxy-client-in-golang.html</id>
 <link rel="alternate" href="http://mengqi.info/html/2015/201506062329-socks5-proxy-client-in-golang.html"/>

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html lang='zh-cn'>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,width=device-width">
+    <meta name="author" content="m3ng9i">
+    <meta name="title" content="Golang 中的 UTF-8 与 GBK 编码转换">
+    <meta name="pubtime" content="2015-07-07T13:45:00+08:00">
+    <meta name="url" content="http://mengqi.info/html/2015/201507071345-using-golang-to-convert-text-between-gbk-and-utf-8.html">
+    <script type="text/javascript" src="/static/libs/html5shiv.min.js"></script>
+    <script type="text/javascript" src="/static/libs/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/libs/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/static/include/style.css">
+    <link rel="alternate" type="application/atom+xml" title="My Candy 最新文章" href="/feed.xml">
+    <title>Golang 中的 UTF-8 与 GBK 编码转换 - My Candy</title>
+</head>
+
+<body>
+    <div id="container">
+        <div id="container_inner">
+            <article>
+                <header>
+                    <h1 class="title"><a href="http://mengqi.info/html/2015/201507071345-using-golang-to-convert-text-between-gbk-and-utf-8.html">Golang 中的 UTF-8 与 GBK 编码转换</a></h1>
+                    <p class="pubtime">m3ng9i 发表于 <time datetime="2015-07-07T13:45:00+08:00" pubdate>2015-07-07 13:45</time></p>
+                </header>
+                <p>在 Golang 中转换 UTF-8 与 GBK 编码的文本，可以使用 Go 官方的 <a href="https://godoc.org/golang.org/x/text" rel="nofollow">golang.org/x/text</a> 包实现，这个包可以通过下面的命令安装：</p>
+
+<pre><code>go get golang.org/x/text
+</code></pre>
+
+<p>如果访问 golang.org 站点存在困难，也可以使用下面的命令通过 github 下载 text 包的代码，下载完成后，再手工将其移动至 <code>$GOPATH/src/golang.org/x/text</code> 目录中完成安装。</p>
+
+<pre><code>git clone --depth 1 https://github.com/golang/text.git
+</code></pre>
+
+<p>下面就是 UTF-8 与 GBK 编码转换的例子代码。这里创建了两个函数：<code>GbkToUtf8()</code> 和 <code>Utf8ToGbk()</code>，分别进行 GBK 到 UTF-8 和 UTF-8 到 GBK 的转换。</p>
+
+<pre><code class="language-go">package main
+
+import (
+    &quot;bytes&quot;
+    &quot;golang.org/x/text/encoding/simplifiedchinese&quot;
+    &quot;golang.org/x/text/transform&quot;
+    &quot;io/ioutil&quot;
+    &quot;fmt&quot;
+)
+
+func GbkToUtf8(s []byte) ([]byte, error) {
+    reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewDecoder())
+    d, e := ioutil.ReadAll(reader)
+    if e != nil {
+        return nil, e
+    }
+    return d, nil
+}
+
+func Utf8ToGbk(s []byte) ([]byte, error) {
+    reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewEncoder())
+    d, e := ioutil.ReadAll(reader)
+    if e != nil {
+        return nil, e
+    }
+    return d, nil
+}
+
+func main() {
+
+    s := &quot;GBK 与 UTF-8 编码转换测试&quot;
+    gbk, err := Utf8ToGbk([]byte(s))
+    if err != nil {
+        fmt.Println(err)
+    } else {
+        fmt.Println(string(gbk))
+    }
+
+    utf8, err := GbkToUtf8(gbk)
+    if err != nil {
+        fmt.Println(err)
+    } else {
+        fmt.Println(string(utf8))
+    }
+}
+</code></pre>
+
+            </article>
+
+            <nav>
+                <p><a href="/">首页</a> <a href="/html/about.html">关于</a> <a href="/feed.xml" title="atom 1.0 feed">订阅</a></p>
+            </nav>
+        </div>
+    </div>
+
+    <div class="hidden">
+        <script async type="text/javascript" src="http://s95.cnzz.com/z_stat.php?id=1255242145&web_id=1255242145"></script>
+        <script type="text/javascript">
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-63483419-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </div>
+</body>
+
+</html>
