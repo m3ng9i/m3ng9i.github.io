@@ -10,6 +10,7 @@
     <script type="text/javascript" src="/static/libs/html5shiv.min.js"></script>
     <script type="text/javascript" src="/static/libs/jquery-1.11.2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/libs/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/static/libs/font-awesome-4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="/static/include/style.css">
     <link rel="alternate" type="application/atom+xml" title="My Candy 最新文章" href="/feed.xml">
     <title>{{article.Title}} - My Candy</title>
