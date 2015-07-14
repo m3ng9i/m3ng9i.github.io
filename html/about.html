@@ -109,7 +109,7 @@ function createReposTable(data, repos) {
     for (var i = 0; i < repos.length; i += 2) {
         for (var j = 0; j < data.length; j++) {
             if (repos[i].toLowerCase() == data[j].name.toLowerCase()) {
-                html += "<tbody title='点击跳转到 github 页面' onclick='window.open(\"" + data[j].html_url + "\");'>" +
+                html += "<tbody title='点击跳转到 github 页面' tabindex='0' data-github-url='" + data[j].html_url + "'>" +
                     "<tr><th>" +
                     "<span><span class='fa fa-github-alt'></span> " + repos[i] + "</span>" +
                     "<span>" + data[j].stargazers_count + " <span class='fa fa-star-o star-o github_star'></span></span>" +
@@ -132,6 +132,19 @@ function createReposTable(data, repos) {
 
 function showRepos(html) {
     $("#project").html(html);
+
+    // bind onclick and onkeypress event
+    $("table.github_project tbody").each(function() {
+        var url = $(this).attr("data-github-url");
+        $(this).click(function() {
+            window.open(url);
+        });
+        $(this).keypress(function(event) {
+            if (event.keyCode == 13) {
+                window.open(url);
+            }
+        });
+    });
 
     // set css effect
     $("table.github_project > tbody").hover(function() {
