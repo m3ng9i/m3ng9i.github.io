@@ -133,8 +133,10 @@ function createReposTable(data, repos) {
 function showRepos(html) {
     $("#project").html(html);
 
+    var tbody =$("table.github_project > tbody");
+
     // bind onclick and onkeypress event
-    $("table.github_project tbody").each(function() {
+    tbody.each(function() {
         var url = $(this).attr("data-github-url");
         $(this).click(function() {
             window.open(url);
@@ -146,21 +148,37 @@ function showRepos(html) {
         });
     });
 
+    var mouseover = function(one) {
+        // if other tbody is highlighted, remove the highlight style.
+        tbody.each(function() {
+            if (this != one) {
+                mouseout(this);
+            }
+        });
+
+        $(one).addClass("mouseover");
+        var e = $(one.getElementsByClassName("github_star"));
+        e.addClass("star");
+        e.removeClass("star-o");
+        e.addClass("fa-star");
+        e.removeClass("fa-star-o");
+    };
+
+    var mouseout = function(one) {
+        $(one).removeClass("mouseover");
+        var e = $(one.getElementsByClassName("github_star"));
+        e.addClass("star-o");
+        e.removeClass("star");
+        e.addClass("fa-star-o");
+        e.removeClass("fa-star");
+    };
+
     // set css effect
-    $("table.github_project > tbody").hover(function() {
-        $(this).addClass("mouseover");
-        var element = $(this.getElementsByClassName("github_star"));
-        element.addClass("star");
-        element.removeClass("star-o");
-        element.addClass("fa-star");
-        element.removeClass("fa-star-o");
-    }, function() {
-        $(this).removeClass("mouseover");
-        var element = $(this.getElementsByClassName("github_star"));
-        element.addClass("star-o");
-        element.removeClass("star");
-        element.addClass("fa-star-o");
-        element.removeClass("fa-star");
+    tbody.on("mouseover focus touchstart", function() {
+        mouseover(this);
+    });
+    tbody.on("mouseout blur touchend", function() {
+        mouseout(this);
     });
 }
 

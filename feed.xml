@@ -7,7 +7,7 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-07-10T16:16:04+08:00</updated>
+    <updated>2015-07-19T06:10:06+08:00</updated>
 
     <entry><title>Golang 中的 UTF-8 与 GBK 编码转换</title>
 <author><name>m3ng9i</name></author>
