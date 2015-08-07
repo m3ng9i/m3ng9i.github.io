@@ -3,214 +3,145 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1,width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="buildtime" content="2015-08-07T10:27:14+08:00">
+    
     <meta name="author" content="m3ng9i">
     <meta name="title" content="关于">
     <meta name="pubtime" content="2015-07-10T13:58:00+08:00">
-    <meta name="url" content="http://mengqi.info/html/about.html">
-    <script type="text/javascript" src="/static/libs/html5shiv.min.js"></script>
-    <script type="text/javascript" src="/static/libs/jquery-1.11.2.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/libs/normalize.css">
-    <link rel="stylesheet" type="text/css" href="/static/libs/font-awesome-4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/include/style.css">
+    
+    <meta name="url" content="//mengqi.info/html/about.html">
+    <script src="/static/libs/jquery-1.11.2.min.js"></script>
+    <script src="/static/libs/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <script src="/static/libs/highlight.js-8.7/highlight.pack.js"></script>
+    <script src="/static/include/mycandy.js"></script>
+    <!--[if lt IE 9]>
+    <script src="/static/libs/html5shiv.min.js"></script>
+    <script src="/static/libs/respond-1.4.2.min.js"></script>
+    <![endif]-->
+    <script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="/static/libs/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/libs/font-awesome-4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/libs/highlight.js-8.7/github-gist.css">
+    <link rel="stylesheet" href="/static/include/mycandy.css">
+    <link rel="icon" sizes="192x192" href="/static/images/icon.png">
     <link rel="alternate" type="application/atom+xml" title="My Candy 最新文章" href="/feed.xml">
     <title>关于 - My Candy</title>
-</head>
-
-<body>
-    <div id="container">
-        <div id="container_inner">
-            <article>
-                <header>
-                    <h1 class="title"><a href="http://mengqi.info/html/about.html">关于</a></h1>
-                    <p class="pubtime">m3ng9i 发表于 <time datetime="2015-07-10T13:58:00+08:00" pubdate>2015-07-10 13:58</time></p>
-                </header>
-                <p><link rel="stylesheet" type="text/css" href="/static/include/github_project.css"></p>
-
+    <link rel="stylesheet" href="/static/include/about.css"/>
+<script src="/static/include/about_github_project.js"></script>
 <script>
-
-var REPOS = [
-    "QReader",      "一个使用 Go 和 JavaScript 编写的 RSS 阅读器。支持标签、文章加星、设置 feed 更新周期与文章保留数量、文章搜索等功能。",
-    "Feedreader",   "RSS 2.0 和 Atom 1.0 解析模块，供 QReader 调用。",
-    "go-utils",     "Go 工具包。",
-    "IP-resolver",  "一个命令行工具，同时调用多个 DNS 查询同一个域名的 IP 地址，并显示对比结果。",
-];
-
-function createReposHtml() {
-    var apiurl = "https://api.github.com/users/m3ng9i/repos";
-
-    $("#project").html("<span class='notice'><span class='fa fa-refresh fa-spin'></span> 加载中 ...</span>");
-
-    var githubHtml = localStorage.aboutPageGithubHtml || "";
-    var timeDiff = Math.round(($.now() - parseInt(localStorage.aboutPageLastRequest || 0)) / 60000); // minutes from last request
-
-    // if githubHtml is not empty and last request time < 15 minutes, load the cache.
-    if (githubHtml != "" && timeDiff < 15) {
-        showRepos(githubHtml);
-        console.log("Load github project cache saved " + timeDiff + " minutes ago.");
-        return;
-    }
-
-    $.getJSON(apiurl, function(data) {
-
-        githubHtml = createReposTable(data, REPOS);
-
-        // save cache
-        localStorage.aboutPageGithubHtml = githubHtml;
-        localStorage.aboutPageLastRequest = $.now();
-
-        // display repos info
-        showRepos(githubHtml);
-
-    }).fail(function() {
-
-        var error = "<span class='error'>" +
-            "<span class='fa fa-warning'></span> 获取 github 项目信息出错，请稍后" +
-            "<a href='' onclick='createReposHtml();return false;'>刷新</a>重试。</span>";
-
-        // if cache is too old (saved 6 hours ago), show error
-        if (timeDiff > 360 || githubHtml == "") {
-            $("#project").html(error);
-        } else {
-            showRepos(githubHtml);
-            console.warn("Could not fetch " + apiurl + ", load cache saved " + timeDiff + " minutes ago.");
-        }
-    });
-
-}
-
-function createReposTable(data, repos) {
-
-    var dateString = function(date) {
-        var d = new Date(date);
-        if (isNaN(d.valueOf())) {
-            return "无法获取";
-        }
-
-        var month = d.getMonth() + 1;
-        month = (month < 10) ? "0" + month : month;
-
-        var day = d.getDate();
-        day = (day < 10) ? "0" + day : day;
-
-        var hours = d.getHours();
-        hours = (hours < 10) ? "0" + hours : hours;
-
-        var minutes = d.getMinutes();
-        minutes = (minutes < 10) ? "0" + minutes : minutes;
-
-        var timezone = (0 - Math.round(d.getTimezoneOffset() / 60)) * 100;
-        var sign = (timezone > 0) ? "+" : "-";
-        timezone = sign + ((timezone < 1000) ? "0" + timezone : timezone);
-        return d.getFullYear() + "-" + month + "-" + day + " " + hours + ":" + minutes + " " + timezone;
-    };
-
-    var html = "";
-
-    for (var i = 0; i < repos.length; i += 2) {
-        for (var j = 0; j < data.length; j++) {
-            if (repos[i].toLowerCase() == data[j].name.toLowerCase()) {
-                html += "<tbody title='点击跳转到 github 页面' tabindex='0' data-github-url='" + data[j].html_url + "'>" +
-                    "<tr><th>" +
-                    "<span><span class='fa fa-github-alt'></span> " + repos[i] + "</span>" +
-                    "<span>" + data[j].stargazers_count + " <span class='fa fa-star-o star-o github_star'></span></span>" +
-                    "</th></tr>" +
-                    "<tr><td>" + repos[i + 1] + "</td></tr>" +
-                    "<tr><td>Github 地址：" + data[j].html_url + "</td></tr>" +
-                    "<tr><td>主要语言：" + data[j].language + "</td></tr>" +
-                    "<tr><td>大小：" + data[j].size + "KB </td></tr>" +
-                    "<tr><td>最近更新：" + dateString(data[j].pushed_at) + "</td></tr>" +
-                    "<tr><td>&nbsp;</td></tr>" +
-                    "</tbody>";
-            }
-        }
-    }
-
-    html = "<table class='github_project'>" + html + "</table>";
-
-    return html;
-}
-
-function showRepos(html) {
-    $("#project").html(html);
-
-    var tbody =$("table.github_project > tbody");
-
-    // bind onclick and onkeypress event
-    tbody.each(function() {
-        var url = $(this).attr("data-github-url");
-        $(this).click(function() {
-            window.open(url);
-        });
-        $(this).keypress(function(event) {
-            if (event.keyCode == 13) {
-                window.open(url);
-            }
-        });
-    });
-
-    var mouseover = function(one) {
-        // if other tbody is highlighted, remove the highlight style.
-        tbody.each(function() {
-            if (this != one) {
-                mouseout(this);
-            }
-        });
-
-        $(one).addClass("mouseover");
-        var e = $(one.getElementsByClassName("github_star"));
-        e.addClass("star");
-        e.removeClass("star-o");
-        e.addClass("fa-star");
-        e.removeClass("fa-star-o");
-    };
-
-    var mouseout = function(one) {
-        $(one).removeClass("mouseover");
-        var e = $(one.getElementsByClassName("github_star"));
-        e.addClass("star-o");
-        e.removeClass("star");
-        e.addClass("fa-star-o");
-        e.removeClass("fa-star");
-    };
-
-    // set css effect
-    tbody.on("mouseover focus touchstart", function() {
-        mouseover(this);
-    });
-    tbody.on("mouseout blur touchend", function() {
-        mouseout(this);
-    });
-}
-
 $(document).ready(function() {
     createReposHtml();
 });
-
 </script>
+</head>
 
-<p>孟琦 （m3ng9i）: Golang、Python、JavaScript、Linux、命令行爱好者。</p>
+<body>
+    <!--[if lt IE 9]>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center alert alert-danger">
+                <p>你正在使用低版本的 IE 浏览器，某些功能或效果可能无法正常显示。建议使用 Google Chrome、Mozilla Firefox、Safari 等现代浏览器。</p>
+            </div>
+        </div>
+    </div>
+    <![endif]-->
+
+    <header class="container">
+
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <nav class="navbar navbar-default navbar-fixed-top">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-links" aria-expanded="false">
+                                <span class="sr-only">展开导航菜单</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand mycandy-brand" href="//mengqi.info">My<sup class="fa fa-asterisk mycandy-asterisk"></sup>Candy</a>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse" id="navbar-links">
+                            <ul class="nav navbar-nav">
+                                <li><a href="/">首页</a></li>
+                                <li><a href="/html/about.html">关于</a></li>
+
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        开源项目
+                                        <span class="caret"></span>
+                                    </a>
+
+                                    <ul class="dropdown-menu mycandy-github">
+                                        <li><a href="https://github.com/m3ng9i">Github 主页</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="https://github.com/m3ng9i/qreader" title="一个 B/S 架构的 RSS 阅读器">QReader</a></li>
+                                        <li><a href="https://github.com/m3ng9i/feedreader" title="RSS 2.0 和 Atom 1.0 解析模块">Feedreader</a></li>
+                                        <li><a href="https://github.com/m3ng9i/go-utils" title="Go 工具包">go-utils</a></li>
+                                        <li><a href="https://github.com/m3ng9i/IP-resolver" title="可以调用多个 DNS 查询一个域名的 IP，并对比查询结果">IP-resolver</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="/feed.xml" title="atom 1.0 feed"><span class="fa fa-rss-square mycandy-rss"></span> 订阅</a></li>
+                            </ul>
+
+
+                        </div><!-- end of #navbar-links -->
+                    </div><!-- end of div.container-fluid -->
+                </nav>
+            </div><!-- end of col-md-10 div -->
+
+        </div>
+    </header>
+
+    <div id="content">
+        <article class="container">
+    <div class="row">
+        <header class="col-md-8 col-md-offset-2">
+            <h1 class="mycandy-title"><a href="//mengqi.info/html/about.html">关于</a></h1>
+            <p class="mycandy-pubtime">m3ng9i 发表于
+                <time datetime="2015-07-10T13:58:00+08:00" pubdate>2015-07-10 13:58</time>
+            </p>
+        </header>
+    </div>
+
+    <div class="row">
+        
+        <div class="col-md-8 col-md-offset-2 mycandy-article article">
+            <p>孟琦 （m3ng9i）: Golang、Python、JavaScript、Linux、命令行爱好者。</p>
 
 <ul>
-<li>blog: <a href="http://mengqi.info" rel="nofollow">http://mengqi.info</a><br></li>
-<li>github: <a href="https://github.com/m3ng9i" rel="nofollow">https://github.com/m3ng9i</a><br></li>
-<li>email: <a href="mailto:&#x35;&#x62;&#x35;&#x66;&#x37;&#x34;&#x32;&#x36;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x35;&#x62;&#x35;&#x66;&#x37;&#x34;&#x32;&#x36;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a><br></li>
+    <li>blog: <a href="http://mengqi.info">http://mengqi.info</a></li>
+    <li>github: <a href="https://github.com/m3ng9i">https://github.com/m3ng9i</a></li>
+    <li>email: <a href="mailto:5b5f7426@gmail.com">5b5f7426@gmail.com</a></li>
 </ul>
 
 <p>部分开源项目：</p>
 
 <section id="project"></section>
 
-            </article>
-
-            <nav>
-                <p><a href="/">首页</a> <a href="/html/about.html">关于</a> <a href="/feed.xml" title="atom 1.0 feed">订阅</a></p>
-            </nav>
         </div>
     </div>
+</article>
 
-    <div class="hidden">
-        <script async type="text/javascript" src="http://s95.cnzz.com/z_stat.php?id=1255242145&web_id=1255242145"></script>
-        <script type="text/javascript">
+    </div>
+
+    <footer class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a class="mycandy-brand" href="/" title="首页"><sup class="fa fa-asterisk mycandy-asterisk"></sup></a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="mycandy-hidden">
+        <script async src="//s95.cnzz.com/z_stat.php?id=1255242145&web_id=1255242145"></script>
+        <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)

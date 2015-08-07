@@ -7,7 +7,7 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-07-19T06:10:06+08:00</updated>
+    <updated>2015-08-07T10:27:15+08:00</updated>
 
     <entry><title>Golang 中的 UTF-8 与 GBK 编码转换</title>
 <author><name>m3ng9i</name></author>
@@ -18,12 +18,12 @@
 <content type="html">
     &lt;p&gt;在 Golang 中转换 UTF-8 与 GBK 编码的文本，可以使用 Go 官方的 &lt;a href=&quot;https://godoc.org/golang.org/x/text&quot; rel=&quot;nofollow&quot;&gt;golang.org/x/text&lt;/a&gt; 包实现，这个包可以通过下面的命令安装：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;go get golang.org/x/text
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go get golang.org/x/text
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;如果访问 golang.org 站点存在困难，也可以使用下面的命令通过 github 下载 text 包的代码，下载完成后，再手工将其移动至 &lt;code&gt;$GOPATH/src/golang.org/x/text&lt;/code&gt; 目录中完成安装。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;git clone --depth 1 https://github.com/golang/text.git
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;git clone --depth 1 https://github.com/golang/text.git
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;下面就是 UTF-8 与 GBK 编码转换的例子代码。这里创建了两个函数：&lt;code&gt;GbkToUtf8()&lt;/code&gt; 和 &lt;code&gt;Utf8ToGbk()&lt;/code&gt;，分别进行 GBK 到 UTF-8 和 UTF-8 到 GBK 的转换。&lt;/p&gt;
@@ -75,7 +75,7 @@ func main() {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-            
+        
 </content>
 </entry><entry><title>使用 Golang 通过 Proxy 抓取网页</title>
 <author><name>m3ng9i</name></author>
@@ -221,7 +221,7 @@ func main() {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-            
+        
 </content>
 </entry><entry><title>在 Go 语言中获取字符串中的字符个数</title>
 <author><name>m3ng9i</name></author>
@@ -234,7 +234,7 @@ func main() {
 
 &lt;p&gt;例如字符串：&lt;code&gt;Hello, 世界&lt;/code&gt; 包含 9 个字符。使用 &lt;code&gt;len(&amp;#34;Hello, 世界&amp;#34;)&lt;/code&gt; 得到的结果为 &lt;code&gt;13&lt;/code&gt;，因为这个字符串占用 13 个字节：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;s := &amp;#34;Hello, 世界&amp;#34;
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;s := &amp;#34;Hello, 世界&amp;#34;
 fmt.Println(len(s)) // 13
 fmt.Println([]byte(s)) // [72 101 108 108 111 44 32 228 184 150 231 149 140]
 &lt;/code&gt;&lt;/pre&gt;
@@ -250,97 +250,97 @@ fmt.Println([]byte(s)) // [72 101 108 108 111 44 32 228 184 150 231 149 140]
 
 &lt;p&gt;具体代码：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;    package count
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;package count
 
-    import &amp;#34;bytes&amp;#34;
-    import &amp;#34;strings&amp;#34;
-    import &amp;#34;unicode/utf8&amp;#34;
+import &amp;#34;bytes&amp;#34;
+import &amp;#34;strings&amp;#34;
+import &amp;#34;unicode/utf8&amp;#34;
 
-    func f1(s string) int {
-        return bytes.Count([]byte(s), nil) - 1
-    }
+func f1(s string) int {
+    return bytes.Count([]byte(s), nil) - 1
+}
 
-    func f2(s string) int {
-        return strings.Count(s, &amp;#34;&amp;#34;) - 1
-    }
+func f2(s string) int {
+    return strings.Count(s, &amp;#34;&amp;#34;) - 1
+}
 
-    func f3(s string) int {
-        return len([]rune(s))
-    }
+func f3(s string) int {
+    return len([]rune(s))
+}
 
-    func f4(s string) int {
-        return utf8.RuneCountInString(s)
-    }
+func f4(s string) int {
+    return utf8.RuneCountInString(s)
+}
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;用上面 4 个函数计算字符串 &lt;code&gt;Hello, 世界&lt;/code&gt; 都会得到正确的字符个数：9。那究竟哪个方法更好一些呢？做一下测试看看：&lt;/p&gt;
 
 &lt;p&gt;创建文件：&lt;code&gt;count_test.go&lt;/code&gt;，内容如下：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;    package count
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;package count
 
-    import &amp;#34;bytes&amp;#34;
-    import &amp;#34;strings&amp;#34;
-    import &amp;#34;unicode/utf8&amp;#34;
-    import &amp;#34;testing&amp;#34;
+import &amp;#34;bytes&amp;#34;
+import &amp;#34;strings&amp;#34;
+import &amp;#34;unicode/utf8&amp;#34;
+import &amp;#34;testing&amp;#34;
 
-    func f1(s string) int {
-        return bytes.Count([]byte(s), nil) - 1
+func f1(s string) int {
+    return bytes.Count([]byte(s), nil) - 1
+}
+
+func f2(s string) int {
+    return strings.Count(s, &amp;#34;&amp;#34;) - 1
+}
+
+func f3(s string) int {
+    return len([]rune(s))
+}
+
+func f4(s string) int {
+    return utf8.RuneCountInString(s)
+}
+
+var s = &amp;#34;Hello, 世界&amp;#34;
+
+func Benchmark1(b *testing.B) {
+    for i := 0; i &amp;lt; b.N; i++ {
+        f1(s)
     }
+}
 
-    func f2(s string) int {
-        return strings.Count(s, &amp;#34;&amp;#34;) - 1
+func Benchmark2(b *testing.B) {
+    for i := 0; i &amp;lt; b.N; i++ {
+        f2(s)
     }
+}
 
-    func f3(s string) int {
-        return len([]rune(s))
+func Benchmark3(b *testing.B) {
+    for i := 0; i &amp;lt; b.N; i++ {
+        f3(s)
     }
+}
 
-    func f4(s string) int {
-        return utf8.RuneCountInString(s)
+func Benchmark4(b *testing.B) {
+    for i := 0; i &amp;lt; b.N; i++ {
+        f4(s)
     }
-
-    var s = &amp;#34;Hello, 世界&amp;#34;
-
-    func Benchmark1(b *testing.B) {
-        for i := 0; i &amp;lt; b.N; i++ {
-            f1(s)
-        }
-    }
-
-    func Benchmark2(b *testing.B) {
-        for i := 0; i &amp;lt; b.N; i++ {
-            f2(s)
-        }
-    }
-
-    func Benchmark3(b *testing.B) {
-        for i := 0; i &amp;lt; b.N; i++ {
-            f3(s)
-        }
-    }
-
-    func Benchmark4(b *testing.B) {
-        for i := 0; i &amp;lt; b.N; i++ {
-            f4(s)
-        }
-    }
+}
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;在命令行中运行命令：&lt;code&gt;go test count_test.go -bench &amp;#34;.*&amp;#34;&lt;/code&gt;，输出如下内容：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;testing: warning: no tests to run
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;testing: warning: no tests to run
 PASS
-Benchmark1  20000000           109 ns/op
-Benchmark2  20000000            61.6 ns/op
-Benchmark3  10000000           220 ns/op
-Benchmark4  30000000            58.1 ns/op
-ok      command-line-arguments  7.843s
+Benchmark1	20000000	       109 ns/op
+Benchmark2	20000000	        61.6 ns/op
+Benchmark3	10000000	       220 ns/op
+Benchmark4	30000000	        58.1 ns/op
+ok  	command-line-arguments	7.843s
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;看来，速度最快的是 &lt;code&gt;utf8.RuneCountInString()&lt;/code&gt;。&lt;/p&gt;
 
-            
+        
 </content>
 </entry><entry><title>RSS 阅读器 QReader 发布</title>
 <author><name>m3ng9i</name></author>
@@ -349,8 +349,7 @@ ok      command-line-arguments  7.843s
 <published>2015-05-27T13:35:00+08:00</published>
 <updated>2015-05-27T13:35:00+08:00</updated>
 <content type="html">
-    &lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/qreader_on_phone.jpg&quot; alt=&quot;QReader&quot;/&gt;
-&lt;/p&gt;
+    &lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/qreader_on_phone.jpg&quot; alt=&quot;QReader&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;最近用 Go 语言和 JavaScript 写了一个 RSS 阅读器 &lt;a href=&quot;https://github.com/m3ng9i/qreader&quot; rel=&quot;nofollow&quot;&gt;QReader&lt;/a&gt;。&lt;/p&gt;
 
@@ -382,7 +381,7 @@ ok      command-line-arguments  7.843s
 
 &lt;p&gt;查看 &lt;a href=&quot;https://github.com/m3ng9i/qreader&quot; rel=&quot;nofollow&quot;&gt;QReader 截图与更多说明&lt;/a&gt;，&lt;a href=&quot;https://github.com/m3ng9i/qreader/releases&quot; rel=&quot;nofollow&quot;&gt;下载 QReader&lt;/a&gt;。欢迎使用，如果你喜欢，请给我一个 star。&lt;/p&gt;
 
-            
+        
 </content>
 </entry><entry><title>编译时向 go 程序写入 git 版本信息</title>
 <author><name>m3ng9i</name></author>
@@ -415,7 +414,7 @@ func main() {
 
 &lt;p&gt;版本信息被保存到变量 &lt;code&gt;_version_&lt;/code&gt; 中，当程序编译后，生成可执行文件 myproject。在命令行运行 &lt;code&gt;./myproject -v&lt;/code&gt; 后，显示：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;Version: v0.1
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;Version: v0.1
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;这么做并没有什么不妥，但如果你的程序经常进行更新，那么频繁的修改 _version_ 变量的值会显得非常繁琐。&lt;/p&gt;
@@ -424,17 +423,17 @@ func main() {
 
 &lt;p&gt;go 程序的编译命令 &lt;code&gt;go build&lt;/code&gt; 包含一个 &lt;code&gt;-ldflags&lt;/code&gt; 选项，可以向链接器传递指令。向链接器传一个 &lt;code&gt;-X&lt;/code&gt; 指令可以设置程序中字符串变量的值。利用这个方法能够实现在编译时设置程序的版本信息。对于上面的那个 go 程序，使用下面的编译命令可以将 main 包中的 _version_ 变量的值设置为 v0.2：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;go build -ldflags &amp;#34;-X main._version_ &amp;#39;v0.2&amp;#39;&amp;#34;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go build -ldflags &amp;#34;-X main._version_ &amp;#39;v0.2&amp;#39;&amp;#34;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;编译后，运行 &lt;code&gt;./myproject -v&lt;/code&gt; 将显示：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;Version: v0.2
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;Version: v0.2
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;如果要同时设置多个变量，可以参照以下格式：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;go build -ldflags &amp;#34;-X importpath.name value -X importpath_2.name_2 value_2 ...&amp;#34;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go build -ldflags &amp;#34;-X importpath.name value -X importpath_2.name_2 value_2 ...&amp;#34;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;现在我们从 go 程序中离开一下，看一下 git。&lt;/p&gt;
@@ -445,24 +444,23 @@ func main() {
 
 &lt;p&gt;下图是在 &lt;a href=&quot;http://sourcetreeapp.com&quot; rel=&quot;nofollow&quot;&gt;SourceTree&lt;/a&gt; 中查看 git log 的截图。可以看到，除了 commit id，git 日志还可以包含分支名称、标签等信息：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/build_go_program_with_git_version_1.png&quot; alt=&quot;git 日志&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/build_go_program_with_git_version_1.png&quot; alt=&quot;git 日志&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;以上信息可以通过 git 命令提取出来。&lt;/p&gt;
 
 &lt;p&gt;下面的命令可以提取出最近一条 git 日志的 commit id：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;git log --pretty=format:&amp;#34;%h&amp;#34; -1
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;git log --pretty=format:&amp;#34;%h&amp;#34; -1
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;下面的命令可以提取出当前的 git 分支名称：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;git rev-parse --abbrev-ref HEAD
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;git rev-parse --abbrev-ref HEAD
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;下面的命令可以提取出最近一个标签的名称，如果当前分支没有创建过标签则会报错：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;git describe --abbrev=0 --tags
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;git describe --abbrev=0 --tags
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h1&gt;构造 go 编译程序&lt;/h1&gt;
@@ -543,7 +541,7 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 
 &lt;p&gt;然后运行 &lt;code&gt;./build.py&lt;/code&gt; 对 go 程序进行编译。编译完成后，再运行编译好的程序：&lt;code&gt;./myproject -v&lt;/code&gt;。可以看到，标签：&lt;code&gt;v1.0&lt;/code&gt;、分支名称：&lt;code&gt;master&lt;/code&gt;、commit id：&lt;code&gt;e5b593c&lt;/code&gt; 以及编译时间都被写入到了 go 程序中：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;Version: v1.0, Branch: master, Build: e5b593c, Build time: 2015-02-17 15:46 +0800
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;Version: v1.0, Branch: master, Build: e5b593c, Build time: 2015-02-17 15:46 +0800
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;是不是很方便？&lt;/p&gt;
@@ -557,7 +555,7 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 &lt;li&gt;&lt;a href=&quot;http://git-scm.com/doc&quot; rel=&quot;nofollow&quot;&gt;Git Documentation&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-            
+        
 </content>
 </entry><entry><title>使用命令行分析日志文件</title>
 <author><name>m3ng9i</name></author>
@@ -578,156 +576,144 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 
 &lt;p&gt;使用 &lt;code&gt;cat&lt;/code&gt; 命令可以查看文件的完整内容，如果要查看 example.log 的内容，可以输入以下命令：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;cat example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;cat example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;运行结果：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_01.png&quot; alt=&quot;cat命令&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_01.png&quot; alt=&quot;cat命令&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;当命令输入完毕并回车后，文件的内容便显示在了命令行界面的窗口中。如果文件的内容很多，就会在窗口中不断的滚动直到将文件内容都输出完毕，如果你要尽早结束输出，可以按下 &lt;code&gt;CTRL+C&lt;/code&gt; 键停止 cat 命令的输出。&lt;/p&gt;
 
 &lt;p&gt;你可以在输出的结果中为每一行内容添加编号，只需要给 cat 命令添加一个 &lt;code&gt;-n&lt;/code&gt; 参数即可实现：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;cat -n example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;cat -n example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;运行结果：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_02.png&quot; alt=&quot;使用cat命令显示行号&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_02.png&quot; alt=&quot;使用cat命令显示行号&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;另一个查看文件内容的命令是 &lt;code&gt;more&lt;/code&gt; ，举例：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;more example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;more example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;对于超过一屏内容的文件，在输出一屏后， more 会自动暂停。暂停后，你可以按&lt;em&gt;回车键&lt;/em&gt;输出下一行内容，按&lt;em&gt;空格键&lt;/em&gt;输出下一屏内容，按 &lt;em&gt;q&lt;/em&gt; 退出。运行效果：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_03.gif&quot; alt=&quot;more命令&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_03.gif&quot; alt=&quot;more命令&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;另外两个比较实用的命令是 &lt;code&gt;head&lt;/code&gt; 和 &lt;code&gt;tail&lt;/code&gt; ，它们分别可以输出文件的前 10 行或后 10 行。在观察比较大的文件结构时，这两个命令非常有用。举例：&lt;/p&gt;
 
 &lt;p&gt;输出前 10 行：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;head example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;head example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;输出后 10 行：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;tail example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;tail example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;可以在 head 或 tail 命令后面加上参数： &lt;code&gt;-数字&lt;/code&gt; 自定义输出的行数，举例：&lt;/p&gt;
 
 &lt;p&gt;输出前 3 行：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;head -3 example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;head -3 example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;输出后 5 行：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;tail -5 example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;tail -5 example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;如果要统计一个文件的行数，可以使用 &lt;code&gt;wc&lt;/code&gt; 命令，举例：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;wc -l example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;wc -l example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;wc 命令的 &lt;code&gt;-l&lt;/code&gt; 参数的含义是：只输出文件的行数。如果不加这个参数，那么会同时统计文件的行数、单词数和字节。这个命令可以很方便的让我们了解文件的规模。下图可以看出，example.log 文件共有 1000 行。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_04.png&quot; alt=&quot;wc命令&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_04.png&quot; alt=&quot;wc命令&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;也可以使用通配符显示多个文件的行数。例如，&lt;code&gt;wc -l *.log&lt;/code&gt; 命令会统计当前目录下每个扩展名为 log 的文件的行数，同时此命令也会统计这些文件的总行数。如下图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_05.png&quot; alt=&quot;wc命令显示多个文件的行数&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_05.png&quot; alt=&quot;wc命令显示多个文件的行数&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;如果你要统计一个文件的字符数，可以使用 &lt;code&gt;-m&lt;/code&gt; 参数。在你写完一篇纯文本格式的文章后，这个命令可以很方便的进行字数统计。举例：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;wc -m example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;wc -m example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h1&gt;在文件中查询信息&lt;/h1&gt;
 
 &lt;p&gt;使用 &lt;code&gt;grep&lt;/code&gt; 命令可以将文件中包含特定文字的行抽取出来。例如，&lt;code&gt;grep 河北 example.log&lt;/code&gt; 命令会扫描整个文件，如某一行包含「河北」则会显示这一行内容：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_06.png&quot; alt=&quot;grep命令&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_06.png&quot; alt=&quot;grep命令&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;使用 &lt;code&gt;grep -v&lt;/code&gt; 命令可以将包含特定文字的行排除。例如，运行命令 &lt;code&gt;grep -v 山西 example.log&lt;/code&gt; 后会输出所有不包含「山西」的行。&lt;/p&gt;
 
 &lt;p&gt;你也可以使用正则表达式进行更复杂的信息提取。命令 &lt;code&gt;grep -E &amp;#34;北京|上海&amp;#34; example.log&lt;/code&gt; 会提取出包含「北京」或「上海」的行，如下图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_07.png&quot; alt=&quot;grep命令-正则表达式&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_07.png&quot; alt=&quot;grep命令-正则表达式&quot;/&gt;&lt;/p&gt;
 
 &lt;h1&gt;抽取部分数据&lt;/h1&gt;
 
 &lt;p&gt;使用 &lt;code&gt;cut&lt;/code&gt; 命令可以很方便的从文本文件中抽取部分数据。例如，抽取第 1 和第 3 列数据：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;cut -f 1,3 example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;cut -f 1,3 example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;运行结果如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_08.png&quot; alt=&quot;cut命令&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_08.png&quot; alt=&quot;cut命令&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;cut 命令的 &lt;code&gt;-f&lt;/code&gt; 参数表示提取若干字段的数据，后面的 &lt;code&gt;1,3&lt;/code&gt; 表示需要的字段序号。如果需要提取 2 至 4 字段，除了使用 &lt;code&gt;-f 2,3,4&lt;/code&gt; 参数，也可以用 &lt;code&gt;-f 2-4&lt;/code&gt; 来表示：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;cut -f 2-4 example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;cut -f 2-4 example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;对于 cut 命令，制表符为默认的字段分隔符。如果要将其它字符设置为字段分隔符，则需要使用 &lt;code&gt;-d&lt;/code&gt; 参数，举例如下：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;cut -d : -f 2 example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;cut -d : -f 2 example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;上例将字段分隔符设置为冒号，并提取出第 2 个字段的数据，也就是时间字段中的「分钟」那一列。运行结果如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_09.png&quot; alt=&quot;cut命令，设置字段分隔符&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_09.png&quot; alt=&quot;cut命令，设置字段分隔符&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;除了按字段提取数据，也可以按字符来提取，这时要用到 &lt;code&gt;-c&lt;/code&gt; 参数。举例如下：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;cut -c 6-16 example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;cut -c 6-16 example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;以上命令提取出第 6 至 16 个字符，也就是日志中的月、日、时、分的部分。运行结果如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_10.png&quot; alt=&quot;cut命令，按字符提取&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_10.png&quot; alt=&quot;cut命令，按字符提取&quot;/&gt;&lt;/p&gt;
 
 &lt;h1&gt;排序&lt;/h1&gt;
 
 &lt;p&gt;example.log 日志内容并不是按照时间排序的，如果需要排序后的结果，可以使用 &lt;code&gt;sort&lt;/code&gt; 命令：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;sort example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;sort example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;由于 example.log 的时间字段正好在第一列的位置，因此上面的命令运行结束后便自动按时间字段排好顺序：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_11.png&quot; alt=&quot;sort命令&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_11.png&quot; alt=&quot;sort命令&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;如果要根据其他字段排序，可以使用 &lt;code&gt;-k&lt;/code&gt; 参数，下例会根据 example.log 文件的第 3 个字段排序：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;sort -k 3 example.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;sort -k 3 example.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;运行结果如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_12.png&quot; alt=&quot;sort命令-k参数&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_12.png&quot; alt=&quot;sort命令-k参数&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;sort 还有其它几个参数十分常用：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;-t  指定字段分隔符（配合 -k 参数使用）
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;-t  指定字段分隔符（配合 -k 参数使用）
 -r  逆序排序
 -R  随机排序（Mac OS X 不支持此参数） 
 -u  去掉重复的行
@@ -737,7 +723,7 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 
 &lt;p&gt;Linux/Unix 命令行强大的地方就是可以利用管道连接多个命令。管道符为 &lt;code&gt;|&lt;/code&gt; ，你可以这样使用管道：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;命令1 | 命令2 | 命令3 ...
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;命令1 | 命令2 | 命令3 ...
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;管道符左边的命令产生的输出将会作为管道符右边命令的输入。上例中「命令1」的运行结果变成了「命令2」的原始数据，「命令2」将「命令1」输出的运行结果处理完毕后，传送给了「命令3」，「命令3」将「命令2」运行的结果处理完毕后，如果还有下一个命令，则将运行结果继续传递给下一个命令使用，否则就将运行结果显示在命令行窗口中。&lt;/p&gt;
@@ -746,51 +732,47 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 
 &lt;p&gt;根据某个字段出现的次数进行统计：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;cut -f 2 example.log | sort | uniq -c | sort
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;cut -f 2 example.log | sort | uniq -c | sort
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;上面的例子提取出 example.log 中的「地区」字段（由 &lt;code&gt;cut -f 2 example.log&lt;/code&gt; 命令实现），统计其在整个文件中出现的次数（由 &lt;code&gt;uniq -c&lt;/code&gt; 命令实现），并按照从少到多进行排序（由第二个 &lt;code&gt;sort&lt;/code&gt; 命令实现）。提供给 &lt;code&gt;uniq -c&lt;/code&gt; 命令的数据必须是已排序的数据，否则将会得出错误的运行结果，因此在 &lt;code&gt;uniq -c&lt;/code&gt; 前面还有一个 &lt;code&gt;sort&lt;/code&gt; 命令。运行结果如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_13.png&quot; alt=&quot;管道1&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_13.png&quot; alt=&quot;管道1&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;计算 example.log 文件中，地区为「北京」的订单的平均金额：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;grep 北京 example.log | cut -f 4 | awk &amp;#39;BEGIN{sum=0}{sum+=$0}END{print sum/NR}&amp;#39;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;grep 北京 example.log | cut -f 4 | awk &amp;#39;BEGIN{sum=0}{sum+=$0}END{print sum/NR}&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;上面的例子取出包含「北京」的行（由 &lt;code&gt;grep 北京 example.log&lt;/code&gt; 命令实现），然后取出金额字段（由 &lt;code&gt;cut -f 4&lt;/code&gt; 命令实现），最后将所有金额相加，并除以日志条数计算出订单平均金额（由 &lt;code&gt;awk &amp;#39;BEGIN{sum=0}{sum+=$0}END{print sum/NR}&amp;#39;&lt;/code&gt; 命令实现）。运行结果如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_14.png&quot; alt=&quot;管道2&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_14.png&quot; alt=&quot;管道2&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;统计 example.log 文件中包含多少个地区：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;cut -f 2 example.log | sort -u | wc -l
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;cut -f 2 example.log | sort -u | wc -l
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;上例先用 &lt;code&gt;cut -f 2&lt;/code&gt; 抽取出包含「地区」信息的字段，然后使用 &lt;code&gt;sort -u&lt;/code&gt; 进行剔重（去除重复数据），最后用 &lt;code&gt;wc -l&lt;/code&gt; 来统计数据个数。运行结果如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_15.png&quot; alt=&quot;管道3&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_15.png&quot; alt=&quot;管道3&quot;/&gt;&lt;/p&gt;
 
 &lt;h1&gt;将运行结果保存到文件中&lt;/h1&gt;
 
 &lt;p&gt;前面的例子都将运行结果直接输出到命令行窗口，如果想要将运行结果保存到文件中，可以使用 &lt;code&gt;&amp;gt;&lt;/code&gt; 将输出重定向到一个文件中。例如，下例根据日期统计订单数量，最后使用 &lt;code&gt;&amp;gt; new.log&lt;/code&gt; 将最终结果保存到 new.log 文件。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;cut -d &amp;#34; &amp;#34; -f 1 example.log | sort | uniq -c &amp;gt; new.log
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;cut -d &amp;#34; &amp;#34; -f 1 example.log | sort | uniq -c &amp;gt; new.log
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;在命令运行完毕后，我们还可以使用 cat 命令来查看这个新生成的文件的内容，如图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_16.png&quot; alt=&quot;重定向到文件&quot;/&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/text_data_analysis_16.png&quot; alt=&quot;重定向到文件&quot;/&gt;&lt;/p&gt;
 
 &lt;h1&gt;获取帮助&lt;/h1&gt;
 
 &lt;p&gt;以上介绍的部分命令可以使用 &lt;code&gt;-h&lt;/code&gt;、&lt;code&gt;--help&lt;/code&gt; 参数获取帮助信息，如果要查看详细的使用手册，可以使用 &lt;code&gt;man 命令名称&lt;/code&gt; 来查阅。举例：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;man grep
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;man grep
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h1&gt;阅读推荐&lt;/h1&gt;
@@ -799,7 +781,7 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 &lt;li&gt;&lt;a href=&quot;http://linux.vbird.org/&quot; rel=&quot;nofollow&quot;&gt;鸟哥的linux私房菜&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-            
+        
 </content>
 </entry>
 </feed>
