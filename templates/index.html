@@ -1,0 +1,14 @@
+<section id="index" class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <ul>
+                {% for i in index %}
+                <li>
+                    <a href="{{i.Path}}">{{i.Title}}</a> 
+                    <time datetime="{{i.PubTime|time:"2006-01-02T15:04Z07:00"}}" pubdate title="{{i.PubTime|time:"2006-01-02 15:04"}}">({{i.PubTime|time:"2006-01-02"}})</time>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</section>

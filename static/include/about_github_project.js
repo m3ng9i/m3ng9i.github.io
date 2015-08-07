@@ -1,12 +1,3 @@
-关于
-=================================
-
-*m3ng9i*
-
-<link rel="stylesheet" type="text/css" href="/static/include/github_project.css">
-
-<script>
-
 var REPOS = [
     "QReader",      "一个使用 Go 和 JavaScript 编写的 RSS 阅读器。支持标签、文章加星、设置 feed 更新周期与文章保留数量、文章搜索等功能。",
     "Feedreader",   "RSS 2.0 和 Atom 1.0 解析模块，供 QReader 调用。",
@@ -17,7 +8,7 @@ var REPOS = [
 function createReposHtml() {
     var apiurl = "https://api.github.com/users/m3ng9i/repos";
 
-    $("#project").html("<span class='notice'><span class='fa fa-refresh fa-spin'></span> 加载中 ...</span>");
+    $("#project").html("<span><span class='fa fa-refresh fa-spin'></span> 加载中 ...</span>");
 
     var githubHtml = localStorage.aboutPageGithubHtml || "";
     var timeDiff = Math.round(($.now() - parseInt(localStorage.aboutPageLastRequest || 0)) / 60000); // minutes from last request
@@ -42,7 +33,7 @@ function createReposHtml() {
 
     }).fail(function() {
 
-        var error = "<span class='error'>" +
+        var error = "<span class='text-danger'>" +
             "<span class='fa fa-warning'></span> 获取 github 项目信息出错，请稍后" +
             "<a href='' onclick='createReposHtml();return false;'>刷新</a>重试。</span>";
 
@@ -91,7 +82,7 @@ function createReposTable(data, repos) {
                 html += "<tbody title='点击跳转到 github 页面' tabindex='0' data-github-url='" + data[j].html_url + "'>" +
                     "<tr><th>" +
                     "<span><span class='fa fa-github-alt'></span> " + repos[i] + "</span>" +
-                    "<span>" + data[j].stargazers_count + " <span class='fa fa-star-o star-o github_star'></span></span>" +
+                    "<span>" + data[j].stargazers_count + " <span class='fa fa-star-o star-o mycandy-github-star'></span></span>" +
                     "</th></tr>" +
                     "<tr><td>" + repos[i + 1] + "</td></tr>" +
                     "<tr><td>Github 地址：" + data[j].html_url + "</td></tr>" +
@@ -104,7 +95,7 @@ function createReposTable(data, repos) {
         }
     }
 
-    html = "<table class='github_project'>" + html + "</table>";
+    html = "<table class='mycandy-about-github'>" + html + "</table>";
 
     return html;
 }
@@ -112,7 +103,7 @@ function createReposTable(data, repos) {
 function showRepos(html) {
     $("#project").html(html);
 
-    var tbody =$("table.github_project > tbody");
+    var tbody =$("table.mycandy-about-github > tbody");
 
     // bind onclick and onkeypress event
     tbody.each(function() {
@@ -135,19 +126,19 @@ function showRepos(html) {
             }
         });
 
-        $(one).addClass("mouseover");
-        var e = $(one.getElementsByClassName("github_star"));
-        e.addClass("star");
-        e.removeClass("star-o");
+        $(one).addClass("mycandy-about-mouseover");
+        var e = $(one.getElementsByClassName("mycandy-github-star"));
+        e.addClass("mycandy-star");
+        e.removeClass("mycandy-star-o");
         e.addClass("fa-star");
         e.removeClass("fa-star-o");
     };
 
     var mouseout = function(one) {
-        $(one).removeClass("mouseover");
-        var e = $(one.getElementsByClassName("github_star"));
-        e.addClass("star-o");
-        e.removeClass("star");
+        $(one).removeClass("mycandy-about-mouseover");
+        var e = $(one.getElementsByClassName("mycandy-github-star"));
+        e.addClass("mycandy-star-o");
+        e.removeClass("mycandy-star");
         e.addClass("fa-star-o");
         e.removeClass("fa-star");
     };
@@ -160,20 +151,3 @@ function showRepos(html) {
         mouseout(this);
     });
 }
-
-$(document).ready(function() {
-    createReposHtml();
-});
-
-</script>
-
-孟琦 （m3ng9i）: Golang、Python、JavaScript、Linux、命令行爱好者。
-
-- blog: http://mengqi.info
-- github: https://github.com/m3ng9i
-- email: <a href="mailto:&#x35;&#x62;&#x35;&#x66;&#x37;&#x34;&#x32;&#x36;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x35;&#x62;&#x35;&#x66;&#x37;&#x34;&#x32;&#x36;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a>
-
-部分开源项目：
-
-<section id="project"></section>
-
