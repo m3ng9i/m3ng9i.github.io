@@ -24,7 +24,9 @@
     <link rel="stylesheet" href="/static/libs/font-awesome-4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/static/libs/highlight.js-8.7/github-gist.css">
     <link rel="stylesheet" href="/static/include/mycandy.css">
+    {# 2015-08-07: icon and apple-touch-icon must be placed into two different link tags #}
     <link rel="icon" sizes="192x192" href="/static/images/icon.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/static/images/icon.png">
     <link rel="alternate" type="application/atom+xml" title="My Candy 最新文章" href="/feed.xml">
     <title>{% if article %}{{article.Title}} - {% endif %}My Candy</title>
     {{article.Head|safe}}
