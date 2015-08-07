@@ -28,7 +28,9 @@ func main() {
 
 版本信息被保存到变量 `_version_` 中，当程序编译后，生成可执行文件 myproject。在命令行运行 `./myproject -v` 后，显示：
 
-    Version: v0.1
+```nohighlight
+Version: v0.1
+```
 
 这么做并没有什么不妥，但如果你的程序经常进行更新，那么频繁的修改 \_version\_ 变量的值会显得非常繁琐。
 
@@ -36,15 +38,21 @@ func main() {
 
 go 程序的编译命令 `go build` 包含一个 `-ldflags` 选项，可以向链接器传递指令。向链接器传一个 `-X` 指令可以设置程序中字符串变量的值。利用这个方法能够实现在编译时设置程序的版本信息。对于上面的那个 go 程序，使用下面的编译命令可以将 main 包中的 \_version\_ 变量的值设置为 v0.2：
 
-    go build -ldflags "-X main._version_ 'v0.2'"
+```bash
+go build -ldflags "-X main._version_ 'v0.2'"
+```
 
 编译后，运行 `./myproject -v` 将显示：
 
-    Version: v0.2
+```nohighlight
+Version: v0.2
+```
 
 如果要同时设置多个变量，可以参照以下格式：
 
-    go build -ldflags "-X importpath.name value -X importpath_2.name_2 value_2 ..."
+```bash
+go build -ldflags "-X importpath.name value -X importpath_2.name_2 value_2 ..."
+```
 
 现在我们从 go 程序中离开一下，看一下 git。
 
@@ -60,15 +68,21 @@ go 程序的编译命令 `go build` 包含一个 `-ldflags` 选项，可以向�
 
 下面的命令可以提取出最近一条 git 日志的 commit id：
 
-    git log --pretty=format:"%h" -1
+```bash
+git log --pretty=format:"%h" -1
+```
 
 下面的命令可以提取出当前的 git 分支名称：
 
-    git rev-parse --abbrev-ref HEAD
+```bash
+git rev-parse --abbrev-ref HEAD
+```
 
 下面的命令可以提取出最近一个标签的名称，如果当前分支没有创建过标签则会报错：
 
-    git describe --abbrev=0 --tags
+```bash
+git describe --abbrev=0 --tags
+```
 
 # 构造 go 编译程序
 
@@ -150,7 +164,9 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 
 然后运行 `./build.py` 对 go 程序进行编译。编译完成后，再运行编译好的程序：`./myproject -v`。可以看到，标签：`v1.0`、分支名称：`master`、commit id：`e5b593c` 以及编译时间都被写入到了 go 程序中：
 
-    Version: v1.0, Branch: master, Build: e5b593c, Build time: 2015-02-17 15:46 +0800
+```bash
+Version: v1.0, Branch: master, Build: e5b593c, Build time: 2015-02-17 15:46 +0800
+```
 
 是不是很方便？
 
