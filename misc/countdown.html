@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html lang='zh-cn'>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,width=device-width,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="/static/libs/jquery-1.11.2.min.js"></script>
+    <script src="/static/jutils/url.js"></script>
+    <link rel="stylesheet" href="/static/libs/font-awesome-4.3.0/css/font-awesome.min.css">
+    <link rel="icon" sizes="192x192" href="/static/images/icon.png">
+    <title>Countdown - My Candy</title>
+    <style>
+    body {
+        background-color: #ec4d98;
+        color: white;
+        width: 100%;
+        height: 100%;
+        font-family:"Courier New","Courier","Consolas","Monaco","Lucida Console","monospace";
+        margin:0;
+        overflow: hidden;
+    }
+    #content {
+        width: calc(100% - 10px);
+        text-align:center;
+        margin: 0 auto;
+        height: 100%;
+        cursor: pointer;
+    }
+    .main-time {
+        line-height: 65%;
+    }
+    .second {
+        font-size: calc(100vw / 18);
+        margin-top: 0.8em;
+        line-height: 80%;
+    }
+    .stop-time {
+        display: none;
+        font-size: calc(100vw / 22);
+    }
+
+    footer {
+        width: 100%;
+        text-align: center;
+        position:absolute;
+        bottom:10px;
+    }
+    footer a {
+        color: white;
+        font-size: 20px;
+    }
+
+    .mycandy-hidden {
+        display:    none;
+        font-size:  0px;
+        width:      0px;
+        height:     0px;
+    }
+
+    @media (max-height: 360px) {
+        footer {
+            display: none;
+        }
+    }
+
+    </style>
+
+    <script>
+
+    var CD = CD || {};
+
+    CD.queryTime = function() {
+        // format of t:
+        // YYYYMMDDHHMMSS
+        // YYYYMMDDHHMM
+        // HHMMSS
+        // HHMM
+        var t = JUTILS.queryValue("t");
+        var target = null;
+
+        var d = new Date();
+        
+        if (/^\d{12,14}$/.test(t)) {
+            d.setFullYear(t.slice(0,4));
+            d.setMonth(t.slice(4,6) - 1);
+            d.setDate(t.slice(6,8));
+            d.setHours(t.slice(8,10));
+            d.setMinutes(t.slice(10,12));
+
+            if (/^\d{14,14}$/.test(t)) {
+                d.setSeconds(t.slice(12,14));
+            } else {
+                d.setSeconds(0);
+            }
+
+            return d;
+        }
+
+        if (/^\d{4,6}$/.test(t)) {
+            d.setHours(t.slice(0,2));
+            d.setMinutes(t.slice(2,4));
+
+            if (/^\d{6,6}$/.test(t)) {
+                d.setSeconds(t.slice(4,6));
+            } else {
+                d.setSeconds(0);
+            }
+
+            return d;
+        }
+
+        return d;
+    };
+
+    CD.getTime = function() {
+
+        var diff = this.queryTime() - new Date();
+        var s2 = parseInt(diff / 1000);
+
+        if (!this.lastSeconds) {
+            this.lastSeconds = s2;
+        } else {
+            if (this.lastSeconds > 0 && this.lastSeconds < s2) {
+                return;
+            } else {
+                this.lastSeconds = s2;
+            }
+        } 
+
+        var days = parseInt(diff / 86400000);
+        diff = diff % 86400000;
+        var hours = parseInt(diff / 3600000);
+        diff = diff % 3600000;
+        var minutes = parseInt(diff / 60000); 
+        diff = diff % 60000;
+        var seconds = parseInt(diff / 1000);
+
+        if (days > 0) {
+            days = days + "D";
+        } else {
+            days = "";
+        }
+
+        if (hours > 0) {
+            hours = (hours < 10) ? "0" + hours : hours;
+            hours = hours + "H";
+        } else {
+            hours = (days == "") ? "" : "00H";
+        }
+
+        if (minutes > 0) {
+            minutes = (minutes < 10) ? "0" + minutes : minutes;
+            minutes = minutes + "M";
+        } else {
+            minutes = (hours == "") ? "" : "00M";
+        }
+
+        if (seconds > 0) {
+            seconds = (seconds < 10) ? "0" + seconds : seconds;
+            seconds = seconds + "S";
+        } else {
+            seconds = "00S";
+        }
+
+        var s1 = []
+        if (days.length > 0) {
+            s1.push(days);
+        }
+        if (hours.length > 0) {
+            s1.push(hours);
+        }
+        if (minutes.length > 0) {
+            s1.push(minutes);
+        }
+        s1.push(seconds);
+        s1 = s1.join("-");
+
+        if (s1.length == 3 && s1[0] == "0") {
+            s1 = s1.slice(1, 3);
+        }
+
+        return [s1, s2];
+    };
+
+    CD.display = function() {
+
+        var t = this.getTime();
+
+        if (t != null) {
+            $("#content .main-time").css("font-size", "calc(100vw / " + t[0].length + ")");
+            if (window.innerHeight / $("#content .main-time").height() < 2) {
+                var size = parseInt(parseInt($("#content .main-time").css("font-size")) * 3 / 5) + "px";
+                $("#content .main-time").css("font-size", size);
+            }
+            $("#content").css("padding-top", parseInt(40-(15-t[0].length)/4*4) + "vh");
+
+            $("#content .main-time").text(t[0]);
+            $("#content .second").text(Math.abs(t[1]));
+        }
+
+    };
+
+    CD.dateString = function(d) {
+        var s = d.getFullYear() + "-";
+        var month = d.getMonth() + 1;
+        s += (month < 10) ? ("0" + month) : month;
+        s += "-";
+        s += (d.getDate() < 10) ? ("0" + d.getDate()) : d.getDate();
+        s += " ";
+        s += (d.getHours() < 10) ? ("0" + d.getHours()) : d.getHours();
+        s += ":";
+        s += (d.getMinutes() < 10) ? ("0" + d.getMinutes()) : d.getMinutes();
+        s += ":";
+        s += (d.getSeconds() < 10) ? ("0" + d.getSeconds()) : d.getSeconds();
+        return s;
+    };
+
+    $(function() {
+        $("#content .stop-time").text("Stop time: " + CD.dateString(CD.queryTime()));
+        setInterval("CD.display()", 200);
+        $("#content").click(function() {
+            $("#content .main-time, #content .second").toggle();
+            $("#content .stop-time").toggle();
+        });
+    });
+    
+    </script>
+</head>
+
+<body>
+
+    <div id="content">
+        <div class="main-time"></div>
+        <div class="second"></div>
+        <div class="stop-time"></div>
+    </div>
+
+    <footer>
+        <div>
+            <a href="/" title="首页"><sup class="fa fa-asterisk"></sup></a>
+        </div>
+    </footer>
+
+    <div class="mycandy-hidden">
+        <script async src="//s95.cnzz.com/z_stat.php?id=1255242145&web_id=1255242145"></script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-63483419-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </div>
+</body>
+
+</html>
