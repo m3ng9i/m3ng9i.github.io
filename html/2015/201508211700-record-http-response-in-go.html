@@ -4,9 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1,width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="buildtime" content="2015-08-21T16:50:11+08:00">
+    <meta name="buildtime" content="2015-08-21T16:50:10+08:00">
     
+    <meta name="author" content="m3ng9i">
+    <meta name="title" content="Go：使用 ResponseRecorder 记录 HTTP 响应报文">
+    <meta name="pubtime" content="2015-08-21T17:00:00+08:00">
     
+    <meta name="url" content="//mengqi.info/html/2015/201508211700-record-http-response-in-go.html">
     <script src="/static/libs/jquery-1.11.2.min.js"></script>
     <script src="/static/libs/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
     <script src="/static/libs/highlight.js-8.7/highlight.pack.js"></script>
@@ -24,7 +28,7 @@
     <link rel="icon" sizes="192x192" href="/static/images/icon.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/static/images/icon.png">
     <link rel="alternate" type="application/atom+xml" title="My Candy 最新文章" href="/feed.xml">
-    <title>My Candy</title>
+    <title>Go：使用 ResponseRecorder 记录 HTTP 响应报文 - My Candy</title>
     
 </head>
 
@@ -92,50 +96,115 @@
     </header>
 
     <div id="content">
-        <section id="index" class="container">
+        <article class="container">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <ul>
-                
-                <li>
-                    <a href="/html/2015/201508211700-record-http-response-in-go.html">Go：使用 ResponseRecorder 记录 HTTP 响应报文</a> 
-                    <time datetime="2015-08-21T17:00+08:00" pubdate title="2015-08-21 17:00">(2015-08-21)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201507071345-using-golang-to-convert-text-between-gbk-and-utf-8.html">Golang 中的 UTF-8 与 GBK 编码转换</a> 
-                    <time datetime="2015-07-07T13:45+08:00" pubdate title="2015-07-07 13:45">(2015-07-07)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201506062329-socks5-proxy-client-in-golang.html">使用 Golang 通过 Proxy 抓取网页</a> 
-                    <time datetime="2015-06-06T23:29+08:00" pubdate title="2015-06-06 23:29">(2015-06-06)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html">在 Go 语言中获取字符串中的字符个数</a> 
-                    <time datetime="2015-06-01T23:00+08:00" pubdate title="2015-06-01 23:00">(2015-06-01)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201505271335-qreader.html">RSS 阅读器 QReader 发布</a> 
-                    <time datetime="2015-05-27T13:35+08:00" pubdate title="2015-05-27 13:35">(2015-05-27)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201502171941-build-go-program-with-git-version.html">编译时向 go 程序写入 git 版本信息</a> 
-                    <time datetime="2015-02-17T19:41+08:00" pubdate title="2015-02-17 19:41">(2015-02-17)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201502142232-text-data-analysis.html">使用命令行分析日志文件</a> 
-                    <time datetime="2015-02-14T22:32+08:00" pubdate title="2015-02-14 22:32">(2015-02-14)</time>
-                </li>
-                
-            </ul>
+        <header class="col-md-8 col-md-offset-2">
+            <h1 class="mycandy-title"><a href="//mengqi.info/html/2015/201508211700-record-http-response-in-go.html">Go：使用 ResponseRecorder 记录 HTTP 响应报文</a></h1>
+            <p class="mycandy-pubtime">m3ng9i 发表于
+                <time datetime="2015-08-21T17:00:00+08:00" pubdate>2015-08-21 17:00</time>
+            </p>
+        </header>
+    </div>
+
+    <div class="row">
+        
+        <div class="col-md-8 col-md-offset-2 mycandy-article article">
+            <p>Go 的 <a href="https://golang.org/pkg/net/http/" rel="nofollow">net/http</a> 包提供了丰富的 API 用来创建 HTTP 服务。在创建自己的 HTTP 服务时，通常会建立一个 <a href="https://golang.org/pkg/net/http/#Handler" rel="nofollow">Handler</a> 来处理请求，并将响应内容写入到 <a href="https://golang.org/pkg/net/http/#ResponseWriter" rel="nofollow">http.ResponseWriter</a> 中。</p>
+
+<p>下面的代码是一个简单的例子：将当前工作目录作为根目录，利用 http 包的 <a href="https://golang.org/pkg/net/http/#FileServer" rel="nofollow">FileServer Handler</a> 创建了一个静态文件服务器，接受 HTTP 请求并做出响应，最后输出日志。</p>
+
+<pre><code class="language-go">package main
+
+import &quot;os&quot;
+import &quot;net/http&quot;
+import &quot;fmt&quot;
+
+type Server struct {
+    Root string
+}
+
+func (this *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    // 创建一个静态文件服务器
+    http.FileServer(http.Dir(this.Root)).ServeHTTP(w, r)
+
+    // 输出日志
+    fmt.Println(r.URL.Path)
+}
+
+func main() {
+    root, err := os.Getwd()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, err.Error())
+        os.Exit(1)
+    }
+    server := &amp;Server{Root:root}
+    http.ListenAndServe(&quot;:8080&quot;, server)
+}
+</code></pre>
+
+<p>上面的代码中，主要的工作由 <code>http.FileServer</code> 完成，HTTP 服务运行的细节被封装到这个函数内部了，对我们是不可见的。例如完成一个响应后，HTTP 状态码是什么，是 200、404 还是 304，FileServer 并没有提供给我们。如果你想要知道有多少比特被发送到了客户端，也比较困难，虽然可以通过 <code>ResponseWriter.Header()</code> 来探测头信息中 Content-Length 的值，但当请求的是一个目录时，FileServer 是不会发送 Content-Length 的 （在 Go 1.4 下测试），这时也无法得知发送的字节数。</p>
+
+<p>Go 的 <a href="https://golang.org/pkg/net/http/httptest/" rel="nofollow">net/http/httptest</a> 包提供了一个 <code>ResponseRecorder</code> 可以将原本要发送到客户端的响应报文截获并记录下来，我们可以从中提取到需要的信息。得到所需信息后，我们再将现场还原，把 HTTP 报文头、报文体写入到 ResponseWriter，这样客户端就可以正常收到响应结果。</p>
+
+<p>下面就是一个使用 ResponseRecorder 的例子：</p>
+
+<pre><code class="language-go">package main
+
+import &quot;os&quot;
+import &quot;net/http&quot;
+import &quot;net/http/httptest&quot;
+import &quot;fmt&quot;
+
+type Server struct {
+    Root string
+}
+
+func (this *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+    // 创建一个 recorder 用来保存响应信息
+    recorder := httptest.NewRecorder()
+
+    // 将静态文件服务器的响应信息截获并记录到 recorder 中，这时客户端是没有输出的
+    http.FileServer(http.Dir(this.Root)).ServeHTTP(recorder, r)
+
+    // 从 recorder 中提取记录下来的 Response Header，设置为 ResponseWriter 的 Header
+    for key, value := range recorder.HeaderMap {
+        for _, val := range value {
+            w.Header().Set(key, val)
+        }
+    }
+
+    // 提取 recorder 中记录的状态码，写入到 ResponseWriter 中
+    w.WriteHeader(recorder.Code)
+
+    var contentLength int
+    if recorder.Body != nil {
+        // 将 recorder 记录的 Response Body 写入到 ResponseWriter 中，客户端收到响应报文体
+        w.Write(recorder.Body.Bytes())
+
+        // 计算 Response Body 的大小（即 Content-Length）
+        contentLength = recorder.Body.Len()
+    }
+
+    // 将状态码，请求路径，Content-Length 作为日志输出
+    fmt.Printf(&quot;%d %s, %d\n&quot;, recorder.Code, r.URL.Path, contentLength)
+
+}
+
+func main() {
+    root, err := os.Getwd()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, err.Error())
+        os.Exit(1)
+    }
+    server := &amp;Server{Root:root}
+    http.ListenAndServe(&quot;:8080&quot;, server)
+}
+</code></pre>
+
         </div>
     </div>
-</section>
+</article>
 
     </div>
 

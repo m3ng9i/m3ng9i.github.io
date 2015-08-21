@@ -7,9 +7,111 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-08-07T10:27:15+08:00</updated>
+    <updated>2015-08-21T16:50:11+08:00</updated>
 
-    <entry><title>Golang 中的 UTF-8 与 GBK 编码转换</title>
+    <entry><title>Go：使用 ResponseRecorder 记录 HTTP 响应报文</title>
+<author><name>m3ng9i</name></author>
+<id>http://mengqi.info/html/2015/201508211700-record-http-response-in-go.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2015/201508211700-record-http-response-in-go.html"/>
+<published>2015-08-21T17:00:00+08:00</published>
+<updated>2015-08-21T17:00:00+08:00</updated>
+<content type="html">
+    &lt;p&gt;Go 的 &lt;a href=&quot;https://golang.org/pkg/net/http/&quot; rel=&quot;nofollow&quot;&gt;net/http&lt;/a&gt; 包提供了丰富的 API 用来创建 HTTP 服务。在创建自己的 HTTP 服务时，通常会建立一个 &lt;a href=&quot;https://golang.org/pkg/net/http/#Handler&quot; rel=&quot;nofollow&quot;&gt;Handler&lt;/a&gt; 来处理请求，并将响应内容写入到 &lt;a href=&quot;https://golang.org/pkg/net/http/#ResponseWriter&quot; rel=&quot;nofollow&quot;&gt;http.ResponseWriter&lt;/a&gt; 中。&lt;/p&gt;
+
+&lt;p&gt;下面的代码是一个简单的例子：将当前工作目录作为根目录，利用 http 包的 &lt;a href=&quot;https://golang.org/pkg/net/http/#FileServer&quot; rel=&quot;nofollow&quot;&gt;FileServer Handler&lt;/a&gt; 创建了一个静态文件服务器，接受 HTTP 请求并做出响应，最后输出日志。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;package main
+
+import &amp;#34;os&amp;#34;
+import &amp;#34;net/http&amp;#34;
+import &amp;#34;fmt&amp;#34;
+
+type Server struct {
+    Root string
+}
+
+func (this *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    // 创建一个静态文件服务器
+    http.FileServer(http.Dir(this.Root)).ServeHTTP(w, r)
+
+    // 输出日志
+    fmt.Println(r.URL.Path)
+}
+
+func main() {
+    root, err := os.Getwd()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, err.Error())
+        os.Exit(1)
+    }
+    server := &amp;amp;Server{Root:root}
+    http.ListenAndServe(&amp;#34;:8080&amp;#34;, server)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码中，主要的工作由 &lt;code&gt;http.FileServer&lt;/code&gt; 完成，HTTP 服务运行的细节被封装到这个函数内部了，对我们是不可见的。例如完成一个响应后，HTTP 状态码是什么，是 200、404 还是 304，FileServer 并没有提供给我们。如果你想要知道有多少比特被发送到了客户端，也比较困难，虽然可以通过 &lt;code&gt;ResponseWriter.Header()&lt;/code&gt; 来探测头信息中 Content-Length 的值，但当请求的是一个目录时，FileServer 是不会发送 Content-Length 的 （在 Go 1.4 下测试），这时也无法得知发送的字节数。&lt;/p&gt;
+
+&lt;p&gt;Go 的 &lt;a href=&quot;https://golang.org/pkg/net/http/httptest/&quot; rel=&quot;nofollow&quot;&gt;net/http/httptest&lt;/a&gt; 包提供了一个 &lt;code&gt;ResponseRecorder&lt;/code&gt; 可以将原本要发送到客户端的响应报文截获并记录下来，我们可以从中提取到需要的信息。得到所需信息后，我们再将现场还原，把 HTTP 报文头、报文体写入到 ResponseWriter，这样客户端就可以正常收到响应结果。&lt;/p&gt;
+
+&lt;p&gt;下面就是一个使用 ResponseRecorder 的例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;package main
+
+import &amp;#34;os&amp;#34;
+import &amp;#34;net/http&amp;#34;
+import &amp;#34;net/http/httptest&amp;#34;
+import &amp;#34;fmt&amp;#34;
+
+type Server struct {
+    Root string
+}
+
+func (this *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+    // 创建一个 recorder 用来保存响应信息
+    recorder := httptest.NewRecorder()
+
+    // 将静态文件服务器的响应信息截获并记录到 recorder 中，这时客户端是没有输出的
+    http.FileServer(http.Dir(this.Root)).ServeHTTP(recorder, r)
+
+    // 从 recorder 中提取记录下来的 Response Header，设置为 ResponseWriter 的 Header
+    for key, value := range recorder.HeaderMap {
+        for _, val := range value {
+            w.Header().Set(key, val)
+        }
+    }
+
+    // 提取 recorder 中记录的状态码，写入到 ResponseWriter 中
+    w.WriteHeader(recorder.Code)
+
+    var contentLength int
+    if recorder.Body != nil {
+        // 将 recorder 记录的 Response Body 写入到 ResponseWriter 中，客户端收到响应报文体
+        w.Write(recorder.Body.Bytes())
+
+        // 计算 Response Body 的大小（即 Content-Length）
+        contentLength = recorder.Body.Len()
+    }
+
+    // 将状态码，请求路径，Content-Length 作为日志输出
+    fmt.Printf(&amp;#34;%d %s, %d\n&amp;#34;, recorder.Code, r.URL.Path, contentLength)
+
+}
+
+func main() {
+    root, err := os.Getwd()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, err.Error())
+        os.Exit(1)
+    }
+    server := &amp;amp;Server{Root:root}
+    http.ListenAndServe(&amp;#34;:8080&amp;#34;, server)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+        
+</content>
+</entry><entry><title>Golang 中的 UTF-8 与 GBK 编码转换</title>
 <author><name>m3ng9i</name></author>
 <id>http://mengqi.info/html/2015/201507071345-using-golang-to-convert-text-between-gbk-and-utf-8.html</id>
 <link rel="alternate" href="http://mengqi.info/html/2015/201507071345-using-golang-to-convert-text-between-gbk-and-utf-8.html"/>
