@@ -37,7 +37,7 @@ func main() {
 }
 ```
 
-上面的代码中，主要的工作由 `http.FileServer` 完成，HTTP 服务运行的细节被封装到这个函数内部了，对我们是不可见的。例如完成一个响应后，HTTP 状态码是什么，是 200、404 还是 304，FileServer 并没有提供给我们。如果你想要知道有多少比特被发送到了客户端，也比较困难，虽然可以通过 `ResponseWriter.Header()` 来探测头信息中 Content-Length 的值，但当请求的是一个目录时，FileServer 是不会发送 Content-Length 的 （在 Go 1.4 下测试），这时也无法得知发送的字节数。
+上面的代码中，主要的工作由 `http.FileServer` 完成，HTTP 服务运行的细节被封装到这个函数内部了，对我们是不可见的。例如完成一个响应后，HTTP 状态码是什么，是 200、404 还是 304，FileServer 并没有提供给我们。如果你想要知道有多少比特被发送到了客户端，也比较困难。
 
 Go 的 [net/http/httptest](https://golang.org/pkg/net/http/httptest/) 包提供了一个 `ResponseRecorder` 可以将原本要发送到客户端的响应报文截获并记录下来，我们可以从中提取到需要的信息。得到所需信息后，我们再将现场还原，把 HTTP 报文头、报文体写入到 ResponseWriter，这样客户端就可以正常收到响应结果。
 
