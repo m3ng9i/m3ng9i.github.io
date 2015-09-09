@@ -170,10 +170,47 @@ Version: v1.0, Branch: master, Build: e5b593c, Build time: 2015-02-17 15:46 +080
 
 是不是很方便？
 
+# 2015-09-09 更新
+
+go 1.5 以后，go link 对 `-X` 参数的参数值格式进行了修改。在 [link 的文档中](http://golang.org/cmd/link/) 可以看到如下内容：
+
+```nohighlight
+-X importpath.name=value
+    Set the value of the string variable in importpath named name to value.
+    Note that before Go 1.5 this option took two separate arguments.
+    Now it takes one argument split on the first = sign.
+```
+
+可以看出，赋值方式由 `-X importpath.name value` 变成了 `-X importpath.name=value`。变量和值之前是使用空格分割的，go 1.5 变更为了等号。
+
+如果你原先使用的编译命令是这样的：
+
+```bash
+go build -ldflags "-X importpath.name value -X importpath_2.name_2 value_2"
+```
+
+那么，在升级到 go 1.5 后，就需要修改成下面这样了：
+
+```bash
+go build -ldflags "-X importpath.name=value -X importpath_2.name_2=value_2"
+```
+
+如果要赋值的变量包含空格，需要用引号将 -X 后面的变量和值都扩起来：
+
+```bash
+go build -ldflags "-X 'importpath.name=a string contains space' -X 'importpath_2.name_2=value'"
+```
+
+在 go 1.5 中，如果在编译时仍然使用旧的 `-X` 指令语法进行编译，可以编译成功，但 go 会给出一个 warning，类似下面这样：
+
+```nohighlight
+link: warning: option -X importpath.name value may not work in future releases; use -X importpath.name=value
+```
+
 # 参考资料
 
 - [go command tutorial](https://github.com/hyper-carrot/go_command_tutorial)
 - [Command go](http://golang.org/cmd/go/)
-- [Command ld](http://golang.org/cmd/ld/)
+- [Command link](http://golang.org/cmd/link/)
 - [Git Documentation](http://git-scm.com/doc)
 

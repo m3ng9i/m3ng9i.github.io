@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1,width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="buildtime" content="2015-08-07T14:25:15+08:00">
+    <meta name="buildtime" content="2015-09-09T17:29:18+08:00">
     
     <meta name="author" content="m3ng9i">
     <meta name="title" content="编译时向 go 程序写入 git 版本信息">
@@ -265,12 +265,44 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 
 <p>是不是很方便？</p>
 
+<h1>2015-09-09 更新</h1>
+
+<p>go 1.5 以后，go link 对 <code>-X</code> 参数的参数值格式进行了修改。在 <a href="http://golang.org/cmd/link/" rel="nofollow">link 的文档中</a> 可以看到如下内容：</p>
+
+<pre><code class="language-nohighlight">-X importpath.name=value
+    Set the value of the string variable in importpath named name to value.
+    Note that before Go 1.5 this option took two separate arguments.
+    Now it takes one argument split on the first = sign.
+</code></pre>
+
+<p>可以看出，赋值方式由 <code>-X importpath.name value</code> 变成了 <code>-X importpath.name=value</code>。变量和值之前是使用空格分割的，go 1.5 变更为了等号。</p>
+
+<p>如果你原先使用的编译命令是这样的：</p>
+
+<pre><code class="language-bash">go build -ldflags &quot;-X importpath.name value -X importpath_2.name_2 value_2&quot;
+</code></pre>
+
+<p>那么，在升级到 go 1.5 后，就需要修改成下面这样了：</p>
+
+<pre><code class="language-bash">go build -ldflags &quot;-X importpath.name=value -X importpath_2.name_2=value_2&quot;
+</code></pre>
+
+<p>如果要赋值的变量包含空格，需要用引号将 -X 后面的变量和值都扩起来：</p>
+
+<pre><code class="language-bash">go build -ldflags &quot;-X 'importpath.name=a string contains space' -X 'importpath_2.name_2=value'&quot;
+</code></pre>
+
+<p>在 go 1.5 中，如果在编译时仍然使用旧的 <code>-X</code> 指令语法进行编译，可以编译成功，但 go 会给出一个 warning，类似下面这样：</p>
+
+<pre><code class="language-nohighlight">link: warning: option -X importpath.name value may not work in future releases; use -X importpath.name=value
+</code></pre>
+
 <h1>参考资料</h1>
 
 <ul>
 <li><a href="https://github.com/hyper-carrot/go_command_tutorial" rel="nofollow">go command tutorial</a><br></li>
 <li><a href="http://golang.org/cmd/go/" rel="nofollow">Command go</a><br></li>
-<li><a href="http://golang.org/cmd/ld/" rel="nofollow">Command ld</a><br></li>
+<li><a href="http://golang.org/cmd/link/" rel="nofollow">Command link</a><br></li>
 <li><a href="http://git-scm.com/doc" rel="nofollow">Git Documentation</a><br></li>
 </ul>
 

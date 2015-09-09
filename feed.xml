@@ -7,7 +7,7 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-09-01T08:54:11+08:00</updated>
+    <updated>2015-09-09T17:29:18+08:00</updated>
 
     <entry><title>Go：使用 ResponseRecorder 记录 HTTP 响应报文</title>
 <author><name>m3ng9i</name></author>
@@ -648,12 +648,44 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 
 &lt;p&gt;是不是很方便？&lt;/p&gt;
 
+&lt;h1&gt;2015-09-09 更新&lt;/h1&gt;
+
+&lt;p&gt;go 1.5 以后，go link 对 &lt;code&gt;-X&lt;/code&gt; 参数的参数值格式进行了修改。在 &lt;a href=&quot;http://golang.org/cmd/link/&quot; rel=&quot;nofollow&quot;&gt;link 的文档中&lt;/a&gt; 可以看到如下内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;-X importpath.name=value
+    Set the value of the string variable in importpath named name to value.
+    Note that before Go 1.5 this option took two separate arguments.
+    Now it takes one argument split on the first = sign.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看出，赋值方式由 &lt;code&gt;-X importpath.name value&lt;/code&gt; 变成了 &lt;code&gt;-X importpath.name=value&lt;/code&gt;。变量和值之前是使用空格分割的，go 1.5 变更为了等号。&lt;/p&gt;
+
+&lt;p&gt;如果你原先使用的编译命令是这样的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go build -ldflags &amp;#34;-X importpath.name value -X importpath_2.name_2 value_2&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;那么，在升级到 go 1.5 后，就需要修改成下面这样了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go build -ldflags &amp;#34;-X importpath.name=value -X importpath_2.name_2=value_2&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果要赋值的变量包含空格，需要用引号将 -X 后面的变量和值都扩起来：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go build -ldflags &amp;#34;-X &amp;#39;importpath.name=a string contains space&amp;#39; -X &amp;#39;importpath_2.name_2=value&amp;#39;&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在 go 1.5 中，如果在编译时仍然使用旧的 &lt;code&gt;-X&lt;/code&gt; 指令语法进行编译，可以编译成功，但 go 会给出一个 warning，类似下面这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;link: warning: option -X importpath.name value may not work in future releases; use -X importpath.name=value
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;h1&gt;参考资料&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/hyper-carrot/go_command_tutorial&quot; rel=&quot;nofollow&quot;&gt;go command tutorial&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://golang.org/cmd/go/&quot; rel=&quot;nofollow&quot;&gt;Command go&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://golang.org/cmd/ld/&quot; rel=&quot;nofollow&quot;&gt;Command ld&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://golang.org/cmd/link/&quot; rel=&quot;nofollow&quot;&gt;Command link&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://git-scm.com/doc&quot; rel=&quot;nofollow&quot;&gt;Git Documentation&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
