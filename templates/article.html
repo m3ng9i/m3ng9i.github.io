@@ -1,16 +1,21 @@
 <article class="container">
+    {% if article.ArticleOption.ShowTitle %}
     <div class="row">
         <header class="col-md-8 col-md-offset-2">
             <h1 class="mycandy-title"><a href="{{url}}">{{article.Title}}</a></h1>
+            {% if article.ShowPubtime %}
             <p class="mycandy-pubtime">{{article.Author}} 发表于
                 <time datetime="{{article.PubTime|time:"2006-01-02T15:04:05Z07:00"}}" pubdate>{{article.PubTime|time:"2006-01-02 15:04"}}</time>
             </p>
+            {% endif %}
         </header>
     </div>
+    {% endif %}
 
     <div class="row">
         {# article class is used for generating atom entry #}
         <div class="col-md-8 col-md-offset-2 mycandy-article article">
+            {% if url && article.ShowURL %}<p class="mycandy-pagelink">本文地址： <a href="{{url}}">{{url|trimPrefixSlash}}</a></p>{% endif %}
             {{article.Content|markdown}}
         </div>
     </div>

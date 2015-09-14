@@ -186,6 +186,20 @@ body > footer a[class~='mycandy-brand'] {
     margin-bottom: 2rem;
 }
 
+#content .mycandy-pagelink {
+    font-size: 0.85rem;
+    color: #999999;
+}
+
+#content .mycandy-pagelink a {
+    color: #999999;
+    text-decoration: none;
+}
+
+#content .mycandy-pagelink a:hover {
+    color: #555555;
+}
+
 /************************
  * code
  ***********************/

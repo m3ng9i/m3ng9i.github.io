@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1,width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="buildtime" content="2015-09-01T08:54:10+08:00">
+    <meta name="buildtime" content="2015-09-14T16:48:47+08:00">
     
     <meta name="author" content="m3ng9i">
     <meta name="title" content="Go：使用 ResponseRecorder 记录 HTTP 响应报文">
@@ -97,18 +97,23 @@
 
     <div id="content">
         <article class="container">
+    
     <div class="row">
         <header class="col-md-8 col-md-offset-2">
             <h1 class="mycandy-title"><a href="//mengqi.info/html/2015/201508211700-record-http-response-in-go.html">Go：使用 ResponseRecorder 记录 HTTP 响应报文</a></h1>
+            
             <p class="mycandy-pubtime">m3ng9i 发表于
                 <time datetime="2015-08-21T17:00:00+08:00" pubdate>2015-08-21 17:00</time>
             </p>
+            
         </header>
     </div>
+    
 
     <div class="row">
         
         <div class="col-md-8 col-md-offset-2 mycandy-article article">
+            <p class="mycandy-pagelink">本文地址： <a href="//mengqi.info/html/2015/201508211700-record-http-response-in-go.html">mengqi.info/html/2015/201508211700-record-http-response-in-go.html</a></p>
             <p>Go 的 <a href="https://golang.org/pkg/net/http/" rel="nofollow">net/http</a> 包提供了丰富的 API 用来创建 HTTP 服务。在创建自己的 HTTP 服务时，通常会建立一个 <a href="https://golang.org/pkg/net/http/#Handler" rel="nofollow">Handler</a> 来处理请求，并将响应内容写入到 <a href="https://golang.org/pkg/net/http/#ResponseWriter" rel="nofollow">http.ResponseWriter</a> 中。</p>
 
 <p>下面的代码是一个简单的例子：将当前工作目录作为根目录，利用 http 包的 <a href="https://golang.org/pkg/net/http/#FileServer" rel="nofollow">FileServer Handler</a> 创建了一个静态文件服务器，接受 HTTP 请求并做出响应，最后输出日志。</p>

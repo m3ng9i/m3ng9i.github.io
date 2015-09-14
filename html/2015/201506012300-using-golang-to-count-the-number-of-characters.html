@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1,width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="buildtime" content="2015-08-07T14:25:15+08:00">
+    <meta name="buildtime" content="2015-09-14T16:48:47+08:00">
     
     <meta name="author" content="m3ng9i">
     <meta name="title" content="在 Go 语言中获取字符串中的字符个数">
@@ -97,18 +97,23 @@
 
     <div id="content">
         <article class="container">
+    
     <div class="row">
         <header class="col-md-8 col-md-offset-2">
             <h1 class="mycandy-title"><a href="//mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html">在 Go 语言中获取字符串中的字符个数</a></h1>
+            
             <p class="mycandy-pubtime">m3ng9i 发表于
                 <time datetime="2015-06-01T23:00:00+08:00" pubdate>2015-06-01 23:00</time>
             </p>
+            
         </header>
     </div>
+    
 
     <div class="row">
         
         <div class="col-md-8 col-md-offset-2 mycandy-article article">
+            <p class="mycandy-pagelink">本文地址： <a href="//mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html">mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html</a></p>
             <p>在 Go 语言中，是不能用 <code>len</code> 函数来统计字符串中的字符个数的，这是因为在 Go 中，字符串是以 UTF-8 为格式进行存储的，在字符串上调用 len 函数，取得的是字符串包含的 byte 的个数。</p>
 
 <p>例如字符串：<code>Hello, 世界</code> 包含 9 个字符。使用 <code>len(&quot;Hello, 世界&quot;)</code> 得到的结果为 <code>13</code>，因为这个字符串占用 13 个字节：</p>

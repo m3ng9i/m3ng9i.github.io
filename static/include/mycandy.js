@@ -53,4 +53,16 @@ $(function() {
         });
     })();
 
+
+    // add "https://" or "http://" for pagelink in article page.
+    (function() {
+        var protocol = window.location.protocol;
+        if (protocol != "") {
+            var node = $("#content .mycandy-pagelink a").get(0);
+            if (node) {
+                node.innerText = protocol + "//" + node.innerText;
+            }
+        }
+    })();
+
 });

@@ -7,7 +7,7 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-09-09T17:29:18+08:00</updated>
+    <updated>2015-09-14T16:48:49+08:00</updated>
 
     <entry><title>Go：使用 ResponseRecorder 记录 HTTP 响应报文</title>
 <author><name>m3ng9i</name></author>
@@ -16,7 +16,8 @@
 <published>2015-08-21T17:00:00+08:00</published>
 <updated>2015-08-21T17:00:00+08:00</updated>
 <content type="html">
-    &lt;p&gt;Go 的 &lt;a href=&quot;https://golang.org/pkg/net/http/&quot; rel=&quot;nofollow&quot;&gt;net/http&lt;/a&gt; 包提供了丰富的 API 用来创建 HTTP 服务。在创建自己的 HTTP 服务时，通常会建立一个 &lt;a href=&quot;https://golang.org/pkg/net/http/#Handler&quot; rel=&quot;nofollow&quot;&gt;Handler&lt;/a&gt; 来处理请求，并将响应内容写入到 &lt;a href=&quot;https://golang.org/pkg/net/http/#ResponseWriter&quot; rel=&quot;nofollow&quot;&gt;http.ResponseWriter&lt;/a&gt; 中。&lt;/p&gt;
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2015/201508211700-record-http-response-in-go.html&quot;&gt;mengqi.info/html/2015/201508211700-record-http-response-in-go.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;Go 的 &lt;a href=&quot;https://golang.org/pkg/net/http/&quot; rel=&quot;nofollow&quot;&gt;net/http&lt;/a&gt; 包提供了丰富的 API 用来创建 HTTP 服务。在创建自己的 HTTP 服务时，通常会建立一个 &lt;a href=&quot;https://golang.org/pkg/net/http/#Handler&quot; rel=&quot;nofollow&quot;&gt;Handler&lt;/a&gt; 来处理请求，并将响应内容写入到 &lt;a href=&quot;https://golang.org/pkg/net/http/#ResponseWriter&quot; rel=&quot;nofollow&quot;&gt;http.ResponseWriter&lt;/a&gt; 中。&lt;/p&gt;
 
 &lt;p&gt;下面的代码是一个简单的例子：将当前工作目录作为根目录，利用 http 包的 &lt;a href=&quot;https://golang.org/pkg/net/http/#FileServer&quot; rel=&quot;nofollow&quot;&gt;FileServer Handler&lt;/a&gt; 创建了一个静态文件服务器，接受 HTTP 请求并做出响应，最后输出日志。&lt;/p&gt;
 
@@ -118,7 +119,8 @@ func main() {
 <published>2015-07-07T13:45:00+08:00</published>
 <updated>2015-07-07T13:45:00+08:00</updated>
 <content type="html">
-    &lt;p&gt;在 Golang 中转换 UTF-8 与 GBK 编码的文本，可以使用 Go 官方的 &lt;a href=&quot;https://godoc.org/golang.org/x/text&quot; rel=&quot;nofollow&quot;&gt;golang.org/x/text&lt;/a&gt; 包实现，这个包可以通过下面的命令安装：&lt;/p&gt;
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2015/201507071345-using-golang-to-convert-text-between-gbk-and-utf-8.html&quot;&gt;mengqi.info/html/2015/201507071345-using-golang-to-convert-text-between-gbk-and-utf-8.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;在 Golang 中转换 UTF-8 与 GBK 编码的文本，可以使用 Go 官方的 &lt;a href=&quot;https://godoc.org/golang.org/x/text&quot; rel=&quot;nofollow&quot;&gt;golang.org/x/text&lt;/a&gt; 包实现，这个包可以通过下面的命令安装：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go get golang.org/x/text
 &lt;/code&gt;&lt;/pre&gt;
@@ -186,7 +188,8 @@ func main() {
 <published>2015-06-06T23:29:00+08:00</published>
 <updated>2015-06-06T23:29:00+08:00</updated>
 <content type="html">
-    &lt;p&gt;使用 Go 自带的 &lt;code&gt;http&lt;/code&gt; 包可以很方便的抓取网页，例如下面这个例子：&lt;/p&gt;
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2015/201506062329-socks5-proxy-client-in-golang.html&quot;&gt;mengqi.info/html/2015/201506062329-socks5-proxy-client-in-golang.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;使用 Go 自带的 &lt;code&gt;http&lt;/code&gt; 包可以很方便的抓取网页，例如下面这个例子：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;package main
 
@@ -332,7 +335,8 @@ func main() {
 <published>2015-06-01T23:00:00+08:00</published>
 <updated>2015-06-01T23:00:00+08:00</updated>
 <content type="html">
-    &lt;p&gt;在 Go 语言中，是不能用 &lt;code&gt;len&lt;/code&gt; 函数来统计字符串中的字符个数的，这是因为在 Go 中，字符串是以 UTF-8 为格式进行存储的，在字符串上调用 len 函数，取得的是字符串包含的 byte 的个数。&lt;/p&gt;
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html&quot;&gt;mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;在 Go 语言中，是不能用 &lt;code&gt;len&lt;/code&gt; 函数来统计字符串中的字符个数的，这是因为在 Go 中，字符串是以 UTF-8 为格式进行存储的，在字符串上调用 len 函数，取得的是字符串包含的 byte 的个数。&lt;/p&gt;
 
 &lt;p&gt;例如字符串：&lt;code&gt;Hello, 世界&lt;/code&gt; 包含 9 个字符。使用 &lt;code&gt;len(&amp;#34;Hello, 世界&amp;#34;)&lt;/code&gt; 得到的结果为 &lt;code&gt;13&lt;/code&gt;，因为这个字符串占用 13 个字节：&lt;/p&gt;
 
@@ -451,7 +455,8 @@ ok  	command-line-arguments	7.843s
 <published>2015-05-27T13:35:00+08:00</published>
 <updated>2015-05-27T13:35:00+08:00</updated>
 <content type="html">
-    &lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/qreader_on_phone.jpg&quot; alt=&quot;QReader&quot;/&gt;&lt;/p&gt;
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2015/201505271335-qreader.html&quot;&gt;mengqi.info/html/2015/201505271335-qreader.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2015/qreader_on_phone.jpg&quot; alt=&quot;QReader&quot;/&gt;&lt;/p&gt;
 
 &lt;p&gt;最近用 Go 语言和 JavaScript 写了一个 RSS 阅读器 &lt;a href=&quot;https://github.com/m3ng9i/qreader&quot; rel=&quot;nofollow&quot;&gt;QReader&lt;/a&gt;。&lt;/p&gt;
 
@@ -492,7 +497,8 @@ ok  	command-line-arguments	7.843s
 <published>2015-02-17T19:41:00+08:00</published>
 <updated>2015-02-17T19:41:00+08:00</updated>
 <content type="html">
-    &lt;p&gt;如何在 &lt;a href=&quot;https://golang.org&quot; title=&quot;点击前往 golang 官方网站&quot; rel=&quot;nofollow&quot;&gt;go&lt;/a&gt; 程序中记录版本信息？最简单的办法就是手工输入。下面是一个例子。&lt;/p&gt;
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2015/201502171941-build-go-program-with-git-version.html&quot;&gt;mengqi.info/html/2015/201502171941-build-go-program-with-git-version.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;如何在 &lt;a href=&quot;https://golang.org&quot; title=&quot;点击前往 golang 官方网站&quot; rel=&quot;nofollow&quot;&gt;go&lt;/a&gt; 程序中记录版本信息？最简单的办法就是手工输入。下面是一个例子。&lt;/p&gt;
 
 &lt;p&gt;程序 &lt;code&gt;myproject.go&lt;/code&gt; 代码：&lt;/p&gt;
 
@@ -698,7 +704,8 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 <published>2015-02-14T22:32:00+08:00</published>
 <updated>2015-02-14T22:32:00+08:00</updated>
 <content type="html">
-    &lt;p&gt;文本文件是一种结构简单，被广泛使用的文件类型。通常我们可以使用操作系统自带的软件查看文本文件的内容，但是对于包含大量数据的日志文件，如果要查看和提取其中的信息，使用普通的编辑器往往无法达到一个好的效果。当文件过大时，普通的编辑器可能会无法打开或者反应变慢。在一个大的日志文件中查找数据时，使用图形界面的编辑器进行操作会显得十分繁琐。这种情况下，使用命令行来观察和分析文件就是一种方便和有效的方法。&lt;/p&gt;
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2015/201502142232-text-data-analysis.html&quot;&gt;mengqi.info/html/2015/201502142232-text-data-analysis.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;文本文件是一种结构简单，被广泛使用的文件类型。通常我们可以使用操作系统自带的软件查看文本文件的内容，但是对于包含大量数据的日志文件，如果要查看和提取其中的信息，使用普通的编辑器往往无法达到一个好的效果。当文件过大时，普通的编辑器可能会无法打开或者反应变慢。在一个大的日志文件中查找数据时，使用图形界面的编辑器进行操作会显得十分繁琐。这种情况下，使用命令行来观察和分析文件就是一种方便和有效的方法。&lt;/p&gt;
 
 &lt;p&gt;如果你使用的是 Linux/Mac，那么本文介绍的命令都可以直接在操作系统的命令行界面中使用。如果你使用的是 Windows ，可以安装一个叫做 &lt;a href=&quot;http://www.cygwin.com&quot; rel=&quot;nofollow&quot;&gt;Cygwin&lt;/a&gt; 的软件，为 Windows 带来一个类似 Unix 的命令行运行环境。&lt;/p&gt;
 
