@@ -97,6 +97,7 @@ body > footer a[class~='mycandy-brand'] {
     margin: 0;
     font-size: 1.1rem;
     color: #777777;
+    line-height: 2rem;
 }
 
 #content .mycandy-article img {
