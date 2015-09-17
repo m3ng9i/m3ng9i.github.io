@@ -6,7 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="buildtime" content="2015-09-17T21:11:17+08:00">
     
+    <meta name="author" content="m3ng9i">
+    <meta name="title" content="go vet 学习笔记">
+    <meta name="pubtime" content="2015-09-17T21:15:00+08:00">
     
+    <meta name="url" content="//mengqi.info/html/2015/201509172115-go-vet-study-note.html">
     <script src="/static/libs/jquery-1.11.2.min.js"></script>
     <script src="/static/libs/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
     <script src="/static/libs/highlight.js-8.7/highlight.pack.js"></script>
@@ -24,7 +28,7 @@
     <link rel="icon" sizes="192x192" href="/static/images/icon.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/static/images/icon.png">
     <link rel="alternate" type="application/atom+xml" title="My Candy 最新文章" href="/feed.xml">
-    <title>My Candy</title>
+    <title>go vet 学习笔记 - My Candy</title>
     
 </head>
 
@@ -92,55 +96,110 @@
     </header>
 
     <div id="content">
-        <section id="index" class="container">
+        <article class="container">
+    
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <ul>
-                
-                <li>
-                    <a href="/html/2015/201509172115-go-vet-study-note.html">go vet 学习笔记</a> 
-                    <time datetime="2015-09-17T21:15+08:00" pubdate title="2015-09-17 21:15">(2015-09-17)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201508211700-record-http-response-in-go.html">Go：使用 ResponseRecorder 记录 HTTP 响应报文</a> 
-                    <time datetime="2015-08-21T17:00+08:00" pubdate title="2015-08-21 17:00">(2015-08-21)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201507071345-using-golang-to-convert-text-between-gbk-and-utf-8.html">Golang 中的 UTF-8 与 GBK 编码转换</a> 
-                    <time datetime="2015-07-07T13:45+08:00" pubdate title="2015-07-07 13:45">(2015-07-07)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201506062329-socks5-proxy-client-in-golang.html">使用 Golang 通过 Proxy 抓取网页</a> 
-                    <time datetime="2015-06-06T23:29+08:00" pubdate title="2015-06-06 23:29">(2015-06-06)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html">在 Go 语言中获取字符串中的字符个数</a> 
-                    <time datetime="2015-06-01T23:00+08:00" pubdate title="2015-06-01 23:00">(2015-06-01)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201505271335-qreader.html">RSS 阅读器 QReader 发布</a> 
-                    <time datetime="2015-05-27T13:35+08:00" pubdate title="2015-05-27 13:35">(2015-05-27)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201502171941-build-go-program-with-git-version.html">编译时向 go 程序写入 git 版本信息</a> 
-                    <time datetime="2015-02-17T19:41+08:00" pubdate title="2015-02-17 19:41">(2015-02-17)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201502142232-text-data-analysis.html">使用命令行分析日志文件</a> 
-                    <time datetime="2015-02-14T22:32+08:00" pubdate title="2015-02-14 22:32">(2015-02-14)</time>
-                </li>
-                
-            </ul>
+        <header class="col-md-8 col-md-offset-2">
+            <h1 class="mycandy-title"><a href="//mengqi.info/html/2015/201509172115-go-vet-study-note.html">go vet 学习笔记</a></h1>
+            
+            <p class="mycandy-pubtime">m3ng9i 发表于
+                <time datetime="2015-09-17T21:15:00+08:00" pubdate>2015-09-17 21:15</time>
+            </p>
+            
+        </header>
+    </div>
+    
+
+    <div class="row">
+        
+        <div class="col-md-8 col-md-offset-2 mycandy-article article">
+            <p class="mycandy-pagelink">本文地址： <a href="//mengqi.info/html/2015/201509172115-go-vet-study-note.html">mengqi.info/html/2015/201509172115-go-vet-study-note.html</a></p>
+            <p>go 的 vet 工具可以用来检查 go 代码中可以通过编译但仍然有可能存在错误的代码。例如下面的代码本应调用 <code>fmt.Fprintln()</code> 却错误的调用了 <code>fmt.Println()</code>，虽然可以编译成功，但实际上运行后并不会把错误信息发到 stderr：</p>
+
+<pre><code class="language-go">// testvet.go
+package main
+
+import &quot;fmt&quot;
+import &quot;os&quot;
+
+func main() {
+    fmt.Println(os.Stderr, fmt.Errorf(&quot;error msg&quot;))
+}
+</code></pre>
+
+<p>通过 vet 可以检测出这样的错误：</p>
+
+<pre><code class="language-bash">$ go vet testvet.go
+testvet.go:7: first argument to Println is os.Stderr
+</code></pre>
+
+<p>根据 <a href="https://golang.org/cmd/vet/" rel="nofollow">vet 的文档</a>，可以使用三种方式调用 vet：</p>
+
+<blockquote>
+<p>By package, from the go tool:</p>
+
+<pre><code class="language-bash">go vet package/path/name
+vets the package whose path is provided.
+</code></pre>
+
+<p>By files:</p>
+
+<pre><code class="language-bash">go tool vet source/directory/*.go
+vets the files named, all of which must be in the same package.
+</code></pre>
+
+<p>By directory:</p>
+
+<pre><code class="language-bash">go tool vet source/directory
+recursively descends the directory, vetting each package it finds.
+</code></pre>
+</blockquote>
+
+<p>vet 的检查结果仅供参考，有时 vet 也会给出错误的检查结果。下面是一个例子：</p>
+
+<pre><code class="language-go">// testvet2.go
+package main
+
+import &quot;fmt&quot;
+
+type S struct {
+}
+
+func (this *S) Printf(i int) {
+    fmt.Println(i)
+}
+
+
+func main() {
+    s := &amp;S{}
+    s.Printf(1)
+}
+</code></pre>
+
+<p>上面的程序可以正常编译运行，而使用 go vet 检查后会报错：</p>
+
+<pre><code class="language-bash">$ go tool vet testvet2.go
+testvet.go:16: constant 1 not a string in call to Printf
+</code></pre>
+
+<p>可以看出，S.Printf() 接受一个 int 类型的参数，但 vet 却认为应该给它传一个 string 类型的参数。如果把 S 的 Printf 方法改成其他名字，使用 go vet 检查就不会报错了。对此，<a href="https://github.com/golang/go/issues/12294#issuecomment-140292129" rel="nofollow">Go 开发者给出答复</a>是：</p>
+
+<blockquote>
+<p>This is working as expected.<br>
+Your choices are 1) rename your Printf function; 2) don't run vet.</p>
+</blockquote>
+
+<h1>相关资源</h1>
+
+<ul>
+<li><a href="https://golang.org/cmd/vet/" rel="nofollow">Command vet</a><br></li>
+<li><a href="https://github.com/hyper-carrot/go_command_tutorial/blob/master/0.11.md" rel="nofollow">特价萝卜：go vet 与 go tool vet</a><br></li>
+<li><a href="http://goreportcard.com/" rel="nofollow">Go Report Card</a><br></li>
+</ul>
+
         </div>
     </div>
-</section>
+</article>
 
     </div>
 

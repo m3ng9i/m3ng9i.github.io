@@ -7,9 +7,102 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-09-14T16:48:49+08:00</updated>
+    <updated>2015-09-17T21:11:17+08:00</updated>
 
-    <entry><title>Go：使用 ResponseRecorder 记录 HTTP 响应报文</title>
+    <entry><title>go vet 学习笔记</title>
+<author><name>m3ng9i</name></author>
+<id>http://mengqi.info/html/2015/201509172115-go-vet-study-note.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2015/201509172115-go-vet-study-note.html"/>
+<published>2015-09-17T21:15:00+08:00</published>
+<updated>2015-09-17T21:15:00+08:00</updated>
+<content type="html">
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2015/201509172115-go-vet-study-note.html&quot;&gt;mengqi.info/html/2015/201509172115-go-vet-study-note.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;go 的 vet 工具可以用来检查 go 代码中可以通过编译但仍然有可能存在错误的代码。例如下面的代码本应调用 &lt;code&gt;fmt.Fprintln()&lt;/code&gt; 却错误的调用了 &lt;code&gt;fmt.Println()&lt;/code&gt;，虽然可以编译成功，但实际上运行后并不会把错误信息发到 stderr：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;// testvet.go
+package main
+
+import &amp;#34;fmt&amp;#34;
+import &amp;#34;os&amp;#34;
+
+func main() {
+    fmt.Println(os.Stderr, fmt.Errorf(&amp;#34;error msg&amp;#34;))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过 vet 可以检测出这样的错误：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ go vet testvet.go
+testvet.go:7: first argument to Println is os.Stderr
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据 &lt;a href=&quot;https://golang.org/cmd/vet/&quot; rel=&quot;nofollow&quot;&gt;vet 的文档&lt;/a&gt;，可以使用三种方式调用 vet：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;By package, from the go tool:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go vet package/path/name
+vets the package whose path is provided.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;By files:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go tool vet source/directory/*.go
+vets the files named, all of which must be in the same package.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;By directory:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go tool vet source/directory
+recursively descends the directory, vetting each package it finds.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;vet 的检查结果仅供参考，有时 vet 也会给出错误的检查结果。下面是一个例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;// testvet2.go
+package main
+
+import &amp;#34;fmt&amp;#34;
+
+type S struct {
+}
+
+func (this *S) Printf(i int) {
+    fmt.Println(i)
+}
+
+
+func main() {
+    s := &amp;amp;S{}
+    s.Printf(1)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的程序可以正常编译运行，而使用 go vet 检查后会报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ go tool vet testvet2.go
+testvet.go:16: constant 1 not a string in call to Printf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看出，S.Printf() 接受一个 int 类型的参数，但 vet 却认为应该给它传一个 string 类型的参数。如果把 S 的 Printf 方法改成其他名字，使用 go vet 检查就不会报错了。对此，&lt;a href=&quot;https://github.com/golang/go/issues/12294#issuecomment-140292129&quot; rel=&quot;nofollow&quot;&gt;Go 开发者给出答复&lt;/a&gt;是：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;This is working as expected.&lt;br/&gt;
+Your choices are 1) rename your Printf function; 2) don&amp;#39;t run vet.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1&gt;相关资源&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://golang.org/cmd/vet/&quot; rel=&quot;nofollow&quot;&gt;Command vet&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/hyper-carrot/go_command_tutorial/blob/master/0.11.md&quot; rel=&quot;nofollow&quot;&gt;特价萝卜：go vet 与 go tool vet&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://goreportcard.com/&quot; rel=&quot;nofollow&quot;&gt;Go Report Card&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+        
+</content>
+</entry><entry><title>Go：使用 ResponseRecorder 记录 HTTP 响应报文</title>
 <author><name>m3ng9i</name></author>
 <id>http://mengqi.info/html/2015/201508211700-record-http-response-in-go.html</id>
 <link rel="alternate" href="http://mengqi.info/html/2015/201508211700-record-http-response-in-go.html"/>
