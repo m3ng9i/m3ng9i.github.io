@@ -7,7 +7,7 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-09-17T21:11:17+08:00</updated>
+    <updated>2015-09-17T21:30:33+08:00</updated>
 
     <entry><title>go vet 学习笔记</title>
 <author><name>m3ng9i</name></author>
