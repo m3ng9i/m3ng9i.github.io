@@ -2,6 +2,7 @@ var REPOS = [
     "QReader",      "一个使用 Go 和 JavaScript 编写的 RSS 阅读器。支持标签、文章加星、设置 feed 更新周期与文章保留数量、文章搜索等功能。",
     "Feedreader",   "RSS 2.0 和 Atom 1.0 解析模块，供 QReader 调用。",
     "go-utils",     "Go 工具包。",
+    "godi",         "用来检查一个 Go 程序包依赖哪些其他包的命令行工具，调用 go list 命令获取包依赖信息。",
     "IP-resolver",  "一个命令行工具，同时调用多个 DNS 查询同一个域名的 IP 地址，并显示对比结果。",
 ];
 
@@ -79,6 +80,12 @@ function createReposTable(data, repos) {
     for (var i = 0; i < repos.length; i += 2) {
         for (var j = 0; j < data.length; j++) {
             if (repos[i].toLowerCase() == data[j].name.toLowerCase()) {
+                var size = data[j].size;
+                if (size == 0) {
+                    size = "未知";
+                } else {
+                    size = size + "KB";
+                }
                 html += "<tbody title='点击跳转到 github 页面' tabindex='0' data-github-url='" + data[j].html_url + "'>" +
                     "<tr><th>" +
                     "<span><span class='fa fa-github-alt'></span> " + repos[i] + "</span>" +
@@ -87,7 +94,7 @@ function createReposTable(data, repos) {
                     "<tr><td>" + repos[i + 1] + "</td></tr>" +
                     "<tr><td>Github 地址：" + data[j].html_url + "</td></tr>" +
                     "<tr><td>主要语言：" + data[j].language + "</td></tr>" +
-                    "<tr><td>大小：" + data[j].size + "KB </td></tr>" +
+                    "<tr><td>大小：" + size + "</td></tr>" +
                     "<tr><td>最近更新：" + dateString(data[j].pushed_at) + "</td></tr>" +
                     "<tr><td>&nbsp;</td></tr>" +
                     "</tbody>";
