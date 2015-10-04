@@ -36,7 +36,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center alert alert-danger">
-                <p>你正在使用低版本的 IE 浏览器，某些功能或效果可能无法正常显示。建议使用 Google Chrome、Mozilla Firefox、Safari 等现代浏览器。</p>
+                <p>你正在使用低版本的 IE 浏览器，某些功能或效果可能无法正常显示。建议使用 Google Chrome、Mozilla Firefox、Apple Safari 等现代浏览器。</p>
+                <p>You are using an old version of Internet Explorer, something may not displayed properly. It's recommended to use modern browsers like: Google Chrome, Mozilla Firefox or Apple Safari.</p>
             </div>
         </div>
     </div>
@@ -61,11 +62,10 @@
                         <!-- Collect the nav links, forms, and other content for toggling -->
                         <div class="collapse navbar-collapse" id="navbar-links">
                             <ul class="nav navbar-nav">
-                                <li><a href="/">首页</a></li>
-                                <li><a href="/html/about.html">关于</a></li>
+                                <li><a href="/" title="home">首页</a></li>
 
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="My projects">
                                         开源项目
                                         <span class="caret"></span>
                                     </a>
@@ -81,6 +81,10 @@
                                         <li><a href="https://github.com/m3ng9i/IP-resolver" title="可以调用多个 DNS 查询一个域名的 IP，并对比查询结果">IP-resolver</a></li>
                                     </ul>
                                 </li>
+
+                                <li><a href="/html/about.html" title="About page (in Chinese)">关于</a></li>
+                                <li><a href="/html/about_en.html">About</a></li>
+
                             </ul>
 
                             <ul class="nav navbar-nav navbar-right">
@@ -207,7 +211,7 @@ Your choices are 1) rename your Printf function; 2) don't run vet.</p>
     <footer class="container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <a class="mycandy-brand" href="/" title="首页"><sup class="fa fa-asterisk mycandy-asterisk"></sup></a>
+                <a class="mycandy-brand" href="/" title="首页 (home)"><sup class="fa fa-asterisk mycandy-asterisk"></sup></a>
             </div>
         </div>
     </footer>

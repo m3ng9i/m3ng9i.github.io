@@ -33,7 +33,8 @@ $(function() {
 
             switch(window.location.pathname) {
                 case "/":                   selected = navButton.get(0); break;
-                case "/html/about.html":    selected = navButton.get(1); break;
+                case "/html/about.html":    selected = navButton.get(2); break;
+                case "/html/about_en.html": selected = navButton.get(3); break;
             }
 
             if (selected !== null) {
@@ -43,12 +44,12 @@ $(function() {
 
         setNavActiveState();
 
-        $(navButton.get(2)).on("show.bs.dropdown", function() {
+        $(navButton.get(1)).on("show.bs.dropdown", function() {
             $(navButton.get(0)).removeClass("active");
             $(navButton.get(1)).removeClass("active");
         });
 
-        $(navButton.get(2)).on("hide.bs.dropdown", function() {
+        $(navButton.get(1)).on("hide.bs.dropdown", function() {
             setNavActiveState();
         });
     })();
