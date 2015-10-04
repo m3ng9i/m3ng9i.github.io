@@ -1,4 +1,5 @@
 var REPOS = [
+    "Ran",          "使用 Go 写的静态 web 服务器。支持 gzip 压缩、digest 身份认证、日志输出、自定义 404 文件等功能。",
     "QReader",      "一个使用 Go 和 JavaScript 编写的 RSS 阅读器。支持标签、文章加星、设置 feed 更新周期与文章保留数量、文章搜索等功能。",
     "Feedreader",   "RSS 2.0 和 Atom 1.0 解析模块，供 QReader 调用。",
     "go-utils",     "Go 工具包。",
