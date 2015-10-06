@@ -5,7 +5,11 @@
     <meta name="viewport" content="initial-scale=1,width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
+    <meta name="author" content="m3ng9i">
+    <meta name="title" content="Ran: 使用 Go 语言开发的静态 Web 服务器">
+    <meta name="pubtime" content="2015-10-06T14:40:00+08:00">
     
+    <meta name="url" content="//mengqi.info/html/2015/201510061440-ran-a-static-web-server-written-in-go.html">
     <script src="/static/libs/jquery-1.11.2.min.js"></script>
     <script src="/static/libs/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
     <script src="/static/libs/highlight.js-8.7/highlight.pack.js"></script>
@@ -23,7 +27,7 @@
     <link rel="icon" sizes="192x192" href="/static/images/icon.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/static/images/icon.png">
     <link rel="alternate" type="application/atom+xml" title="My Candy 最新文章" href="/feed.xml">
-    <title>My Candy</title>
+    <title>Ran: 使用 Go 语言开发的静态 Web 服务器 - My Candy</title>
     
 </head>
 
@@ -97,60 +101,64 @@
     </header>
 
     <div id="content">
-        <section id="index" class="container">
+        <article class="container">
+    
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <ul>
-                
-                <li>
-                    <a href="/html/2015/201510061440-ran-a-static-web-server-written-in-go.html">Ran: 使用 Go 语言开发的静态 Web 服务器</a> 
-                    <time datetime="2015-10-06T14:40+08:00" pubdate title="2015-10-06 14:40">(2015-10-06)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201509172115-go-vet-study-note.html">go vet 学习笔记</a> 
-                    <time datetime="2015-09-17T21:15+08:00" pubdate title="2015-09-17 21:15">(2015-09-17)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201508211700-record-http-response-in-go.html">Go：使用 ResponseRecorder 记录 HTTP 响应报文</a> 
-                    <time datetime="2015-08-21T17:00+08:00" pubdate title="2015-08-21 17:00">(2015-08-21)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201507071345-using-golang-to-convert-text-between-gbk-and-utf-8.html">Golang 中的 UTF-8 与 GBK 编码转换</a> 
-                    <time datetime="2015-07-07T13:45+08:00" pubdate title="2015-07-07 13:45">(2015-07-07)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201506062329-socks5-proxy-client-in-golang.html">使用 Golang 通过 Proxy 抓取网页</a> 
-                    <time datetime="2015-06-06T23:29+08:00" pubdate title="2015-06-06 23:29">(2015-06-06)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html">在 Go 语言中获取字符串中的字符个数</a> 
-                    <time datetime="2015-06-01T23:00+08:00" pubdate title="2015-06-01 23:00">(2015-06-01)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201505271335-qreader.html">RSS 阅读器 QReader 发布</a> 
-                    <time datetime="2015-05-27T13:35+08:00" pubdate title="2015-05-27 13:35">(2015-05-27)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201502171941-build-go-program-with-git-version.html">编译时向 go 程序写入 git 版本信息</a> 
-                    <time datetime="2015-02-17T19:41+08:00" pubdate title="2015-02-17 19:41">(2015-02-17)</time>
-                </li>
-                
-                <li>
-                    <a href="/html/2015/201502142232-text-data-analysis.html">使用命令行分析日志文件</a> 
-                    <time datetime="2015-02-14T22:32+08:00" pubdate title="2015-02-14 22:32">(2015-02-14)</time>
-                </li>
-                
-            </ul>
+        <header class="col-md-8 col-md-offset-2">
+            <h1 class="mycandy-title"><a href="//mengqi.info/html/2015/201510061440-ran-a-static-web-server-written-in-go.html">Ran: 使用 Go 语言开发的静态 Web 服务器</a></h1>
+            
+            <p class="mycandy-pubtime">m3ng9i 发表于
+                <time datetime="2015-10-06T14:40:00+08:00" pubdate>2015-10-06 14:40</time>
+            </p>
+            
+        </header>
+    </div>
+    
+
+    <div class="row">
+        
+        <div class="col-md-8 col-md-offset-2 mycandy-article article">
+            <p class="mycandy-pagelink">本文地址： <a href="//mengqi.info/html/2015/201510061440-ran-a-static-web-server-written-in-go.html">mengqi.info/html/2015/201510061440-ran-a-static-web-server-written-in-go.html</a></p>
+            <p>最近用 Go 语言写了一款静态 Web 服务器：&quot;<a href="https://github.com/m3ng9i/ran" rel="nofollow">Ran</a>&quot;，支持如下功能：</p>
+
+<ul>
+<li>列出目录下的文件<br></li>
+<li>gzip 压缩<br></li>
+<li>digest 身份认证<br></li>
+<li>日志记录<br></li>
+<li>自定义 404 文件<br></li>
+</ul>
+
+<p>适合如下应用场景：</p>
+
+<ul>
+<li>文件共享<br></li>
+<li>Web 应用程序开发测试<br></li>
+<li>个人站点演示<br></li>
+</ul>
+
+<p>以后还会添加更多功能，例如：</p>
+
+<ul>
+<li>配置文件<br></li>
+<li>TLS 加密 (https)<br></li>
+<li>IP 过滤器<br></li>
+<li>自定义日志格式<br></li>
+</ul>
+
+<p>Ran 通过命令行运行，使用 <code>-h</code> 参数可以查看使用帮助。我已经用 Ran 代替了以前经常使用的 python 的单线程服务器：<code>python3 -m http.server</code>。</p>
+
+<p>你可以直接下载适用于 Windows、Linux 或 Mac OS X 的可执行文件，对于其他操作系统，也可以自行编译。</p>
+
+<p>更多内容，请访问 Ran 的 Github 页面：<a href="https://github.com/m3ng9i/ran" rel="nofollow">https://github.com/m3ng9i/ran</a></p>
+
+<p>下载 Ran：<a href="https://github.com/m3ng9i/ran/releases" rel="nofollow">https://github.com/m3ng9i/ran/releases</a></p>
+
+<p>欢迎品尝。</p>
+
         </div>
     </div>
-</section>
+</article>
 
     </div>
 
