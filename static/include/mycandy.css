@@ -108,7 +108,7 @@ body > footer a[class~='mycandy-brand'] {
     line-height: 1.8rem;
 }
 
-#content .mycandy-article > p > em {
+#content .mycandy-article > p em {
     font-weight:    bold;
     font-style:     normal;
     color:          #c74a6a;
