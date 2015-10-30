@@ -7,7 +7,7 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-10-06T14:38:38+08:00</updated>
+    <updated>2015-10-30T15:15:52+08:00</updated>
 
     <entry><title>Ran: 使用 Go 语言开发的静态 Web 服务器</title>
 <author><name>m3ng9i</name></author>
@@ -17,14 +17,15 @@
 <updated>2015-10-06T14:40:00+08:00</updated>
 <content type="html">
     &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2015/201510061440-ran-a-static-web-server-written-in-go.html&quot;&gt;mengqi.info/html/2015/201510061440-ran-a-static-web-server-written-in-go.html&lt;/a&gt;&lt;/p&gt;
-            &lt;p&gt;最近用 Go 语言写了一款静态 Web 服务器：&amp;#34;&lt;a href=&quot;https://github.com/m3ng9i/ran&quot; rel=&quot;nofollow&quot;&gt;Ran&lt;/a&gt;&amp;#34;，支持如下功能：&lt;/p&gt;
+            &lt;p&gt;最近用 Go 语言写了一款静态 Web 服务器：&lt;a href=&quot;https://github.com/m3ng9i/ran&quot; rel=&quot;nofollow&quot;&gt;Ran&lt;/a&gt;，支持如下功能：&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;列出目录下的文件&lt;br/&gt;&lt;/li&gt;
 &lt;li&gt;gzip 压缩&lt;br/&gt;&lt;/li&gt;
 &lt;li&gt;digest 身份认证&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;TLS 加密 (https)&lt;br/&gt;&lt;/li&gt;
 &lt;li&gt;日志记录&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;自定义 404 文件&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;自定义 401、404 错误文件&lt;br/&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;适合如下应用场景：&lt;/p&gt;
@@ -39,7 +40,6 @@
 
 &lt;ul&gt;
 &lt;li&gt;配置文件&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;TLS 加密 (https)&lt;br/&gt;&lt;/li&gt;
 &lt;li&gt;IP 过滤器&lt;br/&gt;&lt;/li&gt;
 &lt;li&gt;自定义日志格式&lt;br/&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -53,6 +53,8 @@
 &lt;p&gt;下载 Ran：&lt;a href=&quot;https://github.com/m3ng9i/ran/releases&quot; rel=&quot;nofollow&quot;&gt;https://github.com/m3ng9i/ran/releases&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;欢迎品尝。&lt;/p&gt;
+
+&lt;p&gt;&lt;small&gt;&lt;em&gt;本文最近更新：2015-10-30&lt;/em&gt;&lt;/small&gt;&lt;/p&gt;
 
         
 </content>
