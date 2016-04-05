@@ -7,7 +7,7 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2015-10-30T15:15:52+08:00</updated>
+    <updated>2016-04-05T18:22:27+08:00</updated>
 
     <entry><title>Ran: 使用 Go 语言开发的静态 Web 服务器</title>
 <author><name>m3ng9i</name></author>
@@ -20,28 +20,28 @@
             &lt;p&gt;最近用 Go 语言写了一款静态 Web 服务器：&lt;a href=&quot;https://github.com/m3ng9i/ran&quot; rel=&quot;nofollow&quot;&gt;Ran&lt;/a&gt;，支持如下功能：&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;列出目录下的文件&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;gzip 压缩&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;digest 身份认证&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;TLS 加密 (https)&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;日志记录&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;自定义 401、404 错误文件&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;列出目录下的文件&lt;/li&gt;
+&lt;li&gt;gzip 压缩&lt;/li&gt;
+&lt;li&gt;digest 身份认证&lt;/li&gt;
+&lt;li&gt;TLS 加密 (https)&lt;/li&gt;
+&lt;li&gt;日志记录&lt;/li&gt;
+&lt;li&gt;自定义 401、404 错误文件&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;适合如下应用场景：&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;文件共享&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;Web 应用程序开发测试&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;个人站点演示&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;文件共享&lt;/li&gt;
+&lt;li&gt;Web 应用程序开发测试&lt;/li&gt;
+&lt;li&gt;个人站点演示&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;以后还会添加更多功能，例如：&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;配置文件&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;IP 过滤器&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;自定义日志格式&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;配置文件&lt;/li&gt;
+&lt;li&gt;IP 过滤器&lt;/li&gt;
+&lt;li&gt;自定义日志格式&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Ran 通过命令行运行，使用 &lt;code&gt;-h&lt;/code&gt; 参数可以查看使用帮助。我已经用 Ran 代替了以前经常使用的 python 的单线程服务器：&lt;code&gt;python3 -m http.server&lt;/code&gt;。&lt;/p&gt;
@@ -89,23 +89,27 @@ testvet.go:7: first argument to Println is os.Stderr
 
 &lt;blockquote&gt;
 &lt;p&gt;By package, from the go tool:&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go vet package/path/name
 vets the package whose path is provided.
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;blockquote&gt;
 &lt;p&gt;By files:&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go tool vet source/directory/*.go
 vets the files named, all of which must be in the same package.
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;blockquote&gt;
 &lt;p&gt;By directory:&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;go tool vet source/directory
 recursively descends the directory, vetting each package it finds.
 &lt;/code&gt;&lt;/pre&gt;
-&lt;/blockquote&gt;
 
 &lt;p&gt;vet 的检查结果仅供参考，有时 vet 也会给出错误的检查结果。下面是一个例子：&lt;/p&gt;
 
@@ -137,16 +141,17 @@ testvet.go:16: constant 1 not a string in call to Printf
 &lt;p&gt;可以看出，S.Printf() 接受一个 int 类型的参数，但 vet 却认为应该给它传一个 string 类型的参数。如果把 S 的 Printf 方法改成其他名字，使用 go vet 检查就不会报错了。对此，&lt;a href=&quot;https://github.com/golang/go/issues/12294#issuecomment-140292129&quot; rel=&quot;nofollow&quot;&gt;Go 开发者给出答复&lt;/a&gt;是：&lt;/p&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;This is working as expected.&lt;br/&gt;
-Your choices are 1) rename your Printf function; 2) don&amp;#39;t run vet.&lt;/p&gt;
+&lt;p&gt;This is working as expected.&lt;/p&gt;
+
+&lt;p&gt;Your choices are 1) rename your Printf function; 2) don&amp;#39;t run vet.&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;h1&gt;相关资源&lt;/h1&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://golang.org/cmd/vet/&quot; rel=&quot;nofollow&quot;&gt;Command vet&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/hyper-carrot/go_command_tutorial/blob/master/0.11.md&quot; rel=&quot;nofollow&quot;&gt;特价萝卜：go vet 与 go tool vet&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://goreportcard.com/&quot; rel=&quot;nofollow&quot;&gt;Go Report Card&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://golang.org/cmd/vet/&quot; rel=&quot;nofollow&quot;&gt;Command vet&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/hyper-carrot/go_command_tutorial/blob/master/0.11.md&quot; rel=&quot;nofollow&quot;&gt;特价萝卜：go vet 与 go tool vet&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://goreportcard.com/&quot; rel=&quot;nofollow&quot;&gt;Go Report Card&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
         
@@ -490,10 +495,10 @@ fmt.Println([]byte(s)) // [72 101 108 108 111 44 32 228 184 150 231 149 140]
 &lt;p&gt;那么如何统计 Golang 字符串中的字符个数呢？有下面几种方法：&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;使用 &lt;code&gt;bytes.Count()&lt;/code&gt; 统计&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;使用 &lt;code&gt;strings.Count()&lt;/code&gt; 统计&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;将字符串转换为 &lt;code&gt;[]rune&lt;/code&gt; 后调用 len 函数进行统计&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;使用 &lt;code&gt;utf8.RuneCountInString()&lt;/code&gt; 统计&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;使用 &lt;code&gt;bytes.Count()&lt;/code&gt; 统计&lt;/li&gt;
+&lt;li&gt;使用 &lt;code&gt;strings.Count()&lt;/code&gt; 统计&lt;/li&gt;
+&lt;li&gt;将字符串转换为 &lt;code&gt;[]rune&lt;/code&gt; 后调用 len 函数进行统计&lt;/li&gt;
+&lt;li&gt;使用 &lt;code&gt;utf8.RuneCountInString()&lt;/code&gt; 统计&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;具体代码：&lt;/p&gt;
@@ -605,16 +610,16 @@ ok  	command-line-arguments	7.843s
 &lt;p&gt;主要功能：&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;按照标签分类 feed&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;为每个 feed 单独设置更新周期&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;设置最大已读保留数，当某个 feed 的未读文章数量超过设定的值后，较早的未读文章会被自动标记为已读&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;设置最大文章保留数，当某个 feed 的已读文章数量超过设定的值后，较早的已读文章会被自动删除&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;可以按随机顺序显示抓取的文章条目&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;设置每页显示的条目数量&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;文章加星&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;设置登录密码&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;与 QReader 服务器通讯的数据可以开启 TLS 加密&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;支持使用 Socks5 代理服务器抓取 feed&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;按照标签分类 feed&lt;/li&gt;
+&lt;li&gt;为每个 feed 单独设置更新周期&lt;/li&gt;
+&lt;li&gt;设置最大已读保留数，当某个 feed 的未读文章数量超过设定的值后，较早的未读文章会被自动标记为已读&lt;/li&gt;
+&lt;li&gt;设置最大文章保留数，当某个 feed 的已读文章数量超过设定的值后，较早的已读文章会被自动删除&lt;/li&gt;
+&lt;li&gt;可以按随机顺序显示抓取的文章条目&lt;/li&gt;
+&lt;li&gt;设置每页显示的条目数量&lt;/li&gt;
+&lt;li&gt;文章加星&lt;/li&gt;
+&lt;li&gt;设置登录密码&lt;/li&gt;
+&lt;li&gt;与 QReader 服务器通讯的数据可以开启 TLS 加密&lt;/li&gt;
+&lt;li&gt;支持使用 Socks5 代理服务器抓取 feed&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;运行 QReader 需要你用一台 PC 做 server，程序运行后，使用电脑或手机上的浏览器访问。&lt;/p&gt;
@@ -622,10 +627,10 @@ ok  	command-line-arguments	7.843s
 &lt;p&gt;这个项目我学到的一些东西：&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://git-scm.com&quot; rel=&quot;nofollow&quot;&gt;Git&lt;/a&gt;：优秀的版本管理软件&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/go-xorm/xorm&quot; rel=&quot;nofollow&quot;&gt;Xorm&lt;/a&gt;：强大的 ORM 库&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://angularjs.org&quot; rel=&quot;nofollow&quot;&gt;AngularJS&lt;/a&gt;：路由和模板很好用&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.rssboard.org/rss-specification&quot; rel=&quot;nofollow&quot;&gt;RSS&lt;/a&gt; 和 &lt;a href=&quot;http://tools.ietf.org/html/rfc4287&quot; rel=&quot;nofollow&quot;&gt;Atom&lt;/a&gt; 规范：根据规范我写了 &lt;a href=&quot;https://github.com/m3ng9i/feedreader&quot; rel=&quot;nofollow&quot;&gt;feedreader&lt;/a&gt; 包来做 feed 解析&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://git-scm.com&quot; rel=&quot;nofollow&quot;&gt;Git&lt;/a&gt;：优秀的版本管理软件&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/go-xorm/xorm&quot; rel=&quot;nofollow&quot;&gt;Xorm&lt;/a&gt;：强大的 ORM 库&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://angularjs.org&quot; rel=&quot;nofollow&quot;&gt;AngularJS&lt;/a&gt;：路由和模板很好用&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.rssboard.org/rss-specification&quot; rel=&quot;nofollow&quot;&gt;RSS&lt;/a&gt; 和 &lt;a href=&quot;http://tools.ietf.org/html/rfc4287&quot; rel=&quot;nofollow&quot;&gt;Atom&lt;/a&gt; 规范：根据规范我写了 &lt;a href=&quot;https://github.com/m3ng9i/feedreader&quot; rel=&quot;nofollow&quot;&gt;feedreader&lt;/a&gt; 包来做 feed 解析&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;查看 &lt;a href=&quot;https://github.com/m3ng9i/qreader&quot; rel=&quot;nofollow&quot;&gt;QReader 截图与更多说明&lt;/a&gt;，&lt;a href=&quot;https://github.com/m3ng9i/qreader/releases&quot; rel=&quot;nofollow&quot;&gt;下载 QReader&lt;/a&gt;。欢迎使用，如果你喜欢，请给我一个 star。&lt;/p&gt;
@@ -831,10 +836,10 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 &lt;h1&gt;参考资料&lt;/h1&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/hyper-carrot/go_command_tutorial&quot; rel=&quot;nofollow&quot;&gt;go command tutorial&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://golang.org/cmd/go/&quot; rel=&quot;nofollow&quot;&gt;Command go&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://golang.org/cmd/link/&quot; rel=&quot;nofollow&quot;&gt;Command link&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://git-scm.com/doc&quot; rel=&quot;nofollow&quot;&gt;Git Documentation&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/hyper-carrot/go_command_tutorial&quot; rel=&quot;nofollow&quot;&gt;go command tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://golang.org/cmd/go/&quot; rel=&quot;nofollow&quot;&gt;Command go&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://golang.org/cmd/link/&quot; rel=&quot;nofollow&quot;&gt;Command link&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://git-scm.com/doc&quot; rel=&quot;nofollow&quot;&gt;Git Documentation&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
         
@@ -1061,7 +1066,7 @@ if subprocess.call(buildCmd(), shell = True) == 0:
 &lt;h1&gt;阅读推荐&lt;/h1&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://linux.vbird.org/&quot; rel=&quot;nofollow&quot;&gt;鸟哥的linux私房菜&lt;/a&gt;&lt;br/&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://linux.vbird.org/&quot; rel=&quot;nofollow&quot;&gt;鸟哥的linux私房菜&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
         

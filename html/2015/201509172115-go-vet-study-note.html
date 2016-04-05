@@ -5,11 +5,12 @@
     <meta name="viewport" content="initial-scale=1,width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
-    <meta name="author" content="m3ng9i">
-    <meta name="title" content="go vet 学习笔记">
-    <meta name="pubtime" content="2015-09-17T21:15:00+08:00">
+    <meta name="candy:author" content="m3ng9i">
+    <meta name="candy:title" content="go vet 学习笔记">
+    <meta name="candy:pubtime" content="2015-09-17T21:15:00+08:00">
+    <meta name="candy:in-index" content="True">
     
-    <meta name="url" content="//mengqi.info/html/2015/201509172115-go-vet-study-note.html">
+    <meta name="candy:url" content="//mengqi.info/html/2015/201509172115-go-vet-study-note.html">
     <script src="/static/libs/jquery-1.11.2.min.js"></script>
     <script src="/static/libs/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
     <script src="/static/libs/highlight.js-8.7/highlight.pack.js"></script>
@@ -142,23 +143,27 @@ testvet.go:7: first argument to Println is os.Stderr
 
 <blockquote>
 <p>By package, from the go tool:</p>
+</blockquote>
 
 <pre><code class="language-bash">go vet package/path/name
 vets the package whose path is provided.
 </code></pre>
 
+<blockquote>
 <p>By files:</p>
+</blockquote>
 
 <pre><code class="language-bash">go tool vet source/directory/*.go
 vets the files named, all of which must be in the same package.
 </code></pre>
 
+<blockquote>
 <p>By directory:</p>
+</blockquote>
 
 <pre><code class="language-bash">go tool vet source/directory
 recursively descends the directory, vetting each package it finds.
 </code></pre>
-</blockquote>
 
 <p>vet 的检查结果仅供参考，有时 vet 也会给出错误的检查结果。下面是一个例子：</p>
 
@@ -190,16 +195,17 @@ testvet.go:16: constant 1 not a string in call to Printf
 <p>可以看出，S.Printf() 接受一个 int 类型的参数，但 vet 却认为应该给它传一个 string 类型的参数。如果把 S 的 Printf 方法改成其他名字，使用 go vet 检查就不会报错了。对此，<a href="https://github.com/golang/go/issues/12294#issuecomment-140292129" rel="nofollow">Go 开发者给出答复</a>是：</p>
 
 <blockquote>
-<p>This is working as expected.<br>
-Your choices are 1) rename your Printf function; 2) don't run vet.</p>
+<p>This is working as expected.</p>
+
+<p>Your choices are 1) rename your Printf function; 2) don't run vet.</p>
 </blockquote>
 
 <h1>相关资源</h1>
 
 <ul>
-<li><a href="https://golang.org/cmd/vet/" rel="nofollow">Command vet</a><br></li>
-<li><a href="https://github.com/hyper-carrot/go_command_tutorial/blob/master/0.11.md" rel="nofollow">特价萝卜：go vet 与 go tool vet</a><br></li>
-<li><a href="http://goreportcard.com/" rel="nofollow">Go Report Card</a><br></li>
+<li><a href="https://golang.org/cmd/vet/" rel="nofollow">Command vet</a></li>
+<li><a href="https://github.com/hyper-carrot/go_command_tutorial/blob/master/0.11.md" rel="nofollow">特价萝卜：go vet 与 go tool vet</a></li>
+<li><a href="http://goreportcard.com/" rel="nofollow">Go Report Card</a></li>
 </ul>
 
         </div>
