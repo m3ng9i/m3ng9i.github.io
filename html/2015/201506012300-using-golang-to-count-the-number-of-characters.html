@@ -5,11 +5,12 @@
     <meta name="viewport" content="initial-scale=1,width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
-    <meta name="author" content="m3ng9i">
-    <meta name="title" content="在 Go 语言中获取字符串中的字符个数">
-    <meta name="pubtime" content="2015-06-01T23:00:00+08:00">
+    <meta name="candy:author" content="m3ng9i">
+    <meta name="candy:title" content="在 Go 语言中获取字符串中的字符个数">
+    <meta name="candy:pubtime" content="2015-06-01T23:00:00+08:00">
+    <meta name="candy:in-index" content="True">
     
-    <meta name="url" content="//mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html">
+    <meta name="candy:url" content="//mengqi.info/html/2015/201506012300-using-golang-to-count-the-number-of-characters.html">
     <script src="/static/libs/jquery-1.11.2.min.js"></script>
     <script src="/static/libs/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
     <script src="/static/libs/highlight.js-8.7/highlight.pack.js"></script>
@@ -131,10 +132,10 @@ fmt.Println([]byte(s)) // [72 101 108 108 111 44 32 228 184 150 231 149 140]
 <p>那么如何统计 Golang 字符串中的字符个数呢？有下面几种方法：</p>
 
 <ul>
-<li>使用 <code>bytes.Count()</code> 统计<br></li>
-<li>使用 <code>strings.Count()</code> 统计<br></li>
-<li>将字符串转换为 <code>[]rune</code> 后调用 len 函数进行统计<br></li>
-<li>使用 <code>utf8.RuneCountInString()</code> 统计<br></li>
+<li>使用 <code>bytes.Count()</code> 统计</li>
+<li>使用 <code>strings.Count()</code> 统计</li>
+<li>将字符串转换为 <code>[]rune</code> 后调用 len 函数进行统计</li>
+<li>使用 <code>utf8.RuneCountInString()</code> 统计</li>
 </ul>
 
 <p>具体代码：</p>
