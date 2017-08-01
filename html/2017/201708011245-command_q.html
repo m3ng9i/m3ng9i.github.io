@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang='zh-cn'>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <meta name="candy:author" content="m3ng9i">
+    <meta name="candy:title" content="命令行工具q：像查询SQL数据库一样查询文本文件">
+    <meta name="candy:pubtime" content="2017-08-01T12:45:00+08:00">
+    <meta name="candy:in-index" content="True">
+    
+    <meta name="candy:url" content="//mengqi.info/html/2017/201708011245-command_q.html">
+    <script src="/static/libs/jquery-1.11.2.min.js"></script>
+    <script src="/static/libs/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <script src="/static/libs/highlight.js-8.7/highlight.pack.js"></script>
+    <script src="/static/include/mycandy.js"></script>
+    <!--[if lt IE 9]>
+    <script src="/static/libs/html5shiv.min.js"></script>
+    <script src="/static/libs/respond-1.4.2.min.js"></script>
+    <![endif]-->
+    <script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="/static/libs/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/libs/font-awesome-4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/libs/highlight.js-8.7/github-gist.css">
+    <link rel="stylesheet" href="/static/include/mycandy.css">
+    
+    <link rel="icon" sizes="192x192" href="/static/images/icon.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/static/images/icon.png">
+    <link rel="alternate" type="application/atom+xml" title="My Candy 最新文章" href="/feed.xml">
+    <title>命令行工具q：像查询SQL数据库一样查询文本文件 - My Candy</title>
+    
+</head>
+
+<body>
+    <!--[if lt IE 9]>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center alert alert-danger">
+                <p>你正在使用低版本的 IE 浏览器，某些功能或效果可能无法正常显示。建议使用 Google Chrome、Mozilla Firefox、Apple Safari 等现代浏览器。</p>
+                <p>You are using an old version of Internet Explorer, something may not displayed properly. It's recommended to use modern browsers like: Google Chrome, Mozilla Firefox or Apple Safari.</p>
+            </div>
+        </div>
+    </div>
+    <![endif]-->
+
+    <header class="container">
+
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <nav class="navbar navbar-default navbar-fixed-top">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-links" aria-expanded="false">
+                                <span class="sr-only">展开导航菜单</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand mycandy-brand" href="//mengqi.info">My<sup class="fa fa-asterisk mycandy-asterisk"></sup>Candy</a>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse" id="navbar-links">
+                            <ul class="nav navbar-nav">
+                                <li><a href="/" title="home">首页</a></li>
+
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="My projects">
+                                        开源项目
+                                        <span class="caret"></span>
+                                    </a>
+
+                                    <ul class="dropdown-menu mycandy-github">
+                                        <li><a href="https://github.com/m3ng9i">Github 主页</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="https://github.com/m3ng9i/ran" title="使用 Go 写的静态 web 服务器">Ran</a></li>
+                                        <li><a href="https://github.com/m3ng9i/qreader" title="一个 B/S 架构的 RSS 阅读器">QReader</a></li>
+                                        <li><a href="https://github.com/m3ng9i/feedreader" title="RSS 2.0 和 Atom 1.0 解析模块">Feedreader</a></li>
+                                        <li><a href="https://github.com/m3ng9i/go-utils" title="Go 工具包">go-utils</a></li>
+                                        <li><a href="https://github.com/m3ng9i/godi" title="Go 程序依赖包检测工具">godi</a></li>
+                                        <li><a href="https://github.com/m3ng9i/IP-resolver" title="可以调用多个 DNS 查询一个域名的 IP，并对比查询结果">IP-resolver</a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a href="/html/about.html" title="About page (in Chinese)">关于</a></li>
+                                <li><a href="/html/about_en.html">About</a></li>
+
+                            </ul>
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="/feed.xml" title="atom 1.0 feed"><span class="fa fa-rss-square mycandy-rss"></span> 订阅</a></li>
+                            </ul>
+
+
+                        </div><!-- end of #navbar-links -->
+                    </div><!-- end of div.container-fluid -->
+                </nav>
+            </div><!-- end of col-md-10 div -->
+
+        </div>
+    </header>
+
+    <div id="content">
+        <article class="container">
+    
+    <div class="row">
+        <header class="col-md-8 col-md-offset-2">
+            <h1 class="mycandy-title"><a href="//mengqi.info/html/2017/201708011245-command_q.html">命令行工具q：像查询SQL数据库一样查询文本文件</a></h1>
+            
+            <p class="mycandy-pubtime">m3ng9i 发表于
+                <time datetime="2017-08-01T12:45:00+08:00" pubdate>2017-08-01 12:45</time>
+            </p>
+            
+        </header>
+    </div>
+    
+
+    <div class="row">
+        
+        <div class="col-md-8 col-md-offset-2 mycandy-article article">
+            <p class="mycandy-pagelink">本文地址： <a href="//mengqi.info/html/2017/201708011245-command_q.html">mengqi.info/html/2017/201708011245-command_q.html</a></p>
+            <p><a href="http://harelba.github.io/q/" rel="nofollow">q</a>是一个可以对文本文件执行SQL查询指令的命令行工具。q使用python编写，可以到q的官网<a href="http://harelba.github.io/q/install.html" rel="nofollow">下载安装</a>。q的SQL是以<a href="http://www.sqlite.org/lang.html" rel="nofollow">SQLite</a>为基础的，所以SQLite中的语法、函数，在q中都可以使用。</p>
+
+<p>下面我们看下如何使用q。这里有一个<a href="/static/2015/text_data_analysis_example.log">样本文件</a>，使用程序随机生成，共1000条数据，包含4个字段，分别表示日期时间、省份名称、订单号、金额，字段之间使用制表符分隔：</p>
+
+<pre><code class="language-nohighlight">$ head text_data_analysis_example.log
+2015-01-25 04:58:59     湖北    24161010220097026928    603.43
+2015-01-17 13:43:06     山东    42422402656113053824    327.95
+2015-01-12 08:15:58     江苏    64951386600336086457    647.55
+2015-01-15 16:52:24     贵州    36495639647086452073    119.20
+2015-01-05 18:17:36     山东    47026818054162399542    748.17
+2015-01-15 09:58:27     西藏    25299664796208617721    446.77
+2015-01-02 16:36:39     陕西    34143609866131614136    361.25
+2015-01-17 19:10:56     湖南    53725682546965026178    896.24
+2015-01-09 20:45:35     广西    20243175880019192418    261.06
+2015-01-02 03:07:32     四川    22020296247794080625    148.12
+</code></pre>
+
+<h2>例1：统计订单最多的10个省份名称以及订单数量：</h2>
+
+<pre><code class="language-nohighlight">$ q -d $'\t' &quot;select c2,count(*) as count from ./text_data_analysis_example.log group by c2 order by count desc limit 10&quot;
+湖北    41
+陕西    40
+云南    38
+山西    38
+贵州    38
+青海    37
+安徽    35
+福建    35
+四川    34
+重庆    34
+</code></pre>
+
+<p>说明：</p>
+
+<ul>
+<li>参数<code>-d $'\t'</code>设置字段分隔符为制表符；</li>
+<li>c1表示第1个字段，c2表示第2个字段，以此类推；</li>
+</ul>
+
+<h2>例2：查询金额小于600的订单，按照金额从大到小排列，取前10条数据：</h2>
+
+<pre><code class="language-nohighlight">$ q -d $'\t' -f &quot;3=%d&quot; &quot;select * from ./text_data_analysis_example.log where c4 &lt; 600 order by c4 desc limit 10&quot;
+2015-01-05 22:45:50     江苏    98436513440879935488    599.02
+2015-01-18 04:32:51     北京    46217457528636792832    599.01
+2015-01-15 03:23:12     陕西    43877530968118345728    596.58
+2015-01-25 09:05:14     安徽    65644845569971331072    596.54
+2015-01-20 04:15:04     云南    67631199068351496192    596.38
+2015-01-31 07:02:33     江西    94210643677476290560    595.93
+2015-01-09 04:40:55     安徽    13315552512198803456    595.73
+2015-01-17 09:05:31     贵州    77673355406810071040    595.72
+2015-01-16 12:44:03     新疆    82040984345137070080    595.08
+2015-01-24 06:20:18     湖南    21188659531566379008    594.71
+</code></pre>
+
+<p>说明：</p>
+
+<ul>
+<li>如果一个字段是数字，且比较大，q默认会以指数表示法显示，例如第1条数据的第3个字段默认会显示成“2.45264045363e+19”，为了按照原样显示数字，加上了<code>-f &quot;3=%d&quot;</code>这个参数，3表示第3个字段；</li>
+<li>如果不需要进行数字大小比较，可以使用<code>--as-text</code>参数，让所有字段都按照文本对待；</li>
+</ul>
+
+<h2>例3：输出所有订单的金额合计和金额平均值</h2>
+
+<pre><code class="language-nohighlight">$ q -d $'\t' &quot;select sum(c4), avg(c4) from ./text_data_analysis_example.log&quot;
+487989.51       487.98951
+</code></pre>
+
+<p>说明：</p>
+
+<ul>
+<li>sum、avg是SQLite的函数，查询所有可用函数，可以参考<a href="https://www.sqlite.org/docs.html" rel="nofollow">SQLite的文档</a>；</li>
+</ul>
+
+<h2>例4：和其他命令行工具配合使用</h2>
+
+<pre><code class="language-nohighlight">$ head text_data_analysis_example.log | q -d $'\t' -D &quot;,&quot; &quot;select c1, c2 from - &quot;
+2015-01-25 04:58:59,湖北
+2015-01-17 13:43:06,山东
+2015-01-12 08:15:58,江苏
+2015-01-15 16:52:24,贵州
+2015-01-05 18:17:36,山东
+2015-01-15 09:58:27,西藏
+2015-01-02 16:36:39,陕西
+2015-01-17 19:10:56,湖南
+2015-01-09 20:45:35,广西
+2015-01-02 03:07:32,四川
+</code></pre>
+
+<p>说明：</p>
+
+<ul>
+<li><code>head</code>命令输出文件的前10行，然后传给q处理；</li>
+<li><code>select ... from -</code> 表示让q通过stdin读取数据，而不是文件，这样可以方便的配合其他工具处理数据；</li>
+<li>参数<code>-D &quot;,&quot;</code>表示将输出数据的字段分隔符设置成逗号；</li>
+</ul>
+
+<h2>相关资源</h2>
+
+<p>可以使用<code>--help</code>获取<code>q</code>的帮助信息，更多内容，可以参考q和SQLite的网站：</p>
+
+<ul>
+<li>q的官方网站：<a href="http://harelba.github.io/q/" rel="nofollow">http://harelba.github.io/q/</a></li>
+<li>q的Github站点：<a href="https://github.com/harelba/q" rel="nofollow">https://github.com/harelba/q</a></li>
+<li>SQLite官方网站：<a href="https://www.sqlite.org" rel="nofollow">https://www.sqlite.org</a></li>
+<li>SQLite文档页：<a href="https://www.sqlite.org/docs.html" rel="nofollow">https://www.sqlite.org/docs.html</a></li>
+<li>和<code>f</code>参数有关Python文档：<a href="https://docs.python.org/release/2.4.4/lib/typesseq-strings.html" rel="nofollow">String Formatting Operations</a></li>
+</ul>
+
+        </div>
+    </div>
+</article>
+
+    </div>
+
+    <footer class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a class="mycandy-brand" href="/" title="首页 (home)"><sup class="fa fa-asterisk mycandy-asterisk"></sup></a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="mycandy-hidden">
+        <script async src="//s95.cnzz.com/z_stat.php?id=1255242145&web_id=1255242145"></script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-63483419-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </div>
+</body>
+
+</html>

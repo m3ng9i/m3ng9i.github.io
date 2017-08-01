@@ -7,9 +7,127 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2016-04-05T18:22:27+08:00</updated>
+    <updated>2017-08-01T12:52:50+08:00</updated>
 
-    <entry><title>Ran: 使用 Go 语言开发的静态 Web 服务器</title>
+    <entry><title>命令行工具q：像查询SQL数据库一样查询文本文件</title>
+<author><name>m3ng9i</name></author>
+<id>http://mengqi.info/html/2017/201708011245-command_q.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2017/201708011245-command_q.html"/>
+<published>2017-08-01T12:45:00+08:00</published>
+<updated>2017-08-01T12:45:00+08:00</updated>
+<content type="html">
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2017/201708011245-command_q.html&quot;&gt;mengqi.info/html/2017/201708011245-command_q.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;&lt;a href=&quot;http://harelba.github.io/q/&quot; rel=&quot;nofollow&quot;&gt;q&lt;/a&gt;是一个可以对文本文件执行SQL查询指令的命令行工具。q使用python编写，可以到q的官网&lt;a href=&quot;http://harelba.github.io/q/install.html&quot; rel=&quot;nofollow&quot;&gt;下载安装&lt;/a&gt;。q的SQL是以&lt;a href=&quot;http://www.sqlite.org/lang.html&quot; rel=&quot;nofollow&quot;&gt;SQLite&lt;/a&gt;为基础的，所以SQLite中的语法、函数，在q中都可以使用。&lt;/p&gt;
+
+&lt;p&gt;下面我们看下如何使用q。这里有一个&lt;a href=&quot;http://mengqi.info/static/2015/text_data_analysis_example.log&quot;&gt;样本文件&lt;/a&gt;，使用程序随机生成，共1000条数据，包含4个字段，分别表示日期时间、省份名称、订单号、金额，字段之间使用制表符分隔：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;$ head text_data_analysis_example.log
+2015-01-25 04:58:59     湖北    24161010220097026928    603.43
+2015-01-17 13:43:06     山东    42422402656113053824    327.95
+2015-01-12 08:15:58     江苏    64951386600336086457    647.55
+2015-01-15 16:52:24     贵州    36495639647086452073    119.20
+2015-01-05 18:17:36     山东    47026818054162399542    748.17
+2015-01-15 09:58:27     西藏    25299664796208617721    446.77
+2015-01-02 16:36:39     陕西    34143609866131614136    361.25
+2015-01-17 19:10:56     湖南    53725682546965026178    896.24
+2015-01-09 20:45:35     广西    20243175880019192418    261.06
+2015-01-02 03:07:32     四川    22020296247794080625    148.12
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;例1：统计订单最多的10个省份名称以及订单数量：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;$ q -d $&amp;#39;\t&amp;#39; &amp;#34;select c2,count(*) as count from ./text_data_analysis_example.log group by c2 order by count desc limit 10&amp;#34;
+湖北    41
+陕西    40
+云南    38
+山西    38
+贵州    38
+青海    37
+安徽    35
+福建    35
+四川    34
+重庆    34
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;参数&lt;code&gt;-d $&amp;#39;\t&amp;#39;&lt;/code&gt;设置字段分隔符为制表符；&lt;/li&gt;
+&lt;li&gt;c1表示第1个字段，c2表示第2个字段，以此类推；&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;例2：查询金额小于600的订单，按照金额从大到小排列，取前10条数据：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;$ q -d $&amp;#39;\t&amp;#39; -f &amp;#34;3=%d&amp;#34; &amp;#34;select * from ./text_data_analysis_example.log where c4 &amp;lt; 600 order by c4 desc limit 10&amp;#34;
+2015-01-05 22:45:50     江苏    98436513440879935488    599.02
+2015-01-18 04:32:51     北京    46217457528636792832    599.01
+2015-01-15 03:23:12     陕西    43877530968118345728    596.58
+2015-01-25 09:05:14     安徽    65644845569971331072    596.54
+2015-01-20 04:15:04     云南    67631199068351496192    596.38
+2015-01-31 07:02:33     江西    94210643677476290560    595.93
+2015-01-09 04:40:55     安徽    13315552512198803456    595.73
+2015-01-17 09:05:31     贵州    77673355406810071040    595.72
+2015-01-16 12:44:03     新疆    82040984345137070080    595.08
+2015-01-24 06:20:18     湖南    21188659531566379008    594.71
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如果一个字段是数字，且比较大，q默认会以指数表示法显示，例如第1条数据的第3个字段默认会显示成“2.45264045363e+19”，为了按照原样显示数字，加上了&lt;code&gt;-f &amp;#34;3=%d&amp;#34;&lt;/code&gt;这个参数，3表示第3个字段；&lt;/li&gt;
+&lt;li&gt;如果不需要进行数字大小比较，可以使用&lt;code&gt;--as-text&lt;/code&gt;参数，让所有字段都按照文本对待；&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;例3：输出所有订单的金额合计和金额平均值&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;$ q -d $&amp;#39;\t&amp;#39; &amp;#34;select sum(c4), avg(c4) from ./text_data_analysis_example.log&amp;#34;
+487989.51       487.98951
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;sum、avg是SQLite的函数，查询所有可用函数，可以参考&lt;a href=&quot;https://www.sqlite.org/docs.html&quot; rel=&quot;nofollow&quot;&gt;SQLite的文档&lt;/a&gt;；&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;例4：和其他命令行工具配合使用&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;$ head text_data_analysis_example.log | q -d $&amp;#39;\t&amp;#39; -D &amp;#34;,&amp;#34; &amp;#34;select c1, c2 from - &amp;#34;
+2015-01-25 04:58:59,湖北
+2015-01-17 13:43:06,山东
+2015-01-12 08:15:58,江苏
+2015-01-15 16:52:24,贵州
+2015-01-05 18:17:36,山东
+2015-01-15 09:58:27,西藏
+2015-01-02 16:36:39,陕西
+2015-01-17 19:10:56,湖南
+2015-01-09 20:45:35,广西
+2015-01-02 03:07:32,四川
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;head&lt;/code&gt;命令输出文件的前10行，然后传给q处理；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;select ... from -&lt;/code&gt; 表示让q通过stdin读取数据，而不是文件，这样可以方便的配合其他工具处理数据；&lt;/li&gt;
+&lt;li&gt;参数&lt;code&gt;-D &amp;#34;,&amp;#34;&lt;/code&gt;表示将输出数据的字段分隔符设置成逗号；&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;相关资源&lt;/h2&gt;
+
+&lt;p&gt;可以使用&lt;code&gt;--help&lt;/code&gt;获取&lt;code&gt;q&lt;/code&gt;的帮助信息，更多内容，可以参考q和SQLite的网站：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;q的官方网站：&lt;a href=&quot;http://harelba.github.io/q/&quot; rel=&quot;nofollow&quot;&gt;http://harelba.github.io/q/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;q的Github站点：&lt;a href=&quot;https://github.com/harelba/q&quot; rel=&quot;nofollow&quot;&gt;https://github.com/harelba/q&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;SQLite官方网站：&lt;a href=&quot;https://www.sqlite.org&quot; rel=&quot;nofollow&quot;&gt;https://www.sqlite.org&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;SQLite文档页：&lt;a href=&quot;https://www.sqlite.org/docs.html&quot; rel=&quot;nofollow&quot;&gt;https://www.sqlite.org/docs.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;和&lt;code&gt;f&lt;/code&gt;参数有关Python文档：&lt;a href=&quot;https://docs.python.org/release/2.4.4/lib/typesseq-strings.html&quot; rel=&quot;nofollow&quot;&gt;String Formatting Operations&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+        
+</content>
+</entry><entry><title>Ran: 使用 Go 语言开发的静态 Web 服务器</title>
 <author><name>m3ng9i</name></author>
 <id>http://mengqi.info/html/2015/201510061440-ran-a-static-web-server-written-in-go.html</id>
 <link rel="alternate" href="http://mengqi.info/html/2015/201510061440-ran-a-static-web-server-written-in-go.html"/>
