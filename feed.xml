@@ -7,9 +7,126 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2017-08-01T12:52:50+08:00</updated>
+    <updated>2017-10-25T18:00:54+08:00</updated>
 
-    <entry><title>命令行工具q：像查询SQL数据库一样查询文本文件</title>
+    <entry><title>IP resolver：查询一个域名在不同DNS下的IP地址</title>
+<author><name>m3ng9i</name></author>
+<id>http://mengqi.info/html/2017/201710251803-ip-resolver.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2017/201710251803-ip-resolver.html"/>
+<published>2017-10-25T18:03:00+08:00</published>
+<updated>2017-10-25T18:03:00+08:00</updated>
+<content type="html">
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2017/201710251803-ip-resolver.html&quot;&gt;mengqi.info/html/2017/201710251803-ip-resolver.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;几年前我用Go写过一个命令行程序，叫&lt;a href=&quot;https://github.com/m3ng9i/ip-resolver&quot; rel=&quot;nofollow&quot;&gt;IP resolver&lt;/a&gt;，这个程序可以同时向多个DNS服务器发出请求，查询一个域名的IP地址，程序会把不同的DNS服务器查询的结果返回，并汇总显示到命令行界面上。&lt;/p&gt;
+
+&lt;p&gt;下面是使用IP resolver查询&lt;a href=&quot;http://mengqi.info&quot; rel=&quot;nofollow&quot;&gt;mengqi.info&lt;/a&gt;域名的截图，程序对5个DNS（具体的DNS可以自行配置）发出了查询请求，并返回了结果。返回结果用一条横线分为了上下两个部分，横线上面的是DNS服务器的名称和其IP地址，横线下面的是这个DNS查询到的IP。从图上可以看出，这5个DNS共查询到了5个不同的IP地址，其中3个国内的DNS（前3个DNS）都只能查询到一个IP，2个国外的DNS可以查询到4个IP：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2017/ipre_1.png&quot; alt=&quot;IP resolver&quot;/&gt;&lt;/p&gt;
+
+&lt;p&gt;下面对IP resolver的使用方式做一些介绍。&lt;/p&gt;
+
+&lt;h2&gt;下载&lt;/h2&gt;
+
+&lt;p&gt;我为Windows、Linux、Mac OS X编译了对应版本的可执行文件，可通过&lt;a href=&quot;https://github.com/m3ng9i/IP-resolver/releases&quot; rel=&quot;nofollow&quot;&gt;此地址下载&lt;/a&gt;。如果你使用的是其他操作系统，可以&lt;a href=&quot;https://github.com/m3ng9i/IP-resolver&quot; rel=&quot;nofollow&quot;&gt;下载IP Resolver的源码&lt;/a&gt;自行编译。&lt;/p&gt;
+
+&lt;p&gt;下载完成后，可以将程序进行重命名，建议Windows下，设置为&lt;code&gt;ipre.exe&lt;/code&gt;，Linux/Mac下，设置为&lt;code&gt;ipre&lt;/code&gt;。然后请将程序放到系统的&lt;code&gt;PATH&lt;/code&gt;目录中，在Windows中，可以是&lt;code&gt;C:\Windows\system32&lt;/code&gt;等目录，在Linux/Mac下可以是&lt;code&gt;/bin&lt;/code&gt;, &lt;code&gt;/usr/bin&lt;/code&gt;, &lt;code&gt;~/bin&lt;/code&gt;等目录。&lt;/p&gt;
+
+&lt;h2&gt;配置文件&lt;/h2&gt;
+
+&lt;p&gt;要使用IP resolver，首先需要提供一个配置文件，配置文件的格式为&lt;code&gt;json&lt;/code&gt;，内容包含了DNS名称和其IP地址。当使用IP resolver进行查询时，程序向配置文件中的DNS服务器发出请求，查询域名的IP地址。&lt;/p&gt;
+
+&lt;p&gt;可以使用&lt;code&gt;-s&lt;/code&gt;参数查询配置文件的样例：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2017/ipre_2.png&quot; alt=&quot;IP resolver配置文件&quot;/&gt;&lt;/p&gt;
+
+&lt;p&gt;默认情况下，程序会依次从以下几个位置检测和读取配置文件：&lt;/p&gt;
+
+&lt;p&gt;Linux/Unix下：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;~/.config/ipre.conf&lt;/li&gt;
+&lt;li&gt;~/.ipre&lt;/li&gt;
+&lt;li&gt;/etc/ipre.conf&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Windows下：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;%HOMEDRIVE%/%HOMEPATH%/.config/ipre.conf&lt;/li&gt;
+&lt;li&gt;%HOMEDRIVE%/%HOMEPATH%/.ipre&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;（注：&lt;code&gt;%HOMEDRIVE%&lt;/code&gt;一般为&lt;code&gt;c:&lt;/code&gt;，&lt;code&gt;%HOMEPATH%&lt;/code&gt;一般为&lt;code&gt;\Users\用户名&lt;/code&gt;）&lt;/p&gt;
+
+&lt;p&gt;另外，也可以使用&lt;code&gt;-l&lt;/code&gt;参数指定配置文件的路径，例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;ipre -l /path/to/ipre.conf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;输出结果格式&lt;/h2&gt;
+
+&lt;p&gt;默认情况下，输出结果会显示每个DNS的名称、DNS的IP和每个DNS查询到的IP（见本文中第一副图）。&lt;/p&gt;
+
+&lt;p&gt;如果你需要使用其他程序读取IP resolver输出的结果，可以使用&lt;code&gt;-f&lt;/code&gt;参数，将结果设置为&lt;code&gt;json&lt;/code&gt;格式，例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;ipre -f json mengqi.info
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出结果如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2017/ipre_3.png&quot; alt=&quot;将输出结果设置为json&quot;/&gt;&lt;/p&gt;
+
+&lt;p&gt;如果只需要在结果中显示IP地址，可以使用&lt;code&gt;-f ip&lt;/code&gt;实现，例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;ipre -f ip mengqi.info
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出结果如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2017/ipre_4.png&quot; alt=&quot;只显示IP地址&quot;/&gt;&lt;/p&gt;
+
+&lt;h2&gt;命令行参数&lt;/h2&gt;
+
+&lt;p&gt;IP resolver的命令行参数如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-nohighlight&quot;&gt;-l, -load &amp;lt;file&amp;gt;            指定配置文件的路径
+-f, -format &amp;lt;std|json|ip&amp;gt;   设置输出结果格式：标准、json、只有ip
+-s, -sample                 显示配置文件样例
+-t, -tcp                    使用TCP协议进行DNS查询（不使用此参数时，默认使用UDP协议查询）
+-c, -config                 显示当前的配置文件内容
+-h, -help                   显示帮助
+-v, -version                显示版本信息
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果忘记了怎么使用，可以使用&lt;code&gt;-h&lt;/code&gt;参数查看帮助：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/static/2017/ipre_5.png&quot; alt=&quot;显示帮助&quot;/&gt;&lt;/p&gt;
+
+&lt;h2&gt;使用举例&lt;/h2&gt;
+
+&lt;p&gt;使用默认的配置文件查询：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;ipre www.example.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;加载名为&lt;code&gt;config.json&lt;/code&gt;的配置文件，并将输出结果设置为&lt;code&gt;json&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;ipre -l config.json -f json -tcp www.example.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;指定配置文件的路径并显示配置文件的内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;ipre -l config.json -c
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用配置文件样例生成一个配置文件，然后进行查询：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;ipre -s &amp;gt; ~/.ipre &amp;amp;&amp;amp; ipre www.example.com
+&lt;/code&gt;&lt;/pre&gt;
+
+        
+</content>
+</entry><entry><title>命令行工具q：像查询SQL数据库一样查询文本文件</title>
 <author><name>m3ng9i</name></author>
 <id>http://mengqi.info/html/2017/201708011245-command_q.html</id>
 <link rel="alternate" href="http://mengqi.info/html/2017/201708011245-command_q.html"/>
