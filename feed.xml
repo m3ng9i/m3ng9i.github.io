@@ -7,9 +7,135 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2017-10-25T18:00:54+08:00</updated>
+    <updated>2019-01-16T08:27:43+08:00</updated>
 
-    <entry><title>IP resolver：查询一个域名在不同DNS下的IP地址</title>
+    <entry><title>使用Openssl为Nginx生成Basic Auth密码文件</title>
+<author><name>m3ng9i</name></author>
+<id>http://mengqi.info/html/2019/201901160829-openssl-passwd.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2019/201901160829-openssl-passwd.html"/>
+<published>2019-01-16T08:29:00+08:00</published>
+<updated>2019-01-16T08:29:00+08:00</updated>
+<content type="html">
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2019/201901160829-openssl-passwd.html&quot;&gt;mengqi.info/html/2019/201901160829-openssl-passwd.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;Nginx支持Basic Auth身份认证，当启用此功能时，浏览器会弹出窗口要求用户输入用户名和密码，输入正确才允许访问网页。&lt;/p&gt;
+
+&lt;p&gt;在让Nginx启用Basic Auth身份认证前，首先要生成一个密码文件，格式如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;username1:password1
+username2:password2:comment
+username3:password2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;每一行为一条用户信息，每条用户信息包含3个字段：用户名、密码、注释，其中注释可以省略，字段间使用冒号分隔。其中第二个字段，即密码的部分并不是明文保存的，而是经过hash运算过的字符串，这样可以避免密码以明文方式呈现，对密码的hash运算可以使用&lt;code&gt;openssl passwd&lt;/code&gt;命令生成。&lt;/p&gt;
+
+&lt;p&gt;例如要将字符串&lt;code&gt;abc&lt;/code&gt;进行hash运算，使用的命令及输出的结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ openssl passwd abc
+5SzUqTnPPSXCY
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意由于在hash运算时自动加入了随机的salt，因此相同的字符串每次进行hash时，产生的结果都是不一样的。&lt;/p&gt;
+
+&lt;p&gt;默认的算法为：&lt;code&gt;Standard Unix password algorithm&lt;/code&gt;，此算法最多只支持对8个字符进行hash。可以选择使用其他的算法，通过openssl帮助查看可用的算法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ openssl help passwd
+Usage: passwd [options]
+Valid options are:
+ -help               Display this summary
+ -in infile          Read passwords from file
+ -noverify           Never verify when reading password from terminal
+ -quiet              No warnings
+ -table              Format output as table
+ -reverse            Switch table columns
+ -salt val           Use provided salt
+ -stdin              Read passwords from stdin
+ -6                  SHA512-based password algorithm
+ -5                  SHA256-based password algorithm
+ -apr1               MD5-based password algorithm, Apache variant
+ -1                  MD5-based password algorithm
+ -aixmd5             AIX MD5-based password algorithm
+ -crypt              Standard Unix password algorithm (default)
+ -rand val           Load the file(s) into the random number generator
+ -writerand outfile  Write random data to the specified file
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;从上述帮助信息中可以看到还可以选择SHA512、SHA256、MD5等方式进行hash。根据使用的openssl版本的不同，可用的算法也可能会不同。&lt;/p&gt;
+
+&lt;p&gt;下面，我们使用一个例子来说明如何用命令行批量对密码信息进行hash。&lt;/p&gt;
+
+&lt;p&gt;首先创建一个文件&lt;code&gt;user.txt&lt;/code&gt;，包含3条用户信息，每行为一条信息，使用冒号作为字段分隔符，字段分别为用户名、明文密码、注释（只在第1条和第3条信息中包含），注意请不要在用户名、密码或注释中包含冒号：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ cat user.txt
+user1:abcde:comment
+user2:xyz123
+m3ng9i:123456:mengqi.info
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后使用下面的命令生成密码文件&lt;code&gt;passwd.txt&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ cut -d &amp;#34;:&amp;#34; -f 2 user.txt | openssl passwd -6 -stdin | paste -d &amp;#34;:&amp;#34; user.txt - | tr -d &amp;#39;\r&amp;#39; | awk &amp;#39;BEGIN{FS=&amp;#34;:&amp;#34;;OFS=&amp;#34;:&amp;#34;}{if (NF==4) print $1,$4,$3; else if (NF==3) print $1,$3}&amp;#39; &amp;gt; passwd.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以上命令组合了&lt;code&gt;cut&lt;/code&gt;、&lt;code&gt;openssl&lt;/code&gt;、&lt;code&gt;paste&lt;/code&gt;、&lt;code&gt;tr&lt;/code&gt;、&lt;code&gt;awk&lt;/code&gt;5个命令，作用简单说明如下：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;cut&lt;/code&gt;: 取出user.txt的第二个字段（密码明文），将结果输出到stdout；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;openssl&lt;/code&gt;: 将stdin中输入的数据（3条密码明文）使用SHA512形式进行hash，输出到stdout；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;paste&lt;/code&gt;: 将user.txt中的原始内容与hash过的密码组合起来，输出到stdout；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tr&lt;/code&gt;: 去除可能出现的&lt;code&gt;\r&lt;/code&gt;符号；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;awk&lt;/code&gt;: 从stdin中提取出用户名、hash过的密码、注释字段，将结果输出到passwd.txt。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;生成的密码文件内容如下，可以看到和&lt;code&gt;user.txt&lt;/code&gt;相比，新生成的文件中，密码字段已经被hash：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ cat passwd.txt
+user1:$6$gjGELGyOCDsUrRtG$OcQy9GXbdpZ9Iujd1Jmzwyd5dJaXxyWUgcsiQxAOAbBj/OEQChPSD0iojfDIn3qKd82Spm5yVd3qAUmJno0KP.:comment
+user2:$6$ak/BIY4C7knXMVq5$hVGDCcKaz5ExcJ2Fv9xusW6ZdqCoWQrveqrK3pWgtbUebi5CCsO4e9GbxgGfSThuVILIfJUaIBjUv7B.60nez1
+m3ng9i:$6$euEJqJ4PmiMdJJXC$gPLLrYkPWz.LqW50RcMA/rPzOTI9j1pWjxSlgXtHd8RJbBedpxjf.w67QnjG2m8MIxnY9G.fDCIlbDw5E2aXu.:mengqi.info
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来编辑Nginx的配置文件，在location部分增加两个指令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;auth_basic &amp;#34;Please login&amp;#34;;
+auth_basic_user_file /path/to/passwd.txt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其中&lt;code&gt;auth_basic&lt;/code&gt;指令开启Nginx的Basic Auth认证功能，并设置了一个字符串，该字符串可能会显示在浏览器的密码输入提示窗口中（根据浏览器的不同，有些会显示，有些不会显示），你可以在HTTP Response header中的&lt;code&gt;WWW-Authenticate&lt;/code&gt;字段看到这个字符串。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;auth_basic_user_file&lt;/code&gt;指令设置了密码文件的路径。&lt;/p&gt;
+
+&lt;p&gt;上述指令可以放在配置文件的HTTP、server或location中。下面是完整的例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cat /etc/nginx/conf.d/test.conf
+
+upstream myserver {
+  server 127.0.0.1:8081;
+  server 127.0.0.1:8082;
+}
+
+server {
+    listen       8080;
+    server_name  localhost;
+
+    location / {
+        proxy_pass http://myserver;
+    }
+
+    location /login {
+        proxy_pass http://myserver;
+        auth_basic &amp;#34;Please login&amp;#34;;
+        auth_basic_user_file /path/to/passwd.txt;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后运行&lt;code&gt;nginx -s reload&lt;/code&gt;重新载入配置文件后，打开网页&lt;code&gt;http://127.0.0.1:8080/login&lt;/code&gt;，就可以看到要求输入用户名和密码的提示了。&lt;/p&gt;
+
+&lt;p&gt;虽然以上很大篇幅提到了对密码文件进行hash，但是在Basic Auth认证方式中，客户端（浏览器）发送到服务器的用户名和密码仍然是明文的，因此在生产环境最好为网站开启SSL/TLS加密。&lt;/p&gt;
+
+        
+</content>
+</entry><entry><title>IP resolver：查询一个域名在不同DNS下的IP地址</title>
 <author><name>m3ng9i</name></author>
 <id>http://mengqi.info/html/2017/201710251803-ip-resolver.html</id>
 <link rel="alternate" href="http://mengqi.info/html/2017/201710251803-ip-resolver.html"/>
