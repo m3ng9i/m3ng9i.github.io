@@ -7,9 +7,120 @@
     <id>http://mengqi.info/feed.xml</id>
     <link ref="self" href="http://mengqi.info/feed.xml"/>
     <link rel="alternate" href="http://mengqi.info"/>
-    <updated>2019-01-16T08:27:43+08:00</updated>
+    <updated>2019-05-02T12:18:17+08:00</updated>
 
-    <entry><title>使用Openssl为Nginx生成Basic Auth密码文件</title>
+    <entry><title>使用mkcert创建自签名证书</title>
+<author><name>m3ng9i</name></author>
+<id>http://mengqi.info/html/2019/201905021220-use-mkcert-to-create-a-self-signed-certificate.html</id>
+<link rel="alternate" href="http://mengqi.info/html/2019/201905021220-use-mkcert-to-create-a-self-signed-certificate.html"/>
+<published>2019-05-02T12:20:00+08:00</published>
+<updated>2019-05-02T12:20:00+08:00</updated>
+<content type="html">
+    &lt;p class=&quot;mycandy-pagelink&quot;&gt;本文地址： &lt;a href=&quot;http://mengqi.info/html/2019/201905021220-use-mkcert-to-create-a-self-signed-certificate.html&quot;&gt;mengqi.info/html/2019/201905021220-use-mkcert-to-create-a-self-signed-certificate.html&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;在做程序开发的时候，免不了要接触https加密通信，你可能需要自己生成证书，虽然可以使用openssl完成这个工作，但是openssl是一个庞大和复杂的工具，有着令人眼花缭乱的参数，如果你没有太多的密码学知识，只是为了在本机生成一个自签名证书，方便自己开发和测试，那么可以试一试这个用Go语言写的命令行工具：mkcert，非常简单易用。&lt;/p&gt;
+
+&lt;p&gt;mkcert的Github地址：&lt;a href=&quot;https://github.com/FiloSottile/mkcert&quot; rel=&quot;nofollow&quot;&gt;https://github.com/FiloSottile/mkcert&lt;/a&gt;，该项目有18000多颗星，作者Filippo Valsorda在2018年加入了Go的开发团队。关于mkcert，作者给出的一句话介绍：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;mkcert is a simple tool for making locally-trusted development certificates. It requires no configuration.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;作者提供了编译好的二进制程序，包含Linux/Windows/macOS三个版本，可直接下载使用：&lt;a href=&quot;https://github.com/FiloSottile/mkcert/releases&quot; rel=&quot;nofollow&quot;&gt;https://github.com/FiloSottile/mkcert/releases&lt;/a&gt;。你也可以使用brew安装，或者通过源码编译，具体详见作者在Github上面的说明。&lt;/p&gt;
+
+&lt;p&gt;下面，我以debian linux为例，介绍一下mkcert 1.3的使用方式：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;将mkcert下载以后，放到一个合适的地方，并添加执行权限：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;ln -s ~/download/mkcert-v1.3.0-linux-amd64 ~/bin/mkcert
+chmod u+x ~/bin/mkcert
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;在linux下，mkcert依赖certutil，如果没有安装certutil，可以使用下面的命令安装：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;sudo apt install libnss3-tools
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;生成CA（certificate authority，即证书颁发机构），运行下面的命令可以在&lt;code&gt;~/.local/share/mkcert/&lt;/code&gt;生成&lt;code&gt;rootCA.pem&lt;/code&gt;和&lt;code&gt;rootCA-key.pem&lt;/code&gt;两个文件，这个命令只需运行一次，因为生成的CA可以反复使用；&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;mkcert -install
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;创建自签名证书，例如要为域名：&lt;code&gt;test.local&lt;/code&gt;和IP：&lt;code&gt;127.0.0.1&lt;/code&gt;创建证书，可以使用如下的命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;mkcert test.local 127.0.0.1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述命令会自动使用第3步创建的CA生成证书文件，其中&lt;code&gt;xxx.pem&lt;/code&gt;为证书，&lt;code&gt;xxx-key.pem&lt;/code&gt;为私钥，你也可以使用&lt;code&gt;-cert-file&lt;/code&gt;和&lt;code&gt;-key-file&lt;/code&gt;两个参数设置生成文件的文件名。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;生成了证书和私钥以后，就可以在web服务器开启https了。&lt;/p&gt;
+
+&lt;p&gt;以我自己的web服务器&lt;a href=&quot;https://github.com/m3ng9i/ran&quot; rel=&quot;nofollow&quot;&gt;ran&lt;/a&gt;为例，可以使用&lt;code&gt;-cert&lt;/code&gt;和&lt;code&gt;-key&lt;/code&gt;参数设置证书和私钥的路径，这时会默认在443端口开启web服务（使用较低的端口需要使用管理员权限），具体命令如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;sudo ran -l -cert /path/to/cert -key /path/to/key
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来，可以打开浏览器测试一下了：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/html/2019/mkcert_1.png&quot; alt=&quot;在浏览器中测试&quot;/&gt;&lt;/p&gt;
+
+&lt;p&gt;从上图可以看到，chrome浏览器地址栏中显示了一把小锁，表示是安全的连接。如果把地址修改成 &lt;code&gt;https://127.0.0.2&lt;/code&gt;，浏览器就会提示为不安全的连接，这是因为刚才使用mkcert创建证书的时侯，并没有设置&lt;code&gt;127.0.0.2&lt;/code&gt;这个地址。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mengqi.info/html/2019/mkcert_2.png&quot; alt=&quot;不安全的连接&quot;/&gt;&lt;/p&gt;
+
+&lt;p&gt;在使用mkcert的过程中，我发现了一个问题：虽然生成的证书在浏览器里会显示为安全的，但是使用curl测试的时候却报错了，意思大概就是找不到自建的CA：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ curl https://127.0.0.1
+curl: (60) SSL certificate problem: unable to get local issuer certificate
+More details here: https://curl.haxx.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我在终端里找到了刚才运行&lt;code&gt;mkcert -install&lt;/code&gt;时出现的提示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-plain&quot;&gt;Using the local CA at &amp;#34;/home/&amp;lt;user&amp;gt;/.local/share/mkcert&amp;#34;
+Installing to the system store is not yet supported on this Linux but Firefox and/or Chrome/Chromium will still work.
+You can also manually install the root certificate at &amp;#34;/home/&amp;lt;user&amp;gt;/.local/share/mkcert/rootCA.pem&amp;#34;.
+The local CA is now installed in the Firefox and/or Chrome/Chromium trust store (requires browser restart)!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;里面有一句：Installing to the system store is not yet supported on this Linux。&lt;/p&gt;
+
+&lt;p&gt;好吧，那么我来手工安装一下刚才生成的CA（以下命令均需要用管理员权限运行）：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;进入&lt;code&gt;/usr/share/ca-certificates&lt;/code&gt;文件夹，创建一个新文件夹&lt;code&gt;local&lt;/code&gt;，在这个文件夹中创建一个指向&lt;code&gt;mkcert&lt;/code&gt;生成的证书的软链接：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;cd /usr/share/ca-certificates
+mkdir local
+cd local
+ln -s /home/&amp;lt;user&amp;gt;/.local/share/mkcert/rootCA.pem my-local-ca.crt
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;编辑文件&lt;code&gt;/etc/ca-certificates.conf&lt;/code&gt;，添加一行：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;local/my-local-ca.crt
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;运行下面的命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;update-ca-certificates
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;这样，使用curl连接的时候就没有报错了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ curl https://127.0.0.1
+&amp;lt;h1&amp;gt;hello world&amp;lt;/h1&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+        
+</content>
+</entry><entry><title>使用Openssl为Nginx生成Basic Auth密码文件</title>
 <author><name>m3ng9i</name></author>
 <id>http://mengqi.info/html/2019/201901160829-openssl-passwd.html</id>
 <link rel="alternate" href="http://mengqi.info/html/2019/201901160829-openssl-passwd.html"/>
