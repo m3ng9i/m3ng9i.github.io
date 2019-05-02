@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang='zh-cn'>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <meta name="candy:author" content="m3ng9i">
+    <meta name="candy:title" content="使用mkcert创建自签名证书">
+    <meta name="candy:pubtime" content="2019-05-02T12:20:00+08:00">
+    <meta name="candy:in-index" content="True">
+    
+    <meta name="candy:url" content="//mengqi.info/html/2019/201905021220-use-mkcert-to-create-a-self-signed-certificate.html">
+    <script src="/static/libs/jquery-1.11.2.min.js"></script>
+    <script src="/static/libs/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <script src="/static/libs/highlight.js-8.7/highlight.pack.js"></script>
+    <script src="/static/include/mycandy.js"></script>
+    <!--[if lt IE 9]>
+    <script src="/static/libs/html5shiv.min.js"></script>
+    <script src="/static/libs/respond-1.4.2.min.js"></script>
+    <![endif]-->
+    <script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="/static/libs/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/libs/font-awesome-4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/libs/highlight.js-8.7/github-gist.css">
+    <link rel="stylesheet" href="/static/include/mycandy.css">
+    
+    <link rel="icon" sizes="192x192" href="/static/images/icon.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/static/images/icon.png">
+    <link rel="alternate" type="application/atom+xml" title="My Candy 最新文章" href="/feed.xml">
+    <title>使用mkcert创建自签名证书 - My Candy</title>
+    
+</head>
+
+<body>
+    <!--[if lt IE 9]>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center alert alert-danger">
+                <p>你正在使用低版本的 IE 浏览器，某些功能或效果可能无法正常显示。建议使用 Google Chrome、Mozilla Firefox、Apple Safari 等现代浏览器。</p>
+                <p>You are using an old version of Internet Explorer, something may not displayed properly. It's recommended to use modern browsers like: Google Chrome, Mozilla Firefox or Apple Safari.</p>
+            </div>
+        </div>
+    </div>
+    <![endif]-->
+
+    <header class="container">
+
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <nav class="navbar navbar-default navbar-fixed-top">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-links" aria-expanded="false">
+                                <span class="sr-only">展开导航菜单</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand mycandy-brand" href="//mengqi.info">My<sup class="fa fa-asterisk mycandy-asterisk"></sup>Candy</a>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse" id="navbar-links">
+                            <ul class="nav navbar-nav">
+                                <li><a href="/" title="home">首页</a></li>
+
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="My projects">
+                                        开源项目
+                                        <span class="caret"></span>
+                                    </a>
+
+                                    <ul class="dropdown-menu mycandy-github">
+                                        <li><a href="https://github.com/m3ng9i">Github 主页</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="https://github.com/m3ng9i/ran" title="使用 Go 写的静态 web 服务器">Ran</a></li>
+                                        <li><a href="https://github.com/m3ng9i/qreader" title="一个 B/S 架构的 RSS 阅读器">QReader</a></li>
+                                        <li><a href="https://github.com/m3ng9i/feedreader" title="RSS 2.0 和 Atom 1.0 解析模块">Feedreader</a></li>
+                                        <li><a href="https://github.com/m3ng9i/go-utils" title="Go 工具包">go-utils</a></li>
+                                        <li><a href="https://github.com/m3ng9i/godi" title="Go 程序依赖包检测工具">godi</a></li>
+                                        <li><a href="https://github.com/m3ng9i/IP-resolver" title="可以调用多个 DNS 查询一个域名的 IP，并对比查询结果">IP-resolver</a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a href="/html/about.html" title="About page (in Chinese)">关于</a></li>
+                                <li><a href="/html/about_en.html">About</a></li>
+
+                            </ul>
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="/feed.xml" title="atom 1.0 feed"><span class="fa fa-rss-square mycandy-rss"></span> 订阅</a></li>
+                            </ul>
+
+
+                        </div><!-- end of #navbar-links -->
+                    </div><!-- end of div.container-fluid -->
+                </nav>
+            </div><!-- end of col-md-10 div -->
+
+        </div>
+    </header>
+
+    <div id="content">
+        <article class="container">
+    
+    <div class="row">
+        <header class="col-md-8 col-md-offset-2">
+            <h1 class="mycandy-title"><a href="//mengqi.info/html/2019/201905021220-use-mkcert-to-create-a-self-signed-certificate.html">使用mkcert创建自签名证书</a></h1>
+            
+            <p class="mycandy-pubtime">m3ng9i 发表于
+                <time datetime="2019-05-02T12:20:00+08:00" pubdate>2019-05-02 12:20</time>
+            </p>
+            
+        </header>
+    </div>
+    
+
+    <div class="row">
+        
+        <div class="col-md-8 col-md-offset-2 mycandy-article article">
+            <p class="mycandy-pagelink">本文地址： <a href="//mengqi.info/html/2019/201905021220-use-mkcert-to-create-a-self-signed-certificate.html">mengqi.info/html/2019/201905021220-use-mkcert-to-create-a-self-signed-certificate.html</a></p>
+            <p>在做程序开发的时候，免不了要接触https加密通信，你可能需要自己生成证书，虽然可以使用openssl完成这个工作，但是openssl是一个庞大和复杂的工具，有着令人眼花缭乱的参数，如果你没有太多的密码学知识，只是为了在本机生成一个自签名证书，方便自己开发和测试，那么可以试一试这个用Go语言写的命令行工具：mkcert，非常简单易用。</p>
+
+<p>mkcert的Github地址：<a href="https://github.com/FiloSottile/mkcert" rel="nofollow">https://github.com/FiloSottile/mkcert</a>，该项目有18000多颗星，作者Filippo Valsorda在2018年加入了Go的开发团队。关于mkcert，作者给出的一句话介绍：</p>
+
+<blockquote>
+<p>mkcert is a simple tool for making locally-trusted development certificates. It requires no configuration.</p>
+</blockquote>
+
+<p>作者提供了编译好的二进制程序，包含Linux/Windows/macOS三个版本，可直接下载使用：<a href="https://github.com/FiloSottile/mkcert/releases" rel="nofollow">https://github.com/FiloSottile/mkcert/releases</a>。你也可以使用brew安装，或者通过源码编译，具体详见作者在Github上面的说明。</p>
+
+<p>下面，我以debian linux为例，介绍一下mkcert 1.3的使用方式：</p>
+
+<ol>
+<li><p>将mkcert下载以后，放到一个合适的地方，并添加执行权限：</p>
+
+<pre><code class="language-bash">ln -s ~/download/mkcert-v1.3.0-linux-amd64 ~/bin/mkcert
+chmod u+x ~/bin/mkcert
+</code></pre></li>
+
+<li><p>在linux下，mkcert依赖certutil，如果没有安装certutil，可以使用下面的命令安装：</p>
+
+<pre><code class="language-bash">sudo apt install libnss3-tools
+</code></pre></li>
+
+<li><p>生成CA（certificate authority，即证书颁发机构），运行下面的命令可以在<code>~/.local/share/mkcert/</code>生成<code>rootCA.pem</code>和<code>rootCA-key.pem</code>两个文件，这个命令只需运行一次，因为生成的CA可以反复使用；</p>
+
+<pre><code class="language-bash">mkcert -install
+</code></pre></li>
+
+<li><p>创建自签名证书，例如要为域名：<code>test.local</code>和IP：<code>127.0.0.1</code>创建证书，可以使用如下的命令：</p>
+
+<pre><code class="language-bash">mkcert test.local 127.0.0.1
+</code></pre>
+
+<p>上述命令会自动使用第3步创建的CA生成证书文件，其中<code>xxx.pem</code>为证书，<code>xxx-key.pem</code>为私钥，你也可以使用<code>-cert-file</code>和<code>-key-file</code>两个参数设置生成文件的文件名。</p></li>
+</ol>
+
+<p>生成了证书和私钥以后，就可以在web服务器开启https了。</p>
+
+<p>以我自己的web服务器<a href="https://github.com/m3ng9i/ran" rel="nofollow">ran</a>为例，可以使用<code>-cert</code>和<code>-key</code>参数设置证书和私钥的路径，这时会默认在443端口开启web服务（使用较低的端口需要使用管理员权限），具体命令如下：</p>
+
+<pre><code class="language-bash">sudo ran -l -cert /path/to/cert -key /path/to/key
+</code></pre>
+
+<p>接下来，可以打开浏览器测试一下了：</p>
+
+<p><img src="mkcert_1.png" alt="在浏览器中测试"></p>
+
+<p>从上图可以看到，chrome浏览器地址栏中显示了一把小锁，表示是安全的连接。如果把地址修改成 <code>https://127.0.0.2</code>，浏览器就会提示为不安全的连接，这是因为刚才使用mkcert创建证书的时侯，并没有设置<code>127.0.0.2</code>这个地址。</p>
+
+<p><img src="mkcert_2.png" alt="不安全的连接"></p>
+
+<p>在使用mkcert的过程中，我发现了一个问题：虽然生成的证书在浏览器里会显示为安全的，但是使用curl测试的时候却报错了，意思大概就是找不到自建的CA：</p>
+
+<pre><code class="language-bash">$ curl https://127.0.0.1
+curl: (60) SSL certificate problem: unable to get local issuer certificate
+More details here: https://curl.haxx.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+</code></pre>
+
+<p>我在终端里找到了刚才运行<code>mkcert -install</code>时出现的提示：</p>
+
+<pre><code class="language-plain">Using the local CA at &quot;/home/&lt;user&gt;/.local/share/mkcert&quot;
+Installing to the system store is not yet supported on this Linux but Firefox and/or Chrome/Chromium will still work.
+You can also manually install the root certificate at &quot;/home/&lt;user&gt;/.local/share/mkcert/rootCA.pem&quot;.
+The local CA is now installed in the Firefox and/or Chrome/Chromium trust store (requires browser restart)!
+</code></pre>
+
+<p>里面有一句：Installing to the system store is not yet supported on this Linux。</p>
+
+<p>好吧，那么我来手工安装一下刚才生成的CA（以下命令均需要用管理员权限运行）：</p>
+
+<ol>
+<li><p>进入<code>/usr/share/ca-certificates</code>文件夹，创建一个新文件夹<code>local</code>，在这个文件夹中创建一个指向<code>mkcert</code>生成的证书的软链接：</p>
+
+<pre><code class="language-bash">cd /usr/share/ca-certificates
+mkdir local
+cd local
+ln -s /home/&lt;user&gt;/.local/share/mkcert/rootCA.pem my-local-ca.crt
+</code></pre></li>
+
+<li><p>编辑文件<code>/etc/ca-certificates.conf</code>，添加一行：</p>
+
+<pre><code class="language-bash">local/my-local-ca.crt
+</code></pre></li>
+
+<li><p>运行下面的命令：</p>
+
+<pre><code class="language-bash">update-ca-certificates
+</code></pre></li>
+</ol>
+
+<p>这样，使用curl连接的时候就没有报错了：</p>
+
+<pre><code class="language-bash">$ curl https://127.0.0.1
+&lt;h1&gt;hello world&lt;/h1&gt;
+</code></pre>
+
+        </div>
+    </div>
+</article>
+
+    </div>
+
+    <footer class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a class="mycandy-brand" href="/" title="首页 (home)"><sup class="fa fa-asterisk mycandy-asterisk"></sup></a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="mycandy-hidden">
+        <script async src="//s95.cnzz.com/z_stat.php?id=1255242145&web_id=1255242145"></script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-63483419-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </div>
+</body>
+
+</html>
